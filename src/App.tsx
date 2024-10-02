@@ -29,12 +29,16 @@ const CustomTextColor = Extension.create({
       toggleTextColor:
         (color: string) =>
         ({ chain, editor }) => {
+          console.log(`Toggling text color to: ${color}`);
           const currentColor = editor.getAttributes("textStyle").color;
+          console.log(`Current color: ${currentColor}`);
 
           if (currentColor === color) {
+            console.log("Removing color");
             return chain().focus().unsetColor().run();
           }
 
+          console.log(`Setting color to: ${color}`);
           return chain().focus().setColor(color).run();
         },
     };

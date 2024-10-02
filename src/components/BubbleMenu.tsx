@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
-import axios from 'axios';
 import './BubbleMenu.scss';
 
 interface CustomBubbleMenuProps extends BubbleMenuProps {
@@ -23,23 +22,17 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        import.meta.env.VITE_WORDWARE_API_URL,
-        {
-          inputs: {
-            manuscript: selectedText
-          },
-          version: '^1.0'
+      const response = await fetch('/api/fix-grammar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_WORDWARE_API_KEY}`
-          }
-        }
-      );
+        body: JSON.stringify({ text: selectedText }),
+      });
 
-      const correctedText = response.data.finalRevision;
+      const data = await response.json();
+
+      const correctedText = data.correctedText;
 
       if (correctedText) {
         editor.chain().focus().setTextSelection(editor.state.selection).insertContent(correctedText).run();
@@ -59,7 +52,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
       editor={editor}
       tippyOptions={{
         duration: 100,
-        placement: 'top'
+        placement: 'bottom'
       }}
     >
       <div className="bubble-menu">
