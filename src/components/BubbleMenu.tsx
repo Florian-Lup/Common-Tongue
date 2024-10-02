@@ -12,6 +12,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
   }
 
   const handleFixGrammar = async () => {
+    console.log('handleFixGrammar function called');
     const selectedText = editor.state.selection.content().content.textBetween(0, editor.state.selection.content().size, ' ');
     console.log('Selected text:', selectedText); // Updated log
 

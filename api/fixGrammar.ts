@@ -2,23 +2,25 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import fetch from 'node-fetch';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  console.log('Request method:', req.method); // Add this log
-  console.log('Request body:', req.body); // Add this log
+  console.log('fixGrammar API handler called');
+  console.log('Request method:', req.method);
+  console.log('Request body:', req.body);
 
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
   const { inputs } = req.body;
-  console.log('Inputs:', inputs); // Add this log
+  console.log('Inputs:', inputs);
 
   if (!inputs || !inputs.manuscript) {
-    console.error('Missing manuscript in request body'); // Add this log
+    console.error('Missing manuscript in request body');
     return res.status(400).json({ message: 'Manuscript is required' });
   }
 
   try {
-    const response = await fetch(process.env.WORDWARE_API_URL!, {
+    const apiUrl = process.env.WORDWARE_API_URL!;
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
