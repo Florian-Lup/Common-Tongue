@@ -24,7 +24,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
 
     try {
       const response = await axios.post(
-        'https://app.wordware.ai/api/released-app/a92fa258-4e19-4ef4-8d6b-32da8691977e/run',
+        import.meta.env.VITE_WORDWARE_API_URL,
         {
           inputs: {
             manuscript: selectedText
@@ -34,7 +34,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.VITE_WORDWARE_API_KEY}`
+            'Authorization': `Bearer ${import.meta.env.VITE_WORDWARE_API_KEY}`
           }
         }
       );
@@ -59,7 +59,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
       editor={editor}
       tippyOptions={{
         duration: 100,
-        placement: 'bottom'
+        placement: 'top'
       }}
     >
       <div className="bubble-menu">
