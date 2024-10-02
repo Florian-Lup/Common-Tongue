@@ -68,6 +68,10 @@ export default function App() {
     ],
   });
 
+  if (!editor) {
+    return null;
+  }
+
   return (
     <div className="editor">
       {editor && <MenuBar editor={editor} />}
@@ -76,7 +80,10 @@ export default function App() {
         editor={editor}
         spellCheck={false}
       />
-      {editor && <CustomBubbleMenu editor={editor} children={undefined} />}
+      {editor && <CustomBubbleMenu editor={editor} />}
+      <div className="character-count">
+        {editor.storage.characterCount.characters()} characters
+      </div>
     </div>
   );
 }
