@@ -8,7 +8,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
-import { Extension } from "@tiptap/core";
+import { Extension, RawCommands } from "@tiptap/core";
 import MenuBar from "./components/MenuBar";
 import Link from "@tiptap/extension-link";
 import CustomBubbleMenu from "./components/BubbleMenu";
@@ -16,23 +16,16 @@ import CustomBubbleMenu from "./components/BubbleMenu";
 const CustomTextColor = Extension.create({
   name: "customTextColor",
 
-  addCommands(): { toggleTextColor: (color: string) => ({ chain, editor }: CommandProps) => boolean; } {
+  addCommands() {
     return {
-      toggleTextColor:
-        (color: string) =>
-        ({ chain, editor }: CommandProps) => {
-          // Check the current text color using editor (not chain)
-          const currentColor = editor.getAttributes("textStyle").color;
-
-          // If the color matches the passed color, remove (unset) the color
-          if (currentColor === color) {
-            return chain().focus().unsetColor().run();
-          }
-
-          // Otherwise, apply the new color
-          return chain().focus().setColor(color).run();
-        },
-    };
+      toggleTextColor: (color: string) => ({ chain, editor }: CommandProps) => {
+        const currentColor = editor.getAttributes("textStyle").color;
+        if (currentColor === color) {
+          return chain().focus().unsetColor().run();
+        }
+        return chain().focus().setColor(color).run();
+      },
+    } as Partial<RawCommands>;
   },
 });
 

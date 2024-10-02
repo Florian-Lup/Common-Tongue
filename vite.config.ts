@@ -1,8 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import dotenv from 'dotenv';
 
-dotenv.config();
+// Environment variables are automatically loaded from .env by Vite
 
 export default defineConfig({
   plugins: [react()],
