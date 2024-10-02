@@ -26,28 +26,22 @@ The project is organized into the following main directories and files:
 ## Features
 
 1. **Rich Text Editing**:
-    - Create and edit rich text documents with various formatting options (bold, italic, underline, etc.).
-    - Add headings, paragraphs, bullet lists, ordered lists, task lists, code blocks, blockquotes, horizontal rules, and hard breaks.
-    - Placeholder text "Write a short paragraph..." is displayed when the editor is empty.
-    - User-friendly menu bar for easy access to text formatting options.
+
+   - Create and edit rich text documents with various formatting options (bold, italic, underline, etc.).
+   - Add headings, paragraphs, bullet lists, ordered lists, task lists, code blocks, blockquotes, horizontal rules, and hard breaks.
+   - Placeholder text "Write a short paragraph..." is displayed when the editor is empty.
+   - User-friendly menu bar for easy access to text formatting options.
 
 2. **Character Count**:
-    - Includes a character count extension that can limit the number of characters in the document.
+
+   - Includes a character count extension that can limit the number of characters in the document.
 
 3. **Task Lists**:
-    - Create task lists with individual task items that can be checked off.
 
-4. **Pro and Free Versions**:
-    - Supports both a Pro version with advanced features and a Free version with basic functionalities. A script is provided to convert the Pro version to the Free version.
+   - Create task lists with individual task items that can be checked off.
 
-5. **Collaboration (Optional)**:
-    - Supports collaboration features through Tiptap Cloud, configurable via environment variables.
-
-6. **GitHub Actions for Packaging**:
-    - Includes GitHub Actions workflows to package and release both Pro and Free versions of the editor.
-
-7. **Tiptap Bubble Menu with "Fix Grammar" Button**:
-    - Integrated Tiptap Bubble Menu featuring a "Fix Grammar" button for grammar suggestions.
+4. **Tiptap Bubble Menu with "Fix Grammar" Button**:
+   - Integrated Tiptap Bubble Menu featuring a "Fix Grammar" button for grammar suggestions.
 
 ## Getting Started
 
@@ -63,32 +57,23 @@ To run the project, ensure you have the following installed on your computer:
 Follow these steps to set up and run the project:
 
 1. **Clone the Repository**:
-    ```sh
-    git clone <repository-url>
-    cd <repository-directory>
-    ```
+   ```sh
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
+   ```
 
-2. **Set Up Tiptap Registry**:
-    Follow the provided instructions to set up the Tiptap registry.
+   ```
+2. **Install Dependencies**:
 
-3. **Convert to Free Version (if necessary)**:
-    Run the provided script to convert the Pro version to the Free version:
-    ```sh
-    npm run convert-to-free
-    ```
+   ```sh
+   npm install
+   ```
 
-4. **Install Dependencies**:
-    ```sh
-    npm install
-    ```
-
-5. **Enable Collaboration Features (Optional)**:
-    Configure the necessary environment variables to enable collaboration features.
-
-6. **Launch the Development Server**:
-    ```sh
-    npm run dev
-    ```
+3. **Launch the Development Server**:
+   ```sh
+   npm run dev
+   ```
 
 ### License
 
