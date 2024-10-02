@@ -7,6 +7,10 @@ interface CustomBubbleMenuProps extends BubbleMenuProps {
 }
 
 const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
+  if (!editor) {
+    return null;
+  }
+
   const handleFixGrammar = async () => {
     const selectedText = editor.state.selection.content().content.textBetween(0, editor.state.selection.content().size, ' ');
 
