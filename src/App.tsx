@@ -74,13 +74,13 @@ export default function App() {
 
   return (
     <div className="editor">
-      {editor && <MenuBar editor={editor} />}
+      <MenuBar editor={editor} />
       <EditorContent
         className="editor__content"
         editor={editor}
         spellCheck={false}
       />
-      {editor && <CustomBubbleMenu editor={editor} children={undefined} />}
+      <CustomBubbleMenu editor={editor} children={undefined} />
       <div className="character-count">
         {editor.storage.characterCount.characters()} characters
       </div>

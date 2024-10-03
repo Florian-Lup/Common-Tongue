@@ -20,11 +20,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   };
 
   try {
-    const response = await fetch(process.env.WORDWARE_API_URL!, {
+    const apiUrl = process.env.WORDWARE_API_URL!;
+    const apiKey = process.env.WORDWARE_API_KEY!;
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.WORDWARE_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify(requestBody),
     });

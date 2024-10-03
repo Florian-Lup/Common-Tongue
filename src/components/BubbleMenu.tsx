@@ -28,11 +28,12 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
     };
 
     try {
-      const apiUrl = '/api/fixGrammar'; // Use the local API endpoint
+      const apiUrl = process.env.WORDWARE_API_URL!;
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.WORDWARE_API_KEY}`,
         },
         body: JSON.stringify(requestBody),
       });
@@ -48,11 +49,12 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
         editor.chain().focus().setTextSelection(editor.state.selection).insertContent(data.suggestions[0]).run();
       }
     } catch (error) {
+      console.error('Error fixing grammar:', error);
       if (error instanceof Error) {
-        console.error('Error fixing grammar:', error.message);
+        console.error('Error message:', error.message);
         console.error('Error stack:', error.stack);
       } else {
-        console.error('Error fixing grammar:', String(error));
+        console.error('Unhandled error type:', typeof error);
       }
     }
   };
