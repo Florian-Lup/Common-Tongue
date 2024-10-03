@@ -2,13 +2,19 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import fetch from 'node-fetch';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log("API handler called");
+  console.log("Request method:", req.method);
+  console.log("Request body:", req.body);
+
   if (req.method !== 'POST') {
+    console.log("Method not allowed");
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
   const { manuscript } = req.body;
 
   if (!manuscript) {
+    console.log("Text is required");
     return res.status(400).json({ message: 'Text is required' });
   }
 
@@ -19,9 +25,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     version: '^1.0'
   };
 
+  console.log("Request body to Wordware API:", JSON.stringify(requestBody));
+
   try {
     const apiUrl = process.env.WORDWARE_API_URL!;
     const apiKey = process.env.WORDWARE_API_KEY!;
+    console.log("Wordware API URL:", apiUrl);
+
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -31,13 +41,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify(requestBody),
     });
 
+    console.log("Wordware API response status:", response.status);
+
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Error response:', errorText);
+      console.error('Error response from Wordware API:', errorText);
       throw new Error('Failed to fix grammar');
     }
 
     const data = await response.json();
+    console.log("Wordware API response data:", data);
     res.status(200).json(data);
   } catch (error) {
     console.error('Error fixing grammar:', error);
