@@ -19,9 +19,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     version: '^1.0'
   };
 
-  console.log('Selected text:', manuscript);
-  console.log('Request body:', JSON.stringify(requestBody));
-
   try {
     const response = await fetch(process.env.WORDWARE_API_URL!, {
       method: 'POST',
@@ -32,8 +29,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify(requestBody),
     });
 
-    console.log('Response status:', response.status);
-
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Error response:', errorText);
@@ -41,12 +36,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const data = await response.json();
-    console.log('Grammar suggestions:', data);
     res.status(200).json(data);
   } catch (error) {
     console.error('Error fixing grammar:', error);
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
-    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    } else {
+      console.error('Unhandled error type:', typeof error);
+    }
+    res.status(500).json({ message: 'Internal Server Error', error: error instanceof Error ? error.message : 'Unknown error' });
   }
 }
