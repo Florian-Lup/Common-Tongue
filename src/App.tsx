@@ -80,7 +80,7 @@ export default function App() {
         editor={editor}
         spellCheck={false}
       />
-      <CustomBubbleMenu editor={editor} />
+      <CustomBubbleMenu editor={editor} children={undefined} />
       <div className="character-count">
         {editor.storage.characterCount.characters()} characters
       </div>
