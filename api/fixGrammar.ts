@@ -12,6 +12,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ message: 'Text is required' });
   }
 
+  const requestBody = {
+    inputs: {
+      manuscript
+    },
+    version: '^1.0'
+  };
+
+  console.log('Selected text:', manuscript);
+  console.log('Request body:', JSON.stringify(requestBody));
+
   try {
     const response = await fetch(process.env.WORDWARE_API_URL!, {
       method: 'POST',
@@ -19,22 +29,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.WORDWARE_API_KEY}`,
       },
-      body: JSON.stringify({
-        inputs: {
-          manuscript
-        },
-        version: '^1.0'
-      }),
+      body: JSON.stringify(requestBody),
     });
 
+    console.log('Response status:', response.status);
+
     if (!response.ok) {
-      throw new Error('API request failed');
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error('Failed to fix grammar');
     }
 
     const data = await response.json();
+    console.log('Grammar suggestions:', data);
     res.status(200).json(data);
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error fixing grammar:', error);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 }
