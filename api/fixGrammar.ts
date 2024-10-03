@@ -11,11 +11,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { manuscript } = req.body;
+  const { manuscript } = req.body.inputs;
 
   if (!manuscript) {
-    console.log("Text is required");
-    return res.status(400).json({ message: 'Text is required' });
+    console.log("Manuscript text is required");
+    return res.status(400).json({ message: 'Manuscript text is required' });
   }
 
   const requestBody = {
@@ -28,8 +28,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log("Request body to Wordware API:", JSON.stringify(requestBody));
 
   try {
-    const apiUrl = process.env.WORDWARE_API_URL;
-    const apiKey = process.env.WORDWARE_API_KEY;
+    const apiUrl = process.env.VITE_WORDWARE_API_URL; // Updated to match .env.local variable name
+    const apiKey = process.env.VITE_WORDWARE_API_KEY; // Updated to match .env.local variable name
     console.log("Wordware API URL:", apiUrl);
 
     if (!apiUrl || !apiKey) {
@@ -58,13 +58,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log("Wordware API response data:", data);
     res.status(200).json(data);
   } catch (error) {
-    console.error('Error fixing grammar:', error);
-    if (error instanceof Error) {
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
-    } else {
-      console.error('Unhandled error type:', typeof error);
-    }
+    console.error('Error fixing grammar:', error instanceof Error ? error.message : String(error));
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace available');
     res.status(500).json({ message: 'Internal Server Error', error: error instanceof Error ? error.message : 'Unknown error' });
   }
 }

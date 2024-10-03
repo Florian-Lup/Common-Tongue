@@ -1,12 +1,8 @@
 import React from 'react';
-import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/react';
 import './BubbleMenu.scss';
 
-interface CustomBubbleMenuProps extends BubbleMenuProps {
-  editor: BubbleMenuProps['editor'];
-}
-
-const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
+const CustomBubbleMenu: React.FC<{ editor: any }> = ({ editor }) => {
   if (!editor) {
     return null;
   }
@@ -32,47 +28,34 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
     console.log("Request body:", JSON.stringify(requestBody));
 
     try {
-      const apiUrl = process.env.WORDWARE_API_URL; // Use environment variable for API URL
-      if (!apiUrl) {
-        throw new Error('WORDWARE_API_URL is not defined');
-      }
-      const apiKey = process.env.WORDWARE_API_KEY; // Use environment variable for API Key
-      console.log("API URL:", apiUrl);
-
+      const apiUrl = '/api/fixGrammar'; // Use the local API endpoint
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`, // Add authorization header
         },
         body: JSON.stringify(requestBody),
       });
 
-      console.log("Response status:", response.status);
+      console.log('Response status:', response.status);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error response:', errorData);
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
         throw new Error('Failed to fix grammar');
       }
 
-      const result = await response.json();
-      console.log(result.improved_text);
-
-      if (result.improved_text && result.improved_text.length > 0) {
-        editor.chain().focus().setTextSelection(editor.state.selection).insertContent(result.improved_text).run();
-        console.log("Grammar suggestion applied:", result.improved_text);
+      const data = await response.json();
+      console.log('Grammar suggestions:', data);
+      if (data.improved_text && data.improved_text.length > 0) {
+        editor.chain().focus().setTextSelection(editor.state.selection).insertContent(data.improved_text).run();
+        console.log("Grammar suggestion applied:", data.improved_text);
       } else {
         console.log("No grammar suggestions received");
       }
     } catch (error) {
-      console.error('Error fixing grammar:', error);
-      if (error instanceof Error) {
-        console.error('Error message:', error.message);
-        console.error('Error stack:', error.stack);
-      } else {
-        console.error('Unknown error:', error);
-      }
+      console.error('Error fixing grammar:', error instanceof Error ? error.message : String(error));
+      console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace available');
     }
   };
 
