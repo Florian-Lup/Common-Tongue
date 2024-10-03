@@ -22,23 +22,43 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
       return;
     }
 
+    const requestBody = {
+      inputs: {
+        manuscript: selectedText
+      },
+      version: '^1.0'
+    };
+
+    console.log("Request body:", JSON.stringify(requestBody));
+
     try {
-      const response = await fetch('/api/fixGrammar', {
+      const apiUrl = import.meta.env.VITE_WORDWARE_API_URL;
+ // Use environment variable for API URL
+      if (!apiUrl) {
+        throw new Error('WORDWARE_API_URL is not defined');
+      }
+      const apiKey = process.env.WORDWARE_API_KEY; // Use environment variable for API Key
+      console.log("API URL:", apiUrl);
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`, // Add authorization header
         },
-        body: JSON.stringify({ manuscript: selectedText }),
+        body: JSON.stringify(requestBody),
       });
 
       console.log("Response status:", response.status);
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
         throw new Error('Failed to fix grammar');
       }
 
       const result = await response.json();
-      console.log("Grammar suggestion received:", result);
+      console.log(result.improved_text);
 
       if (result.improved_text && result.improved_text.length > 0) {
         editor.chain().focus().setTextSelection(editor.state.selection).insertContent(result.improved_text).run();
@@ -48,6 +68,12 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
       }
     } catch (error) {
       console.error('Error fixing grammar:', error);
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      } else {
+        console.error('Unknown error:', error);
+      }
     }
   };
 
