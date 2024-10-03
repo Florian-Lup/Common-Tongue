@@ -28,9 +28,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log("Request body to Wordware API:", JSON.stringify(requestBody));
 
   try {
-    const apiUrl = process.env.WORDWARE_API_URL!;
-    const apiKey = process.env.WORDWARE_API_KEY!;
+    const apiUrl = process.env.WORDWARE_API_URL;
+    const apiKey = process.env.WORDWARE_API_KEY;
     console.log("Wordware API URL:", apiUrl);
+
+    if (!apiUrl || !apiKey) {
+      console.error("API URL or API Key is not defined in environment variables.");
+      throw new Error("API URL or API Key is not defined in environment variables.");
+    }
 
     const response = await fetch(apiUrl, {
       method: 'POST',

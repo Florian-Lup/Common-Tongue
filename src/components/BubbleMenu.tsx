@@ -33,6 +33,9 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
 
     try {
       const apiUrl = process.env.WORDWARE_API_URL; // Use environment variable for API URL
+      if (!apiUrl) {
+        throw new Error('WORDWARE_API_URL is not defined');
+      }
       const apiKey = process.env.WORDWARE_API_KEY; // Use environment variable for API Key
       console.log("API URL:", apiUrl);
 
@@ -64,8 +67,12 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
       }
     } catch (error) {
       console.error('Error fixing grammar:', error);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      } else {
+        console.error('Unknown error:', error);
+      }
     }
   };
 
