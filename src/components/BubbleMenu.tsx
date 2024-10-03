@@ -12,18 +12,9 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
   }
 
   const handleFixGrammar = async () => {
-    console.log('handleFixGrammar function called');
     const selectedText = editor.state.selection.content().content.textBetween(0, editor.state.selection.content().size, ' ');
-    console.log('Selected text:', selectedText); // Updated log
 
     try {
-      console.log('Request body:', JSON.stringify({ // Added log
-        inputs: {
-          manuscript: selectedText
-        },
-        version: '^1.0'
-      }));
-
       const response = await fetch('/api/fixGrammar', {
         method: 'POST',
         headers: {
@@ -37,23 +28,14 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
         }),
       });
 
-      console.log('Response status:', response.status); // Added log
-      console.log('Response headers:', response.headers); // Added log
-
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error response:', errorText); // Added log
         throw new Error('Failed to fix grammar');
       }
 
       const data = await response.json();
-      console.log('Grammar API Response:', JSON.stringify(data, null, 2));
-
-      if (data.finalRevision) {
-        console.log('Final revision:', data.finalRevision);
-        editor.chain().focus().setTextSelection(editor.state.selection).insertContent(data.finalRevision).run();
-      } else {
-        console.log('No final revision available');
+      console.log('Grammar suggestions:', data);
+      if (data.suggestions && data.suggestions.length > 0) {
+        editor.chain().focus().setTextSelection(editor.state.selection).insertContent(data.suggestions[0]).run();
       }
     } catch (error) {
       console.error('Error fixing grammar:', error);
