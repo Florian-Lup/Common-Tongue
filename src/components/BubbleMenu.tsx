@@ -32,19 +32,11 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
     console.log("Request body:", JSON.stringify(requestBody));
 
     try {
-      const apiUrl = import.meta.env.VITE_WORDWARE_API_URL;
- // Use environment variable for API URL
-      if (!apiUrl) {
-        throw new Error('WORDWARE_API_URL is not defined');
-      }
-      const apiKey = process.env.WORDWARE_API_KEY; // Use environment variable for API Key
-      console.log("API URL:", apiUrl);
-
-      const response = await fetch(apiUrl, {
+      // Call the Vercel serverless function instead of the Wordware API directly
+      const response = await fetch('/api/fixGrammar', {  // Call the Vercel proxy
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`, // Add authorization header
         },
         body: JSON.stringify(requestBody),
       });
