@@ -4,10 +4,11 @@ import './BubbleMenu.scss';
 
 interface CustomBubbleMenuProps {
   editor: Editor;
+  isTyping: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, setIsTyping }) => {
+const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, setIsTyping }) => {
   const [isFixing, setIsFixing] = useState(false);
 
   const handleFixGrammar = async () => {
@@ -51,7 +52,12 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, setIsTyping
   };
 
   // Typewriter effect function
-  const typeWriterEffect = (editor: Editor, from: number, to: number, text: string) => {
+  const typeWriterEffect = (
+    editor: Editor,
+    from: number,
+    to: number,
+    text: string
+  ) => {
     setIsTyping(true);
 
     editor.commands.deleteRange({ from, to });
@@ -67,7 +73,8 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, setIsTyping
       } else {
         clearInterval(interval);
         setIsTyping(false);
-        editor.commands.setTextSelection({ from: from + length });
+        // Set the cursor position after the inserted text
+        editor.commands.setTextSelection(from + length);
       }
     }, 50);
   };

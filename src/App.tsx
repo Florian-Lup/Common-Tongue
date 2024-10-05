@@ -40,7 +40,7 @@ const App: React.FC = () => {
     <div className="editor">
       <MenuBar editor={editor} />
       <EditorContent className="editor__content" editor={editor} spellCheck={false} />
-      <CustomBubbleMenu editor={editor} />
+      <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
       <div className="character-count">{editor.storage.characterCount.characters()} characters</div>
     </div>
   );
