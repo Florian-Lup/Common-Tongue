@@ -56,9 +56,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     console.log('Full response body:', responseBody);  // Log full response for diagnostics
 
-    // Split the response into separate chunks
+    // Split the response into individual chunks, and handle them separately
     const chunks = responseBody.split('} {').map((chunk, index, array) => {
-      // Fixing improperly concatenated chunks by adding missing braces
       if (index === 0) return chunk + '}';
       if (index === array.length - 1) return '{' + chunk;
       return '{' + chunk + '}';
@@ -66,7 +65,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     let finalRevision = null;
 
-    // Parse each chunk
+    // Parse each chunk and extract the finalRevision
     chunks.forEach((chunk) => {
       try {
         const parsedChunk = JSON.parse(chunk);
@@ -78,7 +77,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     });
 
-    // Return the final revision if found
     if (finalRevision) {
       return res.status(200).json({ finalRevision });
     } else {
