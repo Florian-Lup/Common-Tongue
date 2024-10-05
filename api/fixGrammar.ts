@@ -23,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       inputs: {
         manuscript: manuscript
       },
-      version: "^1.0"
+      version: "^1.2"
     };
 
     console.log('Sending request to Wordware API with body:', JSON.stringify(requestBody));

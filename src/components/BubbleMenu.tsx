@@ -26,7 +26,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
       inputs: {
         manuscript: selectedText // Use the selected text as manuscript
       },
-      version: "^1.0" // Version as recommended by Wordware
+      version: "^1.2" // Version as recommended by Wordware
     };
 
     console.log("Request body:", JSON.stringify(requestBody));
