@@ -43,28 +43,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     let responseBody = '';
-
-    if (response.body) {
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-
-      // Aggregating all chunks
-      while (!done) {
-        const { done: readerDone, value } = await reader.read();
-        done = readerDone;
-        responseBody += decoder.decode(value, { stream: !readerDone });
-      }
-    } else {
-      responseBody = await response.text();
+    const reader = response.body?.getReader();
+    const decoder = new TextDecoder();
+    
+    // Collect all chunks
+    let done = false;
+    while (!done && reader) {
+      const { done: readerDone, value } = await reader.read();
+      done = readerDone;
+      responseBody += decoder.decode(value, { stream: !readerDone });
     }
 
     console.log('Full response body:', responseBody);  // Log full response for diagnostics
 
-    // Handling chunked response manually
-    const chunks = responseBody.split('\n');  // Split the chunks by newlines
+    // Split the response into separate chunks
+    const chunks = responseBody.split('} {').map((chunk, index, array) => {
+      // Fixing improperly concatenated chunks by adding missing braces
+      if (index === 0) return chunk + '}';
+      if (index === array.length - 1) return '{' + chunk;
+      return '{' + chunk + '}';
+    });
+
     let finalRevision = null;
 
+    // Parse each chunk
     chunks.forEach((chunk) => {
       try {
         const parsedChunk = JSON.parse(chunk);
@@ -76,6 +78,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     });
 
+    // Return the final revision if found
     if (finalRevision) {
       return res.status(200).json({ finalRevision });
     } else {
