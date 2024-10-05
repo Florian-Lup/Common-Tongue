@@ -61,6 +61,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     console.log('Full response body:', responseBody);  // Log full response for diagnostics
 
+    // Check if the response is JSON
     if (contentType && contentType.includes('application/json')) {
       try {
         const data = JSON.parse(responseBody);
@@ -82,7 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
       }
     } else {
-      // If the response is not JSON, return it as raw text
+      // If the response is not JSON, return the raw text
       return res.status(200).send(responseBody);  // Send raw text response to client
     }
 
