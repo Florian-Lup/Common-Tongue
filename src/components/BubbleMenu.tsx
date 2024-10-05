@@ -30,7 +30,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
         },
         body: JSON.stringify({
           inputs: { manuscript: selectedText },
-          version: '^1.3',
+          version: '^1.6',
         }),
       });
 
