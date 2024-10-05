@@ -40,50 +40,57 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       throw new Error(`Invalid response from Wordware API: ${response.statusText} - ${errorText}`);
     }
 
-    let responseBody = '';
     const reader = response.body?.getReader();
     const decoder = new TextDecoder();
 
     let done = false;
+    let finalRevision = '';
+    let finalRevisionStarted = false;
+    let buffer = '';
+
     while (!done && reader) {
       const { done: readerDone, value } = await reader.read();
       done = readerDone;
-      responseBody += decoder.decode(value, { stream: !readerDone });
-    }
+      const chunk = decoder.decode(value, { stream: !readerDone });
+      buffer += chunk;
 
-    console.log('Full response body:', responseBody);
+      // Use a regular expression to extract complete JSON objects
+      const regex = /(\{[^]*?\})(?=\s*\{|\s*$)/g;
+      let match;
+      while ((match = regex.exec(buffer)) !== null) {
+        const jsonString = match[1];
+        try {
+          const parsedChunk = JSON.parse(jsonString);
 
-    // Split the response into individual chunks, and handle them separately
-    const chunks = responseBody.split('} {').map((chunk, index, array) => {
-      if (index === 0) return chunk + '}';
-      if (index === array.length - 1) return '{' + chunk;
-      return '{' + chunk + '}';
-    });
-
-    let finalRevision = '';
-    let finalRevisionStarted = false;
-
-    // Parse each chunk and extract the finalRevision
-    chunks.forEach((chunk) => {
-      try {
-        const parsedChunk = JSON.parse(chunk);
-        if (parsedChunk.value && parsedChunk.value.finalRevision) {
-          finalRevisionStarted = true;
+          // Handle the parsing logic based on the content
+          if (parsedChunk.value) {
+            if (parsedChunk.value.label === 'finalRevision' && parsedChunk.value.state === 'start') {
+              finalRevisionStarted = true;
+            } else if (parsedChunk.value.type === 'chunk' && finalRevisionStarted) {
+              if (parsedChunk.value.value) {
+                finalRevision += parsedChunk.value.value;
+              }
+            } else if (parsedChunk.value.label === 'finalRevision' && parsedChunk.value.state === 'done') {
+              finalRevisionStarted = false;
+            }
+          }
+        } catch (error) {
+          console.log('Skipping invalid JSON chunk:', jsonString);
         }
-        if (finalRevisionStarted && parsedChunk.value && typeof parsedChunk.value === 'string') {
-          finalRevision += parsedChunk.value; // Append the string chunks to form the final revision
-        }
-      } catch (error) {
-        console.log('Skipping non-JSON chunk:', chunk);
       }
-    });
+
+      // Remove processed parts from the buffer
+      buffer = buffer.slice(regex.lastIndex);
+      regex.lastIndex = 0; // Reset regex index
+    }
 
     if (finalRevision) {
       return res.status(200).json({ finalRevision: finalRevision.trim() });
     } else {
+      console.log('Full response body:', buffer);
       return res.status(500).json({
         error: 'finalRevision field not found in response',
-        details: responseBody,  // Send raw response for debugging (optional)
+        details: buffer,  // Send raw response for debugging (optional)
       });
     }
 
