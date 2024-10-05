@@ -45,7 +45,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const contentType = response.headers.get('content-type');
     let responseBody = '';
 
-    // If the response is streamed in chunks, handle it
     if (response.body) {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -57,17 +56,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         responseBody += decoder.decode(value, { stream: !readerDone });
       }
     } else {
-      // Fallback for non-streamed responses
       responseBody = await response.text();
     }
 
-    console.log('Full response body:', responseBody);
+    console.log('Full response body:', responseBody);  // Log full response for diagnostics
 
-    // If the content-type is JSON, attempt to parse it
     if (contentType && contentType.includes('application/json')) {
       try {
         const data = JSON.parse(responseBody);
-        return res.status(200).json(data);  // Send the parsed JSON to the client
+
+        // Check for the presence of `finalRevision`
+        if (data.finalRevision) {
+          return res.status(200).json({ finalRevision: data.finalRevision });
+        } else {
+          return res.status(500).json({
+            error: 'finalRevision field is missing from the API response',
+            details: data,  // Return the entire response for debugging
+          });
+        }
       } catch (error) {
         console.error('Failed to parse JSON response:', error);
         return res.status(500).json({
@@ -76,7 +82,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
       }
     } else {
-      // If the response is not JSON, return the raw text
+      // If the response is not JSON, return it as raw text
       return res.status(200).send(responseBody);  // Send raw text response to client
     }
 
