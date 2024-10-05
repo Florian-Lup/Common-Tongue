@@ -19,6 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ message: 'Missing manuscript field' });
     }
 
+    // Build the request body to match the expected structure
     const requestBody = {
       inputs: {
         manuscript: manuscript
@@ -28,22 +29,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     console.log('Sending request with body:', JSON.stringify(requestBody));
 
+    // Send the request to the Wordware API
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`, // Use your API key
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestBody), // Send the correct body
+      body: JSON.stringify(requestBody), // Ensure proper JSON formatting
     });
 
+    // Log and capture the response text
+    const responseText = await response.text();
+    console.log('Response from Wordware API:', responseText);
+
     if (!response.ok) {
-      const errorText = await response.text(); // Log the full error message from Wordware
-      console.log('Error response from Wordware API:', errorText);
-      throw new Error(`Wordware API Error: ${response.statusText} - ${errorText}`);
+      throw new Error(`Wordware API Error: ${response.statusText} - ${responseText}`);
     }
 
-    const data = await response.json();
+    // Parse the response JSON if the response is valid
+    const data = JSON.parse(responseText);
     res.status(200).json(data); // Return the Wordware response back to the frontend
   } catch (error) {
     if (error instanceof Error) {
