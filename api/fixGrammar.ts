@@ -45,7 +45,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let responseBody = '';
     const reader = response.body?.getReader();
     const decoder = new TextDecoder();
-    
+
     // Collect all chunks
     let done = false;
     while (!done && reader) {
@@ -82,7 +82,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     } else {
       return res.status(500).json({
         error: 'finalRevision field not found in response',
-        details: responseBody,  // Send raw response for debugging
+        details: responseBody,  // Send raw response for debugging (optional)
       });
     }
 
