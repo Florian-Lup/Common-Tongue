@@ -37,40 +37,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify(requestBody),
     });
 
-    // Capture the response text
     const responseText = await response.text();
     console.log('Raw response from Wordware API:', responseText);
 
     const contentType = response.headers.get('content-type');
     if (!response.ok) {
-      // Handle invalid response statuses
       throw new Error(`Invalid response from Wordware API: ${response.statusText} - ${responseText}`);
     }
 
-    // Check if the response is JSON, otherwise return as text
     if (contentType && contentType.includes('application/json')) {
       try {
-        const data = JSON.parse(responseText);
-        res.status(200).json(data);  // Return the parsed JSON to the client
-      } catch (parseError) {
-        console.error('Failed to parse JSON response:', parseError);
-        res.status(500).json({
-          error: 'Failed to parse the response from Wordware API',
-          details: responseText,  // Send raw response for further debugging
+        const data = JSON.parse(responseText); // Try to parse JSON if content-type is JSON
+        return res.status(200).json(data); // Send the parsed JSON to the client
+      } catch (error) {
+        console.error('Error parsing JSON response:', error);
+        return res.status(500).json({
+          error: 'Failed to parse JSON response',
+          details: responseText, // Return raw response to the client
         });
       }
     } else {
-      // If the response is not JSON, return the plain text
-      res.status(200).send(responseText);  // Send raw text response to the client
+      // If the response is not JSON, return it as plain text
+      return res.status(200).send(responseText); // Send raw text response to the client
     }
 
   } catch (error) {
-    if (error instanceof Error) {
-      console.error('Error in fixGrammar API:', error.message);
-      res.status(500).json({ error: 'Internal Server Error', details: error.message });
-    } else {
-      console.error('Unknown error in fixGrammar API:', error);
-      res.status(500).json({ error: 'An unknown error occurred' });
-    }
+    console.error('Error in fixGrammar API:', error);
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 }
