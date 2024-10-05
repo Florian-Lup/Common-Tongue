@@ -37,28 +37,47 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify(requestBody),
     });
 
-    const responseText = await response.text();
-    console.log('Raw response from Wordware API:', responseText);
-
-    const contentType = response.headers.get('content-type');
     if (!response.ok) {
-      throw new Error(`Invalid response from Wordware API: ${response.statusText} - ${responseText}`);
+      const errorText = await response.text();
+      throw new Error(`Invalid response from Wordware API: ${response.statusText} - ${errorText}`);
     }
 
+    const contentType = response.headers.get('content-type');
+    let responseBody = '';
+
+    // If the response is streamed in chunks, handle it
+    if (response.body) {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { done: readerDone, value } = await reader.read();
+        done = readerDone;
+        responseBody += decoder.decode(value, { stream: !readerDone });
+      }
+    } else {
+      // Fallback for non-streamed responses
+      responseBody = await response.text();
+    }
+
+    console.log('Full response body:', responseBody);
+
+    // If the content-type is JSON, attempt to parse it
     if (contentType && contentType.includes('application/json')) {
       try {
-        const data = JSON.parse(responseText); // Try to parse JSON if content-type is JSON
-        return res.status(200).json(data); // Send the parsed JSON to the client
+        const data = JSON.parse(responseBody);
+        return res.status(200).json(data);  // Send the parsed JSON to the client
       } catch (error) {
-        console.error('Error parsing JSON response:', error);
+        console.error('Failed to parse JSON response:', error);
         return res.status(500).json({
-          error: 'Failed to parse JSON response',
-          details: responseText, // Return raw response to the client
+          error: 'Failed to parse JSON response from Wordware API',
+          details: responseBody,  // Send raw response to client for debugging
         });
       }
     } else {
-      // If the response is not JSON, return it as plain text
-      return res.status(200).send(responseText); // Send raw text response to the client
+      // If the response is not JSON, return the raw text
+      return res.status(200).send(responseBody);  // Send raw text response to client
     }
 
   } catch (error) {
