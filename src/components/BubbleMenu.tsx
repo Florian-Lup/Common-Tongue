@@ -76,7 +76,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
         // Set the cursor position after the inserted text
         editor.commands.setTextSelection(from + length);
       }
-    }, 50);
+    }, 25);
   };
 
   return (
