@@ -56,33 +56,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     console.log('Full response body:', responseBody);  // Log full response for diagnostics
 
-    // Split the response into individual chunks, and handle them separately
-    const chunks = responseBody.split('} {').map((chunk, index, array) => {
-      if (index === 0) return chunk + '}';
-      if (index === array.length - 1) return '{' + chunk;
-      return '{' + chunk + '}';
-    });
-
+    // Attempt to parse the full response body as JSON
     let finalRevision = null;
-
-    // Parse each chunk and extract the finalRevision
-    chunks.forEach((chunk) => {
-      try {
-        const parsedChunk = JSON.parse(chunk);
-        if (parsedChunk.value && parsedChunk.value.finalRevision) {
-          finalRevision = parsedChunk.value.finalRevision;
-        }
-      } catch (error) {
-        console.log('Skipping non-JSON chunk:', chunk);
+    try {
+      const parsedResponse = JSON.parse(responseBody);
+      if (parsedResponse.value && parsedResponse.value.finalRevision) {
+        finalRevision = parsedResponse.value.finalRevision;
       }
-    });
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      return res.status(500).json({ error: 'Error parsing JSON response', details: responseBody });
+    }
 
     if (finalRevision) {
       return res.status(200).json({ finalRevision });
     } else {
       return res.status(500).json({
         error: 'finalRevision field not found in response',
-        details: responseBody,  // Send raw response for debugging (optional)
+        details: responseBody,
       });
     }
 
