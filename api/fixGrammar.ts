@@ -25,7 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const requestBody = {
       inputs: { manuscript },
-      version: '^1.1', // Use the correct API version that includes the Proofreader Agent
+      version: '^1.1', // Ensure the correct version is used
     };
 
     console.log('Sending request to Wordware API with body:', JSON.stringify(requestBody));
@@ -62,8 +62,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // Use a regex to extract complete JSON objects
       const regex = /(\{[^]*?\})(?=\s*\{|\s*$)/g;
       let match;
+      let lastProcessedIndex = 0; // Track the end of the last processed match
+
       while ((match = regex.exec(buffer)) !== null) {
         const jsonString = match[1];
+        const matchEndIndex = regex.lastIndex; // End index of the current match
         try {
           const parsedChunk = JSON.parse(jsonString);
 
@@ -119,10 +122,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         } catch (error) {
           console.error('Skipping invalid JSON chunk:', jsonString);
         }
+        // Update lastProcessedIndex to the end of the current match
+        lastProcessedIndex = matchEndIndex;
       }
+
       // Remove processed data from the buffer
-      buffer = buffer.slice(regex.lastIndex);
-      regex.lastIndex = 0; // Reset regex index
+      buffer = buffer.slice(lastProcessedIndex);
     }
 
     if (finalRevision) {
