@@ -8,11 +8,8 @@ interface CustomBubbleMenuProps {
 
 const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
   const handleFixGrammar = async () => {
-    const selectedText = editor.state.doc.textBetween(
-      editor.state.selection.from,
-      editor.state.selection.to,
-      ' '
-    );
+    const { from, to } = editor.state.selection;
+    const selectedText = editor.state.doc.textBetween(from, to, ' ');
 
     if (!selectedText) {
       console.log('No text selected.');
@@ -30,7 +27,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
         },
         body: JSON.stringify({
           inputs: { manuscript: selectedText },
-          version: '^1.1',
+          version: '^1.1', // Ensure the version matches the API version in fixGrammar.ts
         }),
       });
 
@@ -41,7 +38,11 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor }) => {
         console.log('Final revision:', finalRevision);
 
         // Replace the selected text with the final revision in the editor
-        editor.commands.insertContentAt(editor.state.selection.from, finalRevision);
+        editor
+          .chain()
+          .focus()
+          .insertContent(finalRevision) // This replaces the selected content
+          .run();
       } else {
         console.error('Error fixing grammar:', data.error || data.details);
       }

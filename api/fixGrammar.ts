@@ -5,11 +5,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const apiKey = process.env.WORDWARE_API_KEY;
 
   if (!apiUrl) {
-    return res.status(500).json({ error: 'WORDWARE_API_URL is not defined in environment variables.' });
+    return res
+      .status(500)
+      .json({ error: 'WORDWARE_API_URL is not defined in environment variables.' });
   }
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'WORDWARE_API_KEY is not defined in environment variables.' });
+    return res
+      .status(500)
+      .json({ error: 'WORDWARE_API_KEY is not defined in environment variables.' });
   }
 
   try {
@@ -21,7 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const requestBody = {
       inputs: { manuscript },
-      version: "^1.1"
+      version: '^1.1', // Use the correct API version that includes the Proofreader Agent
     };
 
     console.log('Sending request to Wordware API with body:', JSON.stringify(requestBody));
@@ -29,7 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody),
@@ -44,9 +48,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const decoder = new TextDecoder();
 
     let done = false;
-    let finalRevision = '';
-    let finalRevisionStarted = false;
     let buffer = '';
+    let finalRevision = '';
+    let proofreaderAgentActive = false;
+    let finalRevisionStarted = false;
 
     while (!done && reader) {
       const { done: readerDone, value } = await reader.read();
@@ -54,7 +59,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const chunk = decoder.decode(value, { stream: !readerDone });
       buffer += chunk;
 
-      // Use a regular expression to extract complete JSON objects
+      // Use a regex to extract complete JSON objects
       const regex = /(\{[^]*?\})(?=\s*\{|\s*$)/g;
       let match;
       while ((match = regex.exec(buffer)) !== null) {
@@ -64,22 +69,58 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
           // Handle the parsing logic based on the content
           if (parsedChunk.value) {
-            if (parsedChunk.value.label === 'finalRevision' && parsedChunk.value.state === 'start') {
+            // Check if we're entering the Proofreader Agent
+            if (
+              parsedChunk.value.type === 'prompt' &&
+              parsedChunk.value.state === 'start' &&
+              parsedChunk.value.path === 'Proofreader Agent'
+            ) {
+              proofreaderAgentActive = true;
+            }
+
+            // Check if we're exiting the Proofreader Agent
+            else if (
+              parsedChunk.value.type === 'prompt' &&
+              parsedChunk.value.state === 'complete' &&
+              parsedChunk.value.path === 'Proofreader Agent'
+            ) {
+              proofreaderAgentActive = false;
+            }
+
+            // Start of finalRevision within the Proofreader Agent
+            else if (
+              proofreaderAgentActive &&
+              parsedChunk.value.label === 'finalRevision' &&
+              parsedChunk.value.state === 'start'
+            ) {
               finalRevisionStarted = true;
-            } else if (parsedChunk.value.type === 'chunk' && finalRevisionStarted) {
-              if (parsedChunk.value.value) {
-                finalRevision += parsedChunk.value.value;
-              }
-            } else if (parsedChunk.value.label === 'finalRevision' && parsedChunk.value.state === 'done') {
+            }
+
+            // End of finalRevision within the Proofreader Agent
+            else if (
+              proofreaderAgentActive &&
+              parsedChunk.value.label === 'finalRevision' &&
+              parsedChunk.value.state === 'done'
+            ) {
               finalRevisionStarted = false;
+            }
+
+            // Accumulate finalRevision text
+            else if (
+              proofreaderAgentActive &&
+              finalRevisionStarted &&
+              parsedChunk.value.type === 'chunk' &&
+              parsedChunk.value.value
+            ) {
+              // Append only the new chunk to finalRevision
+              finalRevision += parsedChunk.value.value;
             }
           }
         } catch (error) {
-          console.log('Skipping invalid JSON chunk:', jsonString);
+          console.error('Skipping invalid JSON chunk:', jsonString);
         }
       }
-
-      // Remove processed parts from the buffer
+      // Remove processed data from the buffer
       buffer = buffer.slice(regex.lastIndex);
       regex.lastIndex = 0; // Reset regex index
     }
@@ -87,13 +128,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (finalRevision) {
       return res.status(200).json({ finalRevision: finalRevision.trim() });
     } else {
-      console.log('Full response body:', buffer);
+      console.error('Full response buffer:', buffer);
       return res.status(500).json({
-        error: 'finalRevision field not found in response',
-        details: buffer,  // Send raw response for debugging (optional)
+        error: 'finalRevision from Proofreader Agent not found in response',
+        details: buffer, // Send raw response for debugging
       });
     }
-
   } catch (error) {
     console.error('Error in fixGrammar API:', error);
     res.status(500).json({ error: 'Internal Server Error', details: error.message });
