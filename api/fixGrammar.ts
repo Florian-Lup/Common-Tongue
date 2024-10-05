@@ -19,7 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ message: 'Missing manuscript field' });
     }
 
-    // Build the request body to match the expected structure
+    // Build the request body
     const requestBody = {
       inputs: {
         manuscript: manuscript
@@ -27,35 +27,38 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       version: "^1.0"
     };
 
-    console.log('Sending request with body:', JSON.stringify(requestBody));
+    console.log('Sending request to Wordware API with body:', JSON.stringify(requestBody));
 
-    // Send the request to the Wordware API
+    // Send request to Wordware API
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`, // Use your API key
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestBody), // Ensure proper JSON formatting
+      body: JSON.stringify(requestBody), // Ensure the request body is correctly formatted
     });
 
-    // Log and capture the response text
+    // Capture and log the raw response text from the Wordware API
     const responseText = await response.text();
-    console.log('Response from Wordware API:', responseText);
+    console.log('Raw response from Wordware API:', responseText);
 
-    if (!response.ok) {
-      throw new Error(`Wordware API Error: ${response.statusText} - ${responseText}`);
+    // Handle the case where the response is not OK or not JSON
+    const contentType = response.headers.get('content-type');
+    if (!response.ok || !contentType || !contentType.includes('application/json')) {
+      throw new Error(`Invalid response from Wordware API: ${response.statusText} - ${responseText}`);
     }
 
-    // Parse the response JSON if the response is valid
+    // Parse the response as JSON and return it to the client
     const data = JSON.parse(responseText);
-    res.status(200).json(data); // Return the Wordware response back to the frontend
+    res.status(200).json(data); // Send the parsed data back to the client
+
   } catch (error) {
     if (error instanceof Error) {
       console.error('Error in fixGrammar API:', error.message);
       res.status(500).json({ error: 'Internal Server Error', details: error.message });
     } else {
-      console.error('Unknown error:', error);
+      console.error('Unknown error in fixGrammar API:', error);
       res.status(500).json({ error: 'An unknown error occurred' });
     }
   }
