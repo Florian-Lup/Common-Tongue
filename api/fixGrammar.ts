@@ -42,7 +42,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       throw new Error(`Invalid response from Wordware API: ${response.statusText} - ${errorText}`);
     }
 
-    const contentType = response.headers.get('content-type');
     let responseBody = '';
 
     if (response.body) {
@@ -50,6 +49,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const decoder = new TextDecoder();
       let done = false;
 
+      // Aggregating all chunks
       while (!done) {
         const { done: readerDone, value } = await reader.read();
         done = readerDone;
@@ -61,30 +61,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     console.log('Full response body:', responseBody);  // Log full response for diagnostics
 
-    // Check if the response is JSON
-    if (contentType && contentType.includes('application/json')) {
-      try {
-        const data = JSON.parse(responseBody);
+    // Handling chunked response manually
+    const chunks = responseBody.split('\n');  // Split the chunks by newlines
+    let finalRevision = null;
 
-        // Check for the presence of `finalRevision`
-        if (data.finalRevision) {
-          return res.status(200).json({ finalRevision: data.finalRevision });
-        } else {
-          return res.status(500).json({
-            error: 'finalRevision field is missing from the API response',
-            details: data,  // Return the entire response for debugging
-          });
+    chunks.forEach((chunk) => {
+      try {
+        const parsedChunk = JSON.parse(chunk);
+        if (parsedChunk.value && parsedChunk.value.finalRevision) {
+          finalRevision = parsedChunk.value.finalRevision;
         }
       } catch (error) {
-        console.error('Failed to parse JSON response:', error);
-        return res.status(500).json({
-          error: 'Failed to parse JSON response from Wordware API',
-          details: responseBody,  // Send raw response to client for debugging
-        });
+        console.log('Skipping non-JSON chunk:', chunk);
       }
+    });
+
+    if (finalRevision) {
+      return res.status(200).json({ finalRevision });
     } else {
-      // If the response is not JSON, return the raw text
-      return res.status(200).send(responseBody);  // Send raw text response to client
+      return res.status(500).json({
+        error: 'finalRevision field not found in response',
+        details: responseBody,  // Send raw response for debugging
+      });
     }
 
   } catch (error) {
