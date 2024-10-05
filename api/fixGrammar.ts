@@ -44,7 +44,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const reader = response.body?.getReader();
     const decoder = new TextDecoder();
 
-    // Collect all chunks
     let done = false;
     while (!done && reader) {
       const { done: readerDone, value } = await reader.read();
@@ -61,14 +60,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return '{' + chunk + '}';
     });
 
-    let finalRevision = null;
+    let finalRevision = '';
+    let finalRevisionStarted = false;
 
     // Parse each chunk and extract the finalRevision
     chunks.forEach((chunk) => {
       try {
         const parsedChunk = JSON.parse(chunk);
         if (parsedChunk.value && parsedChunk.value.finalRevision) {
-          finalRevision = parsedChunk.value.finalRevision;
+          finalRevisionStarted = true;
+        }
+        if (finalRevisionStarted && parsedChunk.value && typeof parsedChunk.value === 'string') {
+          finalRevision += parsedChunk.value; // Append the string chunks to form the final revision
         }
       } catch (error) {
         console.log('Skipping non-JSON chunk:', chunk);
@@ -76,7 +79,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     if (finalRevision) {
-      return res.status(200).json({ finalRevision });
+      return res.status(200).json({ finalRevision: finalRevision.trim() });
     } else {
       return res.status(500).json({
         error: 'finalRevision field not found in response',
