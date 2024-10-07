@@ -64,7 +64,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     }
   };
 
-  // Updated typeWriterEffect function
+  // Updated typeWriterEffect function using insertContent
   const typeWriterEffect = (
     editor: Editor,
     from: number,
@@ -82,7 +82,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     const insertNextChar = () => {
       if (index < length) {
         const char = text.charAt(index);
-        editor.chain().focus().insertText(char).run();
+        editor.chain().focus().insertContent(char).run(); // Use insertContent
         index++;
         setTimeout(insertNextChar, 25);
       } else {
