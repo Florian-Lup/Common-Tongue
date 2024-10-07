@@ -29,7 +29,7 @@ const App: React.FC = () => {
       TextStyle,
       Color,
     ],
-    editable: editable: !isProcessing, // Allow editing during the typewriter effect
+    editable: !isProcessing, // Allow editing during the typewriter effect
   });
 
   if (!editor) {
