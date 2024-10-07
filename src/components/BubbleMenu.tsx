@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BubbleMenu, Editor } from '@tiptap/react';
-import './BubbleMenu.scss';
+import './BubbleMenu.scss'; // Ensure spinner styles are added here
 
 interface CustomBubbleMenuProps {
   editor: Editor;
@@ -8,7 +8,11 @@ interface CustomBubbleMenuProps {
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, setIsTyping }) => {
+const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
+  editor,
+  isTyping,
+  setIsTyping,
+}) => {
   const [isFixing, setIsFixing] = useState(false);
 
   const handleFixGrammar = async () => {
@@ -28,7 +32,10 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
       const response = await fetch('/api/fixGrammar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ inputs: { manuscript: selectedText }, version: '^1.3' }),
+        body: JSON.stringify({
+          inputs: { manuscript: selectedText },
+          version: '^1.3',
+        }),
       });
 
       const data = await response.json();
@@ -80,11 +87,18 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
   };
 
   return (
-    <BubbleMenu editor={editor} tippyOptions={{ duration: 100, placement: 'bottom' }}>
+    <BubbleMenu
+      editor={editor}
+      tippyOptions={{ duration: 100, placement: 'bottom' }}
+    >
       <div className="bubble-menu">
         <button onClick={handleFixGrammar} disabled={isFixing || isTyping}>
-          {isFixing || isTyping ? 'Fixing...' : 'Fix Grammar'}
+          Fix Grammar
         </button>
+        {/* Other buttons can be added here */}
+        {(isFixing || isTyping) && (
+          <div className="spinner"></div>
+        )}
       </div>
     </BubbleMenu>
   );
