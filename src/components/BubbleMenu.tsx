@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BubbleMenu, Editor } from '@tiptap/react';
-import { Transaction } from '@tiptap/pm/state'; // Import Transaction type
 import './BubbleMenu.scss'; // Ensure spinner styles and error message styles are added here
 
 interface CustomBubbleMenuProps {
@@ -90,41 +89,6 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       }
     }, 25);
   };
-
-  // Automatically dismiss error message after 5 seconds
-  useEffect(() => {
-    if (errorMessage) {
-      const timer = setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000); // Dismiss after 5 seconds
-
-      return () => clearTimeout(timer); // Cleanup the timer on component unmount or when errorMessage changes
-    }
-  }, [errorMessage]);
-
-  // Reset error message when user interacts with the editor
-  useEffect(() => {
-    const handleInteraction = () => {
-      setErrorMessage(null);
-    };
-
-    // Listen for selection changes in the editor
-    editor.on('selectionUpdate', handleInteraction);
-
-    // Listener for transaction events
-    const handleTransaction = ({ transaction }: { transaction: Transaction }) => {
-      if (transaction.selectionSet) {
-        handleInteraction();
-      }
-    };
-
-    editor.on('transaction', handleTransaction);
-
-    return () => {
-      editor.off('selectionUpdate', handleInteraction);
-      editor.off('transaction', handleTransaction);
-    };
-  }, [editor]);
 
   return (
     <>
