@@ -89,7 +89,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     const insertNextChar = () => {
       if (index < length) {
         const char = text.charAt(index);
-        editor.chain().focus().insertText(char).run();
+        editor.chain().focus().insertContent(char).run();
         index++;
         setTimeout(insertNextChar, 25);
       } else {
