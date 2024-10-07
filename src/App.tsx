@@ -15,7 +15,6 @@ import CustomBubbleMenu from './components/BubbleMenu';
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -33,7 +32,7 @@ const App: React.FC = () => {
       TextStyle,
       Color,
     ],
-    editable: !isProcessing, // Editor is non-editable during processing
+    // Removed the 'editable' property to keep the editor always editable
   });
 
   if (!editor) {
@@ -52,8 +51,6 @@ const App: React.FC = () => {
         editor={editor}
         isTyping={isTyping}
         setIsTyping={setIsTyping}
-        isProcessing={isProcessing}
-        setIsProcessing={setIsProcessing}
       />
       <div className="character-count">
         {editor.storage.characterCount.characters()} characters
