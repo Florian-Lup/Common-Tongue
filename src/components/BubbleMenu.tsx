@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Added useEffect import
 import { BubbleMenu, Editor } from '@tiptap/react';
 import './BubbleMenu.scss'; // Ensure spinner styles and error message styles are added here
 
@@ -52,11 +52,11 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         typeWriterEffect(editor, from, to, finalRevision);
       } else {
         console.error('Error fixing grammar:', data.error || data.details);
-        setErrorMessage('An error occurred while fixing grammar.');
+        setErrorMessage('An error occurred.');
       }
     } catch (error) {
       console.error('Error fixing grammar:', error);
-      setErrorMessage('An error occurred while fixing grammar.');
+      setErrorMessage('An error occurred.');
     } finally {
       setIsFixing(false);
     }
@@ -90,9 +90,20 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     }, 25);
   };
 
+  // Automatically dismiss error message after 3 seconds
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000); // Dismiss after 3 seconds
+
+      return () => clearTimeout(timer); // Cleanup the timer on component unmount or when errorMessage changes
+    }
+  }, [errorMessage]);
+
   return (
     <>
-      {(isFixing || isTyping || errorMessage) ? (
+      {isFixing || isTyping || errorMessage ? (
         // Render spinner or error message when action is in progress or an error occurred
         <BubbleMenu
           editor={editor}
