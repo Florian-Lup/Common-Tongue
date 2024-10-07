@@ -7,18 +7,15 @@ interface CustomBubbleMenuProps {
   editor: Editor;
   isTyping: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
-  isProcessing: boolean;
-  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   editor,
   isTyping,
   setIsTyping,
-  isProcessing,
-  setIsProcessing,
 }) => {
   const [showBubbleMenu, setShowBubbleMenu] = useState(true);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handleFixGrammar = async () => {
     const { from, to } = editor.state.selection;
@@ -34,8 +31,8 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     try {
       // Close the bubble menu
       setShowBubbleMenu(false);
-      // Show the spinner and disable the editor
-      setIsProcessing(true);
+      // Show the spinner
+      setShowSpinner(true);
 
       const response = await fetch('/api/fixGrammar', {
         method: 'POST',
@@ -52,26 +49,22 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         const { finalRevision } = data;
         console.log('Final revision:', finalRevision);
 
-        // Hide the spinner and re-enable the editor before the typewriter effect
-        setIsProcessing(false);
-
         editor.commands.focus();
 
         // Start the typewriter effect
         typeWriterEffect(editor, from, to, finalRevision);
       } else {
         console.error('Error fixing grammar:', data.error || data.details);
-        // Ensure the editor is re-enabled in case of error
-        setIsProcessing(false);
       }
     } catch (error) {
       console.error('Error fixing grammar:', error);
-      // Ensure the editor is re-enabled in case of error
-      setIsProcessing(false);
+    } finally {
+      // Hide the spinner
+      setShowSpinner(false);
     }
   };
 
-  // Typewriter effect function
+  // Updated typeWriterEffect function
   const typeWriterEffect = (
     editor: Editor,
     from: number,
@@ -80,23 +73,26 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   ) => {
     setIsTyping(true);
 
-    editor.commands.deleteRange({ from, to });
+    // Delete the selected range
+    editor.chain().focus().deleteRange({ from, to }).run();
 
     let index = 0;
     const length = text.length;
 
-    const interval = setInterval(() => {
+    const insertNextChar = () => {
       if (index < length) {
         const char = text.charAt(index);
-        editor.commands.insertContentAt(from + index, char);
+        editor.chain().focus().insertText(char).run();
         index++;
+        setTimeout(insertNextChar, 25);
       } else {
-        clearInterval(interval);
         setIsTyping(false);
         // Set the cursor position after the inserted text
-        editor.commands.setTextSelection(from + length);
+        editor.chain().focus().setTextSelection(from + length).run();
       }
-    }, 25);
+    };
+
+    insertNextChar();
   };
 
   return (
@@ -107,10 +103,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
           tippyOptions={{ duration: 100, placement: 'bottom' }}
         >
           <div className="bubble-menu">
-            <button
-              onClick={handleFixGrammar}
-              disabled={isTyping || isProcessing}
-            >
+            <button onClick={handleFixGrammar} disabled={isTyping}>
               Fix Grammar
             </button>
           </div>
@@ -118,7 +111,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       )}
 
       {/* Spinner at Selection */}
-      {isProcessing && <SpinnerAtSelection editor={editor} />}
+      {showSpinner && <SpinnerAtSelection editor={editor} />}
     </>
   );
 };
