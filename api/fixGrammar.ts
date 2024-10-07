@@ -28,8 +28,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       version: '^1.1', // Ensure the correct version is used
     };
 
-    console.log('Sending request to Wordware API with body:', JSON.stringify(requestBody));
-
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
