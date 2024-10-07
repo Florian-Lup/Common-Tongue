@@ -26,13 +26,19 @@
 }
 
 .bubble-menu .spinner {
-  margin-left: 8px; /* Spacing between the button and spinner */
-  width: 16px;
-  height: 16px;
-  border: 2px solid #999;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #999;
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+}
+
+.bubble-menu .error-message {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  padding: 8px;
 }
 
 @keyframes spin {
