@@ -12,6 +12,7 @@ import Color from '@tiptap/extension-color';
 import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
+import CharacterCountComponent from './components/CharacterCount'; // Add this import
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -40,8 +41,8 @@ const App: React.FC = () => {
     <div className="editor">
       <MenuBar editor={editor} />
       <EditorContent className="editor__content" editor={editor} spellCheck={false} />
+      <CharacterCountComponent editor={editor} /> {/* Add this line */}
       <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
-      <div className="character-count">{editor.storage.characterCount.characters()} characters</div>
     </div>
   );
 };

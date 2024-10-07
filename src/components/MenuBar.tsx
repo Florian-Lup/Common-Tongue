@@ -8,9 +8,6 @@ import MenuItem from "./MenuItem.jsx";
 import validator from "validator";
 
 export default function MenuBar({ editor }: { editor: Editor }) {
-  // Get character count from the editor state
-  const characterCount = editor.storage.characterCount?.characters() || 0;
-
   const items = [
     {
       icon: "bold",
@@ -259,9 +256,6 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           )}
         </Fragment>
       ))}
-
-      {/* Display character count */}
-      <div className="character-count">{characterCount} Characters</div>
     </div>
   );
 }
