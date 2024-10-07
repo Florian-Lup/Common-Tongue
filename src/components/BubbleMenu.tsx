@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BubbleMenu, Editor } from '@tiptap/react';
+import SpinnerAtSelection from './SpinnerAtSelection';
 import './BubbleMenu.scss';
 
 interface CustomBubbleMenuProps {
@@ -9,7 +10,8 @@ interface CustomBubbleMenuProps {
 }
 
 const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, setIsTyping }) => {
-  const [isFixing, setIsFixing] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [showBubbleMenu, setShowBubbleMenu] = useState(true);
 
   const handleFixGrammar = async () => {
     const { from, to } = editor.state.selection;
@@ -23,12 +25,19 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
     console.log('Selected text:', selectedText);
 
     try {
-      setIsFixing(true);
+      // Close the bubble menu
+      setShowBubbleMenu(false);
+      // Show the spinner
+      setShowSpinner(true);
 
+      // API request to your serverless function on Vercel
       const response = await fetch('/api/fixGrammar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ inputs: { manuscript: selectedText }, version: '^1.3' }),
+        body: JSON.stringify({
+          inputs: { manuscript: selectedText },
+          version: '^1.3',
+        }),
       });
 
       const data = await response.json();
@@ -47,11 +56,12 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
     } catch (error) {
       console.error('Error fixing grammar:', error);
     } finally {
-      setIsFixing(false);
+      // Hide the spinner
+      setShowSpinner(false);
     }
   };
 
-  // Typewriter effect function
+  // Existing typeWriterEffect function remains the same
   const typeWriterEffect = (
     editor: Editor,
     from: number,
@@ -76,17 +86,25 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
         // Set the cursor position after the inserted text
         editor.commands.setTextSelection(from + length);
       }
-    }, 25);
+    }, 50);
   };
 
   return (
-    <BubbleMenu editor={editor} tippyOptions={{ duration: 100, placement: 'bottom' }}>
-      <div className="bubble-menu">
-        <button onClick={handleFixGrammar} disabled={isFixing || isTyping}>
-          {isFixing || isTyping ? 'Fixing...' : 'Fix Grammar'}
-        </button>
-      </div>
-    </BubbleMenu>
+    <>
+      {showBubbleMenu && (
+        <BubbleMenu editor={editor} tippyOptions={{ duration: 100, placement: 'bottom' }}>
+          <div className="bubble-menu">
+            <button onClick={handleFixGrammar} disabled={isTyping || showSpinner}>
+              Fix Grammar
+            </button>
+            {/* Add other buttons as needed */}
+          </div>
+        </BubbleMenu>
+      )}
+
+      {/* Spinner at Selection */}
+      {showSpinner && <SpinnerAtSelection editor={editor} />}
+    </>
   );
 };
 
