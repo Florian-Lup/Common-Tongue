@@ -7,10 +7,17 @@ interface CustomBubbleMenuProps {
   editor: Editor;
   isTyping: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
+  isProcessing: boolean;
+  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, setIsTyping }) => {
-  const [showSpinner, setShowSpinner] = useState(false);
+const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
+  editor,
+  isTyping,
+  setIsTyping,
+  isProcessing,
+  setIsProcessing,
+}) => {
   const [showBubbleMenu, setShowBubbleMenu] = useState(true);
 
   const handleFixGrammar = async () => {
@@ -27,8 +34,8 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
     try {
       // Close the bubble menu
       setShowBubbleMenu(false);
-      // Show the spinner
-      setShowSpinner(true);
+      // Show the spinner and disable the editor
+      setIsProcessing(true);
 
       // API request to your serverless function on Vercel
       const response = await fetch('/api/fixGrammar', {
@@ -46,22 +53,26 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
         const { finalRevision } = data;
         console.log('Final revision:', finalRevision);
 
+        // Hide the spinner and re-enable the editor before the typewriter effect
+        setIsProcessing(false);
+
         editor.commands.focus();
 
         // Start the typewriter effect
         typeWriterEffect(editor, from, to, finalRevision);
       } else {
         console.error('Error fixing grammar:', data.error || data.details);
+        // Ensure the editor is re-enabled in case of error
+        setIsProcessing(false);
       }
     } catch (error) {
       console.error('Error fixing grammar:', error);
-    } finally {
-      // Hide the spinner
-      setShowSpinner(false);
+      // Ensure the editor is re-enabled in case of error
+      setIsProcessing(false);
     }
   };
 
-  // Existing typeWriterEffect function remains the same
+  // Typewriter effect function
   const typeWriterEffect = (
     editor: Editor,
     from: number,
@@ -94,7 +105,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
       {showBubbleMenu && (
         <BubbleMenu editor={editor} tippyOptions={{ duration: 100, placement: 'bottom' }}>
           <div className="bubble-menu">
-            <button onClick={handleFixGrammar} disabled={isTyping || showSpinner}>
+            <button onClick={handleFixGrammar} disabled={isTyping || isProcessing}>
               Fix Grammar
             </button>
             {/* Add other buttons as needed */}
@@ -103,7 +114,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({ editor, isTyping, s
       )}
 
       {/* Spinner at Selection */}
-      {showSpinner && <SpinnerAtSelection editor={editor} />}
+      {isProcessing && <SpinnerAtSelection editor={editor} />}
     </>
   );
 };
