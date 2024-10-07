@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BubbleMenu, Editor } from '@tiptap/react';
-import './BubbleMenu.scss'; // Ensure spinner styles and error message styles are added here
+import './BubbleMenu.scss'; // Ensure this file contains only CSS/SCSS code
 
 interface CustomBubbleMenuProps {
   editor: Editor;
@@ -56,7 +56,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       }
     } catch (error) {
       console.error('Error fixing grammar:', error);
-      setErrorMessage('An error occurred.');
+      setErrorMessage('An error occurred while fixing grammar.');
     } finally {
       setIsFixing(false);
     }
@@ -110,7 +110,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     // Listen for selection changes in the editor
     editor.on('selectionUpdate', handleInteraction);
 
-    // Listen for clicks in the editor
+    // Listen for transactions that might indicate interaction
     editor.on('transaction', ({ transactions }) => {
       if (transactions.some(tr => tr.selectionSet)) {
         handleInteraction();
