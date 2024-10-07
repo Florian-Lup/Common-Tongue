@@ -15,6 +15,7 @@ import CustomBubbleMenu from './components/BubbleMenu';
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -24,12 +25,15 @@ const App: React.FC = () => {
       TaskList,
       TaskItem,
       CharacterCount.configure({ limit: 5000 }),
-      Placeholder.configure({ placeholder: 'Write a short paragraph...', emptyEditorClass: 'is-editor-empty' }),
+      Placeholder.configure({
+        placeholder: 'Write a short paragraph...',
+        emptyEditorClass: 'is-editor-empty',
+      }),
       Underline,
       TextStyle,
       Color,
     ],
-    editable: !isTyping,
+    editable: !isProcessing, // Editor is non-editable during processing
   });
 
   if (!editor) {
@@ -39,9 +43,21 @@ const App: React.FC = () => {
   return (
     <div className="editor">
       <MenuBar editor={editor} />
-      <EditorContent className="editor__content" editor={editor} spellCheck={false} />
-      <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
-      <div className="character-count">{editor.storage.characterCount.characters()} characters</div>
+      <EditorContent
+        className="editor__content"
+        editor={editor}
+        spellCheck={false}
+      />
+      <CustomBubbleMenu
+        editor={editor}
+        isTyping={isTyping}
+        setIsTyping={setIsTyping}
+        isProcessing={isProcessing}
+        setIsProcessing={setIsProcessing}
+      />
+      <div className="character-count">
+        {editor.storage.characterCount.characters()} characters
+      </div>
     </div>
   );
 };
