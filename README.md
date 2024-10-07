@@ -1,79 +1,89 @@
-```markdown
 # Common-Tongue
 
-Common-Tongue is a rich text editor application designed for creating and editing rich text documents. It is built using React and TypeScript, leveraging the Tiptap editor framework for its core functionalities. The application provides various text formatting options and supports extensions like character count, highlighting, task lists, and more. The project includes both a "Pro" version with advanced features that require a paid subscription and a "Free" version with basic functionalities. The application aims to offer a user-friendly interface for rich text editing, with optional collaboration features through Tiptap Cloud.
+Common-Tongue is a rich text editor application designed for creating and editing rich text documents. Built using React and TypeScript, it leverages the Tiptap editor framework for its core functionalities. The application offers various text formatting options and supports extensions like highlighting, task lists, and more. It includes both a "Pro" version with advanced features and a "Free" version with basic functionalities. The application aims to provide a user-friendly interface for rich text editing, with optional collaboration features through Tiptap Cloud.
 
 ## Overview
 
-Common-Tongue is a web application developed using the following technologies:
+Common-Tongue is architected using modern web technologies to ensure a robust and scalable application. The key technologies used include:
 
-- **React** for building the user interface.
-- **TypeScript** for type-safe JavaScript.
-- **Vite** for fast and optimized build processes.
-- **ESLint** for maintaining code quality and consistency.
-- **Tiptap** for the core rich text editing functionalities.
-- **Remixicon** for menu bar icons.
-- **Sass** for styling.
+- **Frontend**: React and TypeScript
+- **Build Tool**: Vite for fast and optimized build processes
+- **Code Quality**: ESLint for maintaining code quality and consistency
+- **Rich Text Editor**: Tiptap for core rich text editing functionalities
+- **Icons**: Remixicon for menu bar icons
+- **Styling**: Sass for styling
 
-The project is structured as follows:
+### Project Structure
 
-- The main project directory contains configuration files and scripts for setting up and building the project.
-- The `src` directory contains the main editor application, including components, styles, and configurations.
+- **Main Directory**: Contains configuration files and scripts for setting up and building the project.
+- **src Directory**: Contains the main editor application, including components, styles, and configurations.
+
+### Editor Configuration
+
+- **Extensions**: Configured with various Tiptap extensions including Highlight, TaskItem, TaskList, Placeholder, Underline, TextStyle, Color, and a custom extension for toggling text color. A Bubble Menu extension is also included to support the "Fix Grammar" feature.
+- **Menu Bar**: Includes buttons for various text formatting options. The "Fix Grammar" button is integrated to enhance text editing capabilities.
+- **Custom Text Color**: A custom extension is defined to toggle text color between a default and a specified color.
+
+### Development and Build
+
+- **Scripts**: Defined in `package.json` for running the development server (`npm run dev`), building the project (`npm run build`), linting the code (`npm run lint`), and previewing the build (`npm run preview`).
+- **TypeScript Configuration**: Defined in `tsconfig.json` and `tsconfig.node.json`.
+- **Vite Configuration**: Defined in `vite.config.ts` to configure Vite, including adding the React plugin.
+
+### GitHub Actions
+
+- **Workflow**: Defined in `.github/workflows/pack-blockeditor.yml` for packaging and releasing both Pro and Free versions of the editor.
 
 ## Features
 
 1. **Rich Text Editing**:
-    - Users can create and edit rich text documents with various formatting options, including bold, italic, underline, strikethrough, code, highlight, and text color (red).
-    - Users can add headings, paragraphs, bullet lists, ordered lists, task lists, code blocks, blockquotes, horizontal rules, and hard breaks.
-    - A Tiptap placeholder with the text "Write a short paragraph..." is displayed when the editor is empty.
-    - The editor ensures a seamless user experience by not highlighting borders when focusing on the placeholder.
-    - The menu bar provides easy access to text formatting options, with an Underline button next to the Italic button and a Text Color button next to the Highlight button. The Code button is placed next to the Code Block button.
+    - Create and edit rich text documents with formatting options like bold, italic, underline, strikethrough, code, highlight, and text color (red).
+    - Add headings, paragraphs, bullet lists, ordered lists, task lists, code blocks, blockquotes, horizontal rules, and hard breaks.
+    - Placeholder text "Write a short paragraph..." when the editor is empty.
+    - Seamless user experience without highlighting borders when focusing on the placeholder.
+    - Menu bar for easy access to text formatting options.
 
 2. **Character Count**:
-    - The editor includes a character count extension that can be configured to limit the number of characters in the document.
+    - Configurable character count extension to limit the number of characters in the document.
+    - Character count displayed under the text editor.
 
 3. **Task Lists**:
-    - Users can create task lists with individual task items that can be checked off.
+    - Create task lists with individual task items that can be checked off.
 
 4. **Pro and Free Versions**:
-    - The project supports both a Pro version with advanced features and a Free version with basic functionalities. A script is provided to convert the Pro version to the Free version by removing references to Pro features.
+    - Pro version with advanced features and Free version with basic functionalities.
+    - Script provided to convert the Pro version to the Free version by removing references to Pro features.
 
 5. **Collaboration (Optional)**:
-    - The project supports collaboration features through Tiptap Cloud. This feature is optional and can be enabled by configuring the necessary environment variables.
+    - Collaboration features through Tiptap Cloud, configurable via environment variables.
 
 6. **GitHub Actions for Packaging**:
-    - The project includes GitHub Actions workflows to package and release both Pro and Free versions of the editor.
+    - Workflows to package and release both Pro and Free versions of the editor.
 
 7. **Tiptap Bubble Menu with "Fix Grammar" Button**:
-    - A Tiptap Bubble Menu is integrated into the editor, featuring a "Fix Grammar" button. This button provides users with suggestions to improve their grammar within the text editor.
-    - The Tiptap Bubble Menu is configured to appear below the selected text using the `tippyOptions` provided by Tiptap, which internally uses tippy.js for positioning. Specifically, the placement option is set to 'bottom'.
+    - Integrated Bubble Menu with a "Fix Grammar" button providing grammar improvement suggestions.
+    - Configured to appear below the selected text using `tippyOptions`.
 
-## Getting started
+## Getting Started
 
 ### Requirements
 
-To run the project, you need to have the following technologies installed on your computer:
-
 - Node.js
-- npm (Node Package Manager)
+- npm
 
 ### Quickstart
 
-1. **Clone the repository**:
-   ```bash
-   git clone <repository-url>
-   cd common-tongue
-   ```
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-3. **Launch the development server**:
-   ```bash
-   npm run dev
-   ```
+1. Clone the repository and navigate to the project directory.
+2. Set up the Tiptap registry as per the provided instructions.
+3. Convert to the Free version if necessary by running the provided script.
+4. Install dependencies using `npm install`.
+5. Enable collaboration features if desired by configuring the necessary environment variables.
+6. Launch the development server using `npm run dev`.
 
 ### License
 
-The project is proprietary (not open source). © 2024.
+The project is proprietary (not open source). 
+
+```
+© 2024. All rights reserved.
 ```
