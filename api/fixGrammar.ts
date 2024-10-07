@@ -137,8 +137,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         details: buffer, // Send raw response for debugging
       });
     }
-  } catch (error) {
-    console.error('Error in fixGrammar API:', error);
-    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error in fixGrammar API:', error);
+      res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    } else {
+      console.error('Unknown error in fixGrammar API:', error);
+      res.status(500).json({ error: 'Unknown error occurred' });
+    }
   }
 }
