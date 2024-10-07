@@ -21,11 +21,8 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     const selectedText = editor.state.doc.textBetween(from, to, ' ');
 
     if (!selectedText) {
-      console.log('No text selected.');
       return;
     }
-
-    console.log('Selected text:', selectedText);
 
     try {
       setIsFixing(true);
@@ -44,7 +41,6 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
 
       if (response.ok) {
         const { finalRevision } = data;
-        console.log('Final revision:', finalRevision);
 
         editor.commands.focus();
 
