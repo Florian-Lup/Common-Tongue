@@ -1,6 +1,6 @@
 # Common-Tongue
 
-Common-Tongue is a rich text editor application designed for creating and editing rich text documents. Built using React and TypeScript, it leverages the Tiptap editor framework for its core functionalities. The application offers various text formatting options and supports extensions like highlighting, task lists, and more. It includes both a "Pro" version with advanced features and a "Free" version with basic functionalities. The application aims to provide a user-friendly interface for rich text editing, with optional collaboration features through Tiptap Cloud.
+Common-Tongue is a rich text editor application designed for creating and editing rich text documents. Built using React and TypeScript, it leverages the Tiptap editor framework for its core functionalities. It includes both a "Pro" version with advanced features and a "Free" version with basic functionalities. The application aims to provide a user-friendly interface for rich text editing, with optional collaboration features.
 
 ## Overview
 
@@ -74,11 +74,8 @@ Common-Tongue is architected using modern web technologies to ensure a robust an
 ### Quickstart
 
 1. Clone the repository and navigate to the project directory.
-2. Set up the Tiptap registry as per the provided instructions.
-3. Convert to the Free version if necessary by running the provided script.
-4. Install dependencies using `npm install`.
-5. Enable collaboration features if desired by configuring the necessary environment variables.
-6. Launch the development server using `npm run dev`.
+2. Install dependencies using `npm install`.
+3. Launch the development server using `npm run dev`.
 
 ### License
 
