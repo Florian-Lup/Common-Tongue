@@ -23,7 +23,7 @@ const App: React.FC = () => {
       Highlight.configure({ multicolor: true }),
       TaskList,
       TaskItem,
-      CharacterCount.configure({ limit: 5000 }), // You already have the character count extension here
+      CharacterCount.configure({ limit: 5000 }),
       Placeholder.configure({ placeholder: 'Write a short paragraph...', emptyEditorClass: 'is-editor-empty' }),
       Underline,
       TextStyle,
@@ -40,13 +40,15 @@ const App: React.FC = () => {
   const characterCount = editor.storage.characterCount.characters();
 
   return (
-    <div className="editor">
-      <MenuBar editor={editor} />
-      <EditorContent className="editor__content" editor={editor} spellCheck={false} />
-      <div className="character-count">
-        {characterCount} characters
+    <div className="editor-container">
+      <div className="editor">
+        <MenuBar editor={editor} />
+        <EditorContent className="editor__content" editor={editor} spellCheck={false} />
+        <div className="character-count">
+          {characterCount} characters
+        </div>
+        <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
       </div>
-      <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
     </div>
   );
 };

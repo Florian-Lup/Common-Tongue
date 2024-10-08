@@ -5,3 +5,21 @@
   margin-right: 0.75rem;
   width: 1px;
 }
+
+
+.editor__header {
+  display: flex;
+  align-items: center;
+  background-color: #f9fafb;
+  /* Light background */
+  border-bottom: 1px solid #e5e7eb;
+  /* Light gray border */
+  padding: 8px 16px;
+  gap: 8px;
+  /* Space between dropdowns */
+
+  /* Responsive design */
+  @media (max-width: 600px) {
+    flex-wrap: wrap;
+  }
+}

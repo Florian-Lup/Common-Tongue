@@ -1,22 +1,36 @@
+/* MenuItem.scss */
 .menu-item {
-  background-color: transparent;
+  background: none;
   border: none;
-  border-radius: 0.4rem;
-  color: #fff;
   cursor: pointer;
-  height: 1.75rem;
-  margin-right: 0.25rem;
-  padding: 0.25rem;
-  width: 1.75rem;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Space between icon and text */
+  color: #374151;
+  /* Text color */
+  transition: background-color 0.2s ease;
 
-  svg {
-    fill: currentColor;
-    height: 100%;
-    width: 100%;
+  &:hover {
+    background-color: #e5e7eb;
+    /* Light gray on hover */
   }
 
-  &:hover,
   &.is-active {
-    background-color: #303030;
+    background-color: #e5e7eb;
+    /* Slightly darker background for active items */
+  }
+
+  .remix {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    /* Icon color matches text color */
+  }
+
+  .menu-item__title {
+    font-size: 14px;
+    font-weight: 500;
   }
 }

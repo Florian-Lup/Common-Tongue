@@ -1,0 +1,116 @@
+/* DropdownMenu.scss */
+.dropdown-menu {
+  display: inline-block;
+
+  .dropdown-toggle {
+    background: none;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #374151;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #c1c4ca;
+    }
+
+    .remix {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .dropdown-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .dropdown-arrow {
+      margin-left: auto;
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+  }
+
+  .dropdown-content {
+    display: none;
+    /* Hidden by default */
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffffff;
+    width: 200px;
+    /* Set a fixed width or adjust as needed */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    z-index: 1;
+    padding: 8px 0;
+    box-sizing: border-box;
+  }
+
+  /* Show the dropdown when the parent has the 'open' class */
+  &.open .dropdown-content {
+    display: block;
+  }
+
+  .dropdown-content .menu-item {
+    width: 100%;
+    padding: 8px 16px;
+    box-sizing: border-box;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+
+    &.is-active {
+      background-color: #e5e7eb;
+    }
+
+    .remix {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .menu-item__title {
+      flex: 1;
+      /* Allows the title to take up remaining space */
+    }
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 600px) {
+    .dropdown-content {
+      max-width: 400px;
+      /* Optional: Limit maximum width */
+      top: calc(100% + 8px);
+      /* Slightly increase spacing */
+      left: 50%;
+      transform: translateX(-50%);
+      max-height: 80vh;
+      /* Prevent dropdown from exceeding 80% of the viewport height */
+      overflow-y: auto;
+      /* Enable vertical scrolling */
+    }
+
+    .dropdown-toggle {
+      padding: 12px 16px;
+      /* Increase padding for better touch targets */
+    }
+  }
+}
