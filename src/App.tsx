@@ -12,7 +12,6 @@ import Color from '@tiptap/extension-color';
 import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
-import CharacterCountComponent from './components/CharacterCount'; // Add this import
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -24,7 +23,7 @@ const App: React.FC = () => {
       Highlight.configure({ multicolor: true }),
       TaskList,
       TaskItem,
-      CharacterCount.configure({ limit: 5000 }),
+      CharacterCount.configure({ limit: 5000 }), // You already have the character count extension here
       Placeholder.configure({ placeholder: 'Write a short paragraph...', emptyEditorClass: 'is-editor-empty' }),
       Underline,
       TextStyle,
@@ -37,11 +36,16 @@ const App: React.FC = () => {
     return null;
   }
 
+  // Inline character count logic
+  const characterCount = editor.storage.characterCount.characters();
+
   return (
     <div className="editor">
       <MenuBar editor={editor} />
       <EditorContent className="editor__content" editor={editor} spellCheck={false} />
-      <CharacterCountComponent editor={editor} /> {/* Add this line */}
+      <div className="character-count">
+        {characterCount} characters
+      </div>
       <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
     </div>
   );
