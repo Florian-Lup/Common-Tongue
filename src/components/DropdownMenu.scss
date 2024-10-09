@@ -40,7 +40,7 @@
       width: 16px;
       height: 16px;
       fill: currentColor;
-      transition: transform 0.3s ease; // Added transition
+      transition: transform 0.3s ease, fill 0.3s ease; // Added fill transition
       transform: rotate(0deg); // Initial rotation
     }
   }
@@ -52,12 +52,16 @@
   }
 
   .dropdown-content {
-    display: none;
-    /* Hidden by default */
+    /* Initial hidden state */
+    opacity: 0; /* Fully transparent */
+    transform: translateY(-10px); /* Slight upward position */
+    visibility: hidden; /* Hide from accessibility tree */
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    /* Existing styles... */
     position: absolute;
     top: calc(100% + 4px);
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-10px); /* Combine transforms */
     background-color: #ffffff;
     width: 260px;
     /* Set a fixed width or adjust as needed */
@@ -67,11 +71,15 @@
     z-index: 1;
     padding: 8px 0;
     box-sizing: border-box;
+    pointer-events: none; /* Prevent interaction when hidden */
   }
 
   /* Show the dropdown when the parent has the 'open' class */
   &.open .dropdown-content {
-    display: block;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0); /* Slide down */
+    visibility: visible;
+    pointer-events: auto; /* Allow interaction */
   }
 
   .dropdown-content .menu-item {
@@ -115,11 +123,15 @@
       top: calc(100% + 8px);
       /* Slightly increase spacing */
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) translateY(-10px);
       max-height: 80vh;
       /* Prevent dropdown from exceeding 80% of the viewport height */
       overflow-y: auto;
       /* Enable vertical scrolling */
+    }
+
+    &.open .dropdown-content {
+      transform: translateX(-50%) translateY(0);
     }
   }
 }
