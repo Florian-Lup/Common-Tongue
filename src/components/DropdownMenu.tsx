@@ -64,8 +64,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ title, icon, items }) => {
         className="dropdown-toggle"
         onClick={toggleDropdown}
         title={title}
-        aria-haspopup="true"
-        aria-expanded={open}
+        // Removed ARIA attributes:
+        // aria-haspopup="true"
+        // aria-expanded={open}
       >
         <svg className="remix">
           <use xlinkHref={`${remixiconUrl}#ri-${icon}`} />
@@ -76,7 +77,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ title, icon, items }) => {
       </button>
       
       {/* Always render the dropdown-content */}
-      <div className="dropdown-content" role="menu">
+      <div className="dropdown-content">
         {items.map((item, index) => (
           <MenuItem
             key={index}
