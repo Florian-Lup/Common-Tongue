@@ -18,6 +18,14 @@
       background-color: #c1c4ca;
     }
 
+        /* Add this block to highlight when open */
+    .dropdown-menu.open & {
+      background-color: #e5e7eb; /* Highlight color */
+      /* Optional: You can add more styles like border or box-shadow */
+      /* border: 1px solid #a1a1a1; */
+      /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); */
+    }
+
     .remix {
       width: 20px;
       height: 20px;
