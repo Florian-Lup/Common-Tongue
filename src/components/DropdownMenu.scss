@@ -2,6 +2,7 @@
 
 .dropdown-menu {
   display: inline-block;
+  position: relative; /* Ensure proper positioning of absolute children */
 
   /* Highlight the dropdown-toggle when open */
   &.open .dropdown-toggle {
@@ -40,7 +41,7 @@
       width: 16px;
       height: 16px;
       fill: currentColor;
-      transition: transform 0.3s ease, fill 0.3s ease; // Added fill transition
+      transition: transform 0.3s ease, fill 0.3s ease; // Smooth transition
       transform: rotate(0deg); // Initial rotation
     }
   }
@@ -54,30 +55,29 @@
   .dropdown-content {
     /* Initial hidden state */
     opacity: 0; /* Fully transparent */
-    transform: translateY(-10px); /* Slight upward position */
+    transform: translateX(-50%) translateY(-10px); /* Start 10px above */
     visibility: hidden; /* Hide from accessibility tree */
-    transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s ease;
-    /* Existing styles... */
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease; // Reduced duration
     position: absolute;
     top: calc(100% + 4px);
     left: 50%;
-    transform: translateX(-50%) translateY(0); /* Combine transforms */
+    /* Remove the second transform to prevent conflicts */
     background-color: #ffffff;
     width: 260px;
-    /* Set a fixed width or adjust as needed */
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
     border: 1px solid #e5e7eb;
     border-radius: 4px;
-    z-index: 1;
+    z-index: 1000; /* Increased z-index to ensure visibility */
     padding: 8px 0;
     box-sizing: border-box;
     pointer-events: none; /* Prevent interaction when hidden */
+    transform-origin: top center; /* Define origin for transform */
   }
 
   /* Show the dropdown when the parent has the 'open' class */
   &.open .dropdown-content {
     opacity: 1;
-    transform: translateX(-50%) translateY(10px); /* Slide down */
+    transform: translateX(-50%) translateY(0); /* Slide down to original position */
     visibility: visible;
     pointer-events: auto; /* Allow interaction */
   }
@@ -123,7 +123,7 @@
       top: calc(100% + 8px);
       /* Slightly increase spacing */
       left: 50%;
-      transform: translateX(-50%) translateY(-10px);
+      transform: translateX(-50%) translateY(-10px); /* Start 10px above */
       max-height: 80vh;
       /* Prevent dropdown from exceeding 80% of the viewport height */
       overflow-y: auto;
@@ -131,7 +131,7 @@
     }
 
     &.open .dropdown-content {
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%) translateY(0); /* Slide down to original position */
     }
   }
 }
