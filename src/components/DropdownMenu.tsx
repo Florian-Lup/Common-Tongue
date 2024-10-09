@@ -74,17 +74,17 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ title, icon, items }) => {
           <use xlinkHref={`${remixiconUrl}#ri-arrow-down-s-line`} />
         </svg>
       </button>
-      {open && (
-        <div className="dropdown-content" role="menu">
-          {items.map((item, index) => (
-            <MenuItem
-              key={index}
-              {...item}
-              action={() => handleMenuItemClick(item.action)}
-            />
-          ))}
-        </div>
-      )}
+      
+      {/* Always render the dropdown-content */}
+      <div className="dropdown-content" role="menu">
+        {items.map((item, index) => (
+          <MenuItem
+            key={index}
+            {...item}
+            action={() => handleMenuItemClick(item.action)}
+          />
+        ))}
+      </div>
     </div>
   );
 };
