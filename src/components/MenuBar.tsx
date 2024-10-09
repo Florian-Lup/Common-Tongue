@@ -103,7 +103,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
     },
     {
       title: 'Insert',
-      icon: 'add-circle-line',
+      icon: 'page-separator',
       items: [
         {
           icon: 'link',
