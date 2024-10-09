@@ -120,14 +120,16 @@ body {
   /* Ensure the editor doesn't exceed its parent container */
 
   &__header {
-    position: relative;
-    /* Allow dropdowns to be positioned absolutely within */
+    position: sticky;
+    top: 10px;
+    z-index: 1000;
+    transition: box-shadow 0.3s ease;
     display: flex;
     /* Flex layout for dropdown menus */
     align-items: center;
     background: #0d0d0d;
     border-radius: 0.5rem;
-    padding: 0.5rem 0.5rem;
+    padding: 0.2rem 0.2rem;
     /* Increased padding for better touch targets on mobile */
     margin: 0 auto;
     /* Center the header */
@@ -135,10 +137,14 @@ body {
     /* Include padding and border in the element's total width */
     gap: 8px;
     /* Space between dropdown menus */
-      /* Responsive design */
-  @media (max-width: 600px) {
-    flex-wrap: wrap;
-  }
+    /* Responsive design */
+    @media (max-width: 600px) {
+      flex-wrap: wrap;
+    }
+
+    &.sticky {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
   }
 
   &__content {

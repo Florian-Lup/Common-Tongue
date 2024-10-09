@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
 import Highlight from '@tiptap/extension-highlight';
@@ -15,6 +15,7 @@ import CustomBubbleMenu from './components/BubbleMenu';
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
+  const [isHeaderSticky, setIsHeaderSticky] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -32,17 +33,34 @@ const App: React.FC = () => {
     editable: !isTyping,
   });
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const header = document.querySelector('.editor__header');
+      if (header) {
+        const sticky = header.getBoundingClientRect().top <= 0;
+        setIsHeaderSticky(sticky);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   if (!editor) {
     return null;
   }
 
-  // Inline character count logic
   const characterCount = editor.storage.characterCount.characters();
 
   return (
     <div className="editor-container">
       <div className="editor">
-        <MenuBar editor={editor} />
+        <div className={`editor__header${isHeaderSticky ? ' sticky' : ''}`}>
+          <MenuBar editor={editor} />
+        </div>
         <EditorContent className="editor__content" editor={editor} spellCheck={false} />
         <div className="character-count">
           {characterCount} characters
