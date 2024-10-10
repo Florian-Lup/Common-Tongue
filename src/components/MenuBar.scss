@@ -9,13 +9,9 @@
   gap: 8px;
   width: fit-content; /* Adjust width to fit content */
 
-  /* Optional: Add padding for better touch targets */
-  padding: 0.5rem 1rem;
-
   /* Responsive design */
   @media (max-width: 600px) {
     flex-wrap: wrap;
-    padding: 0.5rem; /* Adjust padding if necessary */
     gap: 4px; /* Reduce gap for smaller screens */
   }
 
