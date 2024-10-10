@@ -1,21 +1,73 @@
-/* src/components/MenuBar/MenuBar.scss */
+/* src/components/MenuBar.scss */
 
-.menu-bar {
+.dropdown-wrapper {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  /* Additional styling properties */
+  flex-wrap: wrap;
+  gap: 8px; /* Adjust spacing between dropdowns as needed */
+  
+  /* Example: Align dropdowns to the start */
+  justify-content: flex-start;
 
-  /* Responsive design */
+  /* Responsive adjustments */
   @media (max-width: 600px) {
-    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
   }
 }
 
-.divider {
-  background-color: rgba(#fff, 0.25);
-  height: 1.25rem;
-  margin-left: 0.5rem;
-  margin-right: 0.75rem;
-  width: 1px;
+.dropdown-menu {
+  position: relative;
+  display: inline-block;
+  /* Additional styles as needed */
+}
+
+.dropdown-button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  /* Additional styles as needed */
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  z-index: 1;
+  /* Additional styles as needed */
+}
+
+.dropdown-menu:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content button {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-content button:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-content button.active {
+  background-color: #ddd;
+}
+
+.dropdown-content button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Optional: Add transitions for smooth dropdown appearance */
+.dropdown-content {
+  transition: all 0.3s ease;
 }
