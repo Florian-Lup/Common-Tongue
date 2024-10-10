@@ -15,6 +15,7 @@ import CustomBubbleMenu from './components/BubbleMenu';
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
+  const [characterCount, setCharacterCount] = useState(0);
 
   const editor = useEditor({
     extensions: [
@@ -30,22 +31,24 @@ const App: React.FC = () => {
       Color,
     ],
     editable: !isTyping,
+    onUpdate: ({ editor }) => {
+      setCharacterCount(editor.storage.characterCount.characters());
+    },
   });
 
   if (!editor) {
     return null;
   }
 
-  // Inline character count logic
-  const characterCount = editor.storage.characterCount.characters();
-
   return (
     <div className="editor-container">
       <div className="editor">
         <MenuBar editor={editor} />
         <EditorContent className="editor__content" editor={editor} spellCheck={false} />
-        <div className="character-count">
-          {characterCount} characters
+        <div className="editor__footer">
+          <div className="character-count">
+            {characterCount} characters
+          </div>
         </div>
         <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
       </div>

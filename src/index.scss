@@ -143,16 +143,21 @@ body {
 
   &__footer {
     align-items: center;
-    border-top: 3px solid #0d0d0d;
-    color: #0d0d0d;
+    border-top: 1px solid #e5e7eb;
+    color: #374151;
     display: flex;
     flex: 0 0 auto;
     font-size: 12px;
-    flex-wrap: wrap;
-    font-weight: 600;
-    justify-content: space-between;
-    padding: 0.25rem 0.75rem;
-    white-space: nowrap;
+    justify-content: flex-end;
+    padding: 0.5rem 0.75rem;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+
+    .character-count {
+      font-size: 0.8rem;
+      color: #888;
+    }
   }
 }
 
@@ -169,18 +174,4 @@ body {
   .red-text {
     color: #ff0000;
   }
-}
-
-.character-count {
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  text-align: right;
-  width: 100%;
-  /* Take full width of the editor */
-  max-width: 800px;
-  /* Align with the editor content */
-  box-sizing: border-box;
-  padding-right: 0.5rem;
 }
