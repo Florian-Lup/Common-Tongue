@@ -1,3 +1,17 @@
+/* MenuBar.scss */
+
+.menu-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Additional styling properties */
+
+  /* Responsive design */
+  @media (max-width: 600px) {
+    flex-wrap: wrap;
+  }
+}
+
 .divider {
   background-color: rgba(#fff, 0.25);
   height: 1.25rem;
@@ -5,4 +19,3 @@
   margin-right: 0.75rem;
   width: 1px;
 }
-
