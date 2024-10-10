@@ -232,7 +232,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
   ];
 
   return (
-    <div className="editor__header">
+    <div className="menu-bar"> {/* Changed className */}
       {groups.map((group, index) => (
         <DropdownMenu key={index} title={group.title} icon={group.icon} items={group.items} />
       ))}
