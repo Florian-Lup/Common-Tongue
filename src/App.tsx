@@ -42,9 +42,7 @@ const App: React.FC = () => {
   return (
     <div className="editor-container">
       <div className="editor">
-        <div className="editor__header">
-          <MenuBar editor={editor} />
-        </div>
+        <MenuBar editor={editor} />
         <EditorContent className="editor__content" editor={editor} spellCheck={false} />
         <div className="character-count">
           {characterCount} characters
