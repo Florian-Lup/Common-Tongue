@@ -1,24 +1,10 @@
-// src/components/MenuBar.tsx
 import './MenuBar.scss';
 import type { Editor } from '@tiptap/react';
 import DropdownMenu from './DropdownMenu';
 import validator from 'validator';
 
-interface MenuItem {
-  icon: string;
-  title: string;
-  action: () => void;
-  isActive: (() => boolean) | null;
-}
-
-interface MenuGroup {
-  title: string;
-  icon: string;
-  items: MenuItem[];
-}
-
 export default function MenuBar({ editor }: { editor: Editor }) {
-  const groups: MenuGroup[] = [
+  const groups = [
     {
       title: 'Formatting',
       icon: 'font-size',
@@ -191,13 +177,13 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           icon: 'separator',
           title: 'Horizontal Rule',
           action: () => editor.chain().focus().setHorizontalRule().run(),
-          isActive: null, // Disabled item
+          isActive: null,
         },
         {
           icon: 'text-wrap',
           title: 'Hard Break',
           action: () => editor.chain().focus().setHardBreak().run(),
-          isActive: null, // Disabled item
+          isActive: null,
         },
       ],
     },
@@ -215,45 +201,40 @@ export default function MenuBar({ editor }: { editor: Editor }) {
               .then(() => alert('Text copied to clipboard!'))
               .catch((err) => console.error('Failed to copy text: ', err));
           },
-          isActive: null, // Disabled item
+          isActive: null,
         },
         {
           icon: 'delete-bin-line',
           title: 'Delete Text',
           action: () => editor.chain().focus().clearContent().run(),
-          isActive: null, // Disabled item
+          isActive: null,
         },
         {
           icon: 'format-clear',
           title: 'Clear Format',
           action: () => editor.chain().focus().clearNodes().unsetAllMarks().run(),
-          isActive: null, // Disabled item
+          isActive: null,
         },
         {
           icon: 'arrow-go-back-line',
           title: 'Undo',
           action: () => editor.chain().focus().undo().run(),
-          isActive: null, // Disabled item
+          isActive: null,
         },
         {
           icon: 'arrow-go-forward-line',
           title: 'Redo',
           action: () => editor.chain().focus().redo().run(),
-          isActive: null, // Disabled item
+          isActive: null,
         },
       ],
     },
   ];
 
   return (
-    <div className="dropdown-wrapper">
+    <div className="editor__header">
       {groups.map((group, index) => (
-        <DropdownMenu
-          key={index}
-          title={group.title}
-          icon={group.icon}
-          items={group.items}
-        />
+        <DropdownMenu key={index} title={group.title} icon={group.icon} items={group.items} />
       ))}
     </div>
   );
