@@ -115,21 +115,17 @@ body {
 
   &__header {
     background-color: #fff;
-    position: sticky;
-    -webkit-position: sticky; /* For iOS Safari */
+    position: fixed; /* Already fixed to top */
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.5rem 0;
+    z-index: 1000; /* Ensure it's above other elements */
+    display: flex; /* Use Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically if needed */
+    padding: 0.5rem 0; /* Adds space above and below the menu-bar */
     box-sizing: border-box;
-    height: auto;
-    width: 100%;
-    max-width: 800px; /* Match the editor's max-width */
-    margin: 0 auto;
+    height: auto; /* Let content dictate height */
   }
 
   &__content {
@@ -166,29 +162,6 @@ body {
       color: #888;
     }
   }
-
-  /* Add a new media query for mobile devices */
-  @media screen and (max-width: 768px) {
-    &__header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      max-width: 100%;
-    }
-
-    .editor__content {
-      padding-top: 60px; /* Adjust this value based on your header's height */
-    }
-  }
-}
-
-/* Add this to ensure the content is scrollable on mobile */
-html, body {
-  height: 100%;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .ProseMirror {
