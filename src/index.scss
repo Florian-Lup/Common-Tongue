@@ -116,34 +116,35 @@ body {
   &__header {
     background-color: #fff;
     position: fixed;
+    /* Already fixed to top */
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    /* Ensure it's above other elements */
     display: flex;
+    /* Use Flexbox */
     justify-content: center;
+    /* Center horizontally */
     align-items: center;
+    /* Center vertically if needed */
     padding: 0.5rem 0;
+    /* Adds space above and below the menu-bar */
     box-sizing: border-box;
     height: auto;
-
-    .menu-bar {
-      max-width: 800px;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
+    /* Let content dictate height */
   }
 
   &__content {
-    padding-top: calc(4rem + 40px); // Adjust this value based on the actual height of your header
     flex: 1 1 auto;
     overflow-x: hidden;
     overflow-y: auto;
+    padding: 4rem 0;
     -webkit-overflow-scrolling: touch;
     width: 100%;
+    /* Take full width of the editor */
     max-width: 800px;
+    /* Ensure content doesn't exceed max width */
     box-sizing: border-box;
   }
 
