@@ -103,10 +103,8 @@ body {
 .editor-container {
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 30px;
   /* Add top padding to accommodate the fixed header */
-  padding-top: 80px; /* Example: 60px header height + 20px spacing */
-  /* Adjust the value based on your actual header height */
 }
 
 .editor {
