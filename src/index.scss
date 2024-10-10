@@ -129,7 +129,7 @@ body {
     display: flex; /* Use Flexbox */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically if needed */
-    padding: 0; /* Reset padding if necessary */
+    padding: 0.5rem 0; /* Adds space above and below the menu-bar */
     box-sizing: border-box;
     height: auto; /* Let content dictate height */
   }
