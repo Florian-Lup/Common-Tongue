@@ -120,14 +120,14 @@ body {
 
   &__header {
     background-color: #fff;
-    position: fixed; /* Change from relative or static to fixed */
+    position: fixed; /* Already fixed to top */
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000; /* Ensure it's above other elements */
-    /* Retain existing styles or adjust as necessary */
-    /* Example styles based on previous refactoring: */
-    display: block; /* Since .menu-bar handles flex */
+    display: flex; /* Use Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically if needed */
     padding: 0; /* Reset padding if necessary */
     box-sizing: border-box;
   }
