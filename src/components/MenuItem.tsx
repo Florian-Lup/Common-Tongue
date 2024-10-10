@@ -1,4 +1,4 @@
-// MenuItem.tsx
+// src/components/MenuItem/MenuItem.tsx
 import React from 'react';
 import './MenuItem.scss';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
