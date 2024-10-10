@@ -54,7 +54,7 @@
   .dropdown-content {
     /* Initial hidden state */
     opacity: 0; /* Fully transparent */
-    transform: translateY(-5px); /* Slight upward position */
+    transform: translateY(-10px); /* Slight upward position */
     visibility: hidden; /* Hide from accessibility tree */
     transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s ease;
     /* Existing styles... */
