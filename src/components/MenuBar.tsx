@@ -4,15 +4,17 @@ import type { Editor } from '@tiptap/react';
 import DropdownMenu from './DropdownMenu';
 import validator from 'validator';
 
+interface MenuItem {
+  icon: string;
+  title: string;
+  action: () => void;
+  isActive: (() => boolean) | null;
+}
+
 interface MenuGroup {
   title: string;
   icon: string;
-  items: Array<{
-    icon: string;
-    title: string;
-    action: () => void;
-    isActive: () => boolean | null;
-  }>;
+  items: MenuItem[];
 }
 
 export default function MenuBar({ editor }: { editor: Editor }) {
