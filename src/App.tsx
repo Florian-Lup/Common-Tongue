@@ -1,3 +1,4 @@
+// src/App.tsx
 import React, { useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
@@ -9,9 +10,12 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
-import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
+import MenuBar from './components/MenuBar';
 import CustomBubbleMenu from './components/BubbleMenu';
+
+import './App.scss'; // Import the new styles
+import './MenuBar.scss'; // Ensure MenuBar styles are imported
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -24,7 +28,10 @@ const App: React.FC = () => {
       TaskList,
       TaskItem,
       CharacterCount.configure({ limit: 5000 }),
-      Placeholder.configure({ placeholder: 'Write a short paragraph...', emptyEditorClass: 'is-editor-empty' }),
+      Placeholder.configure({
+        placeholder: 'Write a short paragraph...',
+        emptyEditorClass: 'is-editor-empty',
+      }),
       Underline,
       TextStyle,
       Color,
@@ -42,16 +49,23 @@ const App: React.FC = () => {
   return (
     <div className="editor-container">
       <div className="editor">
+        {/* Wrap MenuBar with editor__header */}
         <div className="editor__header">
-          <div className="menu-bar-container">
-            <MenuBar editor={editor} />
-          </div>
+          <MenuBar editor={editor} />
         </div>
-        <EditorContent className="editor__content" editor={editor} spellCheck={false} />
+        <EditorContent
+          className="editor__content"
+          editor={editor}
+          spellCheck={false}
+        />
         <div className="character-count">
           {characterCount} characters
         </div>
-        <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
+        <CustomBubbleMenu
+          editor={editor}
+          isTyping={isTyping}
+          setIsTyping={setIsTyping}
+        />
       </div>
     </div>
   );
