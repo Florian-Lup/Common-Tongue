@@ -132,7 +132,7 @@ body {
     flex: 1 1 auto;
     overflow-x: hidden;
     overflow-y: auto;
-    padding-top: 4rem;
+    padding: 4rem 0;
     -webkit-overflow-scrolling: touch;
     width: 100%;
     /* Take full width of the editor */
@@ -142,17 +142,20 @@ body {
   }
 
   &__footer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     align-items: center;
     border-top: 1px solid #e5e7eb;
-    color: #374151;
     display: flex;
     flex: 0 0 auto;
-    font-size: 12px;
-    justify-content: flex-end;
+    justify-content: center;
     padding: 0.5rem 0.75rem;
     width: 100%;
     max-width: 800px;
     box-sizing: border-box;
+    background-color: #fff;
 
     .character-count {
       font-size: 0.8rem;
