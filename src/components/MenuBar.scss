@@ -1,31 +1,24 @@
 .menu-bar {
-  position: relative;
-  /* Allow dropdowns to be positioned absolutely within */
   display: flex;
-  /* Flex layout for dropdown menus */
   align-items: center;
   background: #0d0d0d;
   border-radius: 0.5rem;
-  padding: 0.5rem 0.5rem;
-  /* Increased padding for better touch targets on mobile */
-  margin: 0 auto;
-  /* Center the header */
+  padding: 0.5rem;
+  /* Remove margin: 0 auto; since Flexbox centers it */
   box-sizing: border-box;
-  /* Include padding and border in the element's total width */
   gap: 8px;
-  /* Space between dropdown menus */
+  width: fit-content; /* Adjust width to fit content */
+
+  /* Optional: Add padding for better touch targets */
+  padding: 0.5rem 1rem;
 
   /* Responsive design */
   @media (max-width: 600px) {
     flex-wrap: wrap;
+    padding: 0.5rem; /* Adjust padding if necessary */
+    gap: 4px; /* Reduce gap for smaller screens */
   }
-}
 
-/* If the .divider class is used within the MenuBar, include it here */
-.menu-bar .divider {
-  background-color: rgba(#fff, 0.25);
-  height: 1.25rem;
-  margin-left: 0.5rem;
-  margin-right: 0.75rem;
-  width: 1px;
+  /* Optional: Transition for smooth appearance */
+  transition: all 0.3s ease;
 }
