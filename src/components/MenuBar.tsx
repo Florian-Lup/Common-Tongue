@@ -1,6 +1,7 @@
+// src/components/MenuBar/MenuBar.tsx
 import './MenuBar.scss';
 import type { Editor } from '@tiptap/react';
-import DropdownMenu from './DropdownMenu';
+import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import validator from 'validator';
 
 export default function MenuBar({ editor }: { editor: Editor }) {
