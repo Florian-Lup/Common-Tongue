@@ -13,7 +13,6 @@ import Color from '@tiptap/extension-color';
 import Link from '@tiptap/extension-link';
 import MenuBar from './components/MenuBar';
 import CustomBubbleMenu from './components/BubbleMenu';
-import './MenuBar.scss'; // Ensure MenuBar styles are imported
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
