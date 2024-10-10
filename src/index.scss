@@ -119,6 +119,7 @@ body {
   /* Ensure the editor doesn't exceed its parent container */
 
   &__header {
+    background-color: #fff;
     position: fixed; /* Change from relative or static to fixed */
     top: 0;
     left: 0;
