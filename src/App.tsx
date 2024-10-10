@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState, useEffect } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
@@ -57,10 +58,15 @@ const App: React.FC = () => {
 
   return (
     <div className="editor-container">
-      <div className="editor">
+      {/* Header Wrapper */}
+      <div className="editor-header-wrapper">
         <div className={`editor__header${isHeaderSticky ? ' sticky' : ''}`}>
           <MenuBar editor={editor} />
         </div>
+      </div>
+      
+      {/* Editor Content */}
+      <div className="editor">
         <EditorContent className="editor__content" editor={editor} spellCheck={false} />
         <div className="character-count">
           {characterCount} characters
