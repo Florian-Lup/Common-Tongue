@@ -1,11 +1,22 @@
-// src/components/MenuBar/MenuBar.tsx
+// src/components/MenuBar.tsx
 import './MenuBar.scss';
 import type { Editor } from '@tiptap/react';
 import DropdownMenu from './DropdownMenu';
 import validator from 'validator';
 
+interface MenuGroup {
+  title: string;
+  icon: string;
+  items: Array<{
+    icon: string;
+    title: string;
+    action: () => void;
+    isActive: () => boolean | null;
+  }>;
+}
+
 export default function MenuBar({ editor }: { editor: Editor }) {
-  const groups = [
+  const groups: MenuGroup[] = [
     {
       title: 'Formatting',
       icon: 'font-size',
@@ -233,10 +244,15 @@ export default function MenuBar({ editor }: { editor: Editor }) {
   ];
 
   return (
-    <div className="menu-bar">
+    <>
       {groups.map((group, index) => (
-        <DropdownMenu key={index} title={group.title} icon={group.icon} items={group.items} />
+        <DropdownMenu
+          key={index}
+          title={group.title}
+          icon={group.icon}
+          items={group.items}
+        />
       ))}
-    </div>
+    </>
   );
 }
