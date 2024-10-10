@@ -12,9 +12,5 @@
   /* Responsive design */
   @media (max-width: 600px) {
     flex-wrap: wrap;
-    gap: 4px; /* Reduce gap for smaller screens */
   }
-
-  /* Optional: Transition for smooth appearance */
-  transition: all 0.3s ease;
 }
