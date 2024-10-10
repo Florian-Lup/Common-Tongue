@@ -191,13 +191,13 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           icon: 'separator',
           title: 'Horizontal Rule',
           action: () => editor.chain().focus().setHorizontalRule().run(),
-          isActive: null,
+          isActive: null, // Disabled item
         },
         {
           icon: 'text-wrap',
           title: 'Hard Break',
           action: () => editor.chain().focus().setHardBreak().run(),
-          isActive: null,
+          isActive: null, // Disabled item
         },
       ],
     },
@@ -215,38 +215,38 @@ export default function MenuBar({ editor }: { editor: Editor }) {
               .then(() => alert('Text copied to clipboard!'))
               .catch((err) => console.error('Failed to copy text: ', err));
           },
-          isActive: null,
+          isActive: null, // Disabled item
         },
         {
           icon: 'delete-bin-line',
           title: 'Delete Text',
           action: () => editor.chain().focus().clearContent().run(),
-          isActive: null,
+          isActive: null, // Disabled item
         },
         {
           icon: 'format-clear',
           title: 'Clear Format',
           action: () => editor.chain().focus().clearNodes().unsetAllMarks().run(),
-          isActive: null,
+          isActive: null, // Disabled item
         },
         {
           icon: 'arrow-go-back-line',
           title: 'Undo',
           action: () => editor.chain().focus().undo().run(),
-          isActive: null,
+          isActive: null, // Disabled item
         },
         {
           icon: 'arrow-go-forward-line',
           title: 'Redo',
           action: () => editor.chain().focus().redo().run(),
-          isActive: null,
+          isActive: null, // Disabled item
         },
       ],
     },
   ];
 
   return (
-    <>
+    <div className="dropdown-wrapper">
       {groups.map((group, index) => (
         <DropdownMenu
           key={index}
@@ -255,6 +255,6 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           items={group.items}
         />
       ))}
-    </>
+    </div>
   );
 }
