@@ -130,6 +130,7 @@ body {
     align-items: center; /* Center vertically if needed */
     padding: 0; /* Reset padding if necessary */
     box-sizing: border-box;
+    height: auto; /* Let content dictate height */
   }
 
   &__content {
