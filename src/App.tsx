@@ -49,6 +49,15 @@ const App: React.FC = () => {
         </div>
         <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
       </div>
+          <div>
+      {/* Fixed MenuBar */}
+      <MenuBar editor={editor} />
+
+      {/* Main content area with top padding */}
+      <div style={{ paddingTop: '70px' }}>  {/* Adjust padding based on the MenuBar height */}
+        <EditorContent editor={editor} />
+      </div>
+    </div>
     </div>
   );
 };
