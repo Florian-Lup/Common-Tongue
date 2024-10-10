@@ -160,7 +160,7 @@ body {
   box-sizing: border-box;
   max-width: 800px;
   margin: 0 auto;
-  /* Center the content */
+  padding-left: 0.5rem;
 
   &:focus {
     outline: none;
@@ -182,4 +182,5 @@ body {
   max-width: 800px;
   /* Align with the editor content */
   box-sizing: border-box;
+  padding-right: 0.5rem;
 }
