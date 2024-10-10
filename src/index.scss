@@ -121,7 +121,7 @@ body {
 
   &__header {
     background-color: #fff;
-    position: fixed; /* Already fixed to top */
+    position: sticky; /* Already fixed to top */
     top: 0;
     left: 0;
     right: 0;
