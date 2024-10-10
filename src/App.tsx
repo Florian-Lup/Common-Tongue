@@ -12,6 +12,7 @@ import Color from '@tiptap/extension-color';
 import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
+import './styles.css'; // Ensure this imports your updated styles
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -42,7 +43,11 @@ const App: React.FC = () => {
   return (
     <div className="editor-container">
       <div className="editor">
-        <MenuBar editor={editor} />
+        <div className="editor__header">
+          <div className="menu-bar-container">
+            <MenuBar editor={editor} />
+          </div>
+        </div>
         <EditorContent className="editor__content" editor={editor} spellCheck={false} />
         <div className="character-count">
           {characterCount} characters
