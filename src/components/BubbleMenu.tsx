@@ -40,6 +40,9 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       // Apply Processing Color to the selected text
       editor.chain().focus().setColor(processingColor).run();
 
+      // **Collapse the selection to remove the blue highlight**
+      editor.chain().focus().setTextSelection(to).run();
+
       const response = await fetch('/api/fixGrammar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
