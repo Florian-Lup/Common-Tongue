@@ -17,6 +17,9 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   const [isFixing, setIsFixing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Define the processing color
+  const processingColor = '#d3d3d3'; // Light gray
+
   const handleFixGrammar = async () => {
     const { from, to } = editor.state.selection;
     const selectedText = editor.state.doc.textBetween(from, to, ' ');
@@ -34,6 +37,9 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         editor.chain().focus().toggleStrike().run();
       }
 
+      // Apply Processing Color to the selected text
+      editor.chain().focus().setColor(processingColor).run();
+
       const response = await fetch('/api/fixGrammar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -50,9 +56,13 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
 
         editor.commands.focus();
 
-        // Remove Strikethrough before replacing text
+        // Remove Strikethrough and Processing Color before replacing text
         if (editor.isActive('strike')) {
           editor.chain().focus().toggleStrike().run();
+        }
+
+        if (editor.isActive({ color: processingColor })) {
+          editor.chain().focus().unsetColor().run();
         }
 
         // Start the typewriter effect
@@ -61,18 +71,26 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         console.error('Error fixing grammar:', data.error || data.details);
         setErrorMessage('An error occurred.');
 
-        // Remove Strikethrough since the operation failed
+        // Remove Strikethrough and Processing Color since the operation failed
         if (editor.isActive('strike')) {
           editor.chain().focus().toggleStrike().run();
+        }
+
+        if (editor.isActive({ color: processingColor })) {
+          editor.chain().focus().unsetColor().run();
         }
       }
     } catch (error) {
       console.error('Error fixing grammar:', error);
       setErrorMessage('An error occurred.');
 
-      // Remove Strikethrough since the operation failed
+      // Remove Strikethrough and Processing Color since the operation failed
       if (editor.isActive('strike')) {
         editor.chain().focus().toggleStrike().run();
+      }
+
+      if (editor.isActive({ color: processingColor })) {
+        editor.chain().focus().unsetColor().run();
       }
     } finally {
       setIsFixing(false);
