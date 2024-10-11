@@ -7,12 +7,14 @@ interface CustomBubbleMenuProps {
   editor: Editor;
   isTyping: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>; // New prop
 }
 
 const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   editor,
   isTyping,
   setIsTyping,
+  setIsProcessing, // Destructure the new prop
 }) => {
   const [isFixing, setIsFixing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -30,6 +32,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
 
     try {
       setIsFixing(true);
+      setIsProcessing(true); // Set processing state
       setErrorMessage(null); // Reset any previous error messages
 
       // Apply Strikethrough to the selected text
@@ -40,7 +43,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       // Apply Processing Color to the selected text
       editor.chain().focus().setColor(processingColor).run();
 
-      // **Collapse the selection to remove the blue highlight**
+      // Optionally, collapse the selection to remove the blue highlight
       editor.chain().focus().setTextSelection(to).run();
 
       const response = await fetch('/api/fixGrammar', {
@@ -97,6 +100,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       }
     } finally {
       setIsFixing(false);
+      setIsProcessing(false); // Unset processing state
     }
   };
 

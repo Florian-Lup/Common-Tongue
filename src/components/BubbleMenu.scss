@@ -1,3 +1,10 @@
+.editor-container.processing ::selection {
+  background-color: #fff;
+  /* Example: Yellow highlight during processing */
+  color: inherit;
+  /* Maintain the text color */
+}
+
 .bubble-menu {
   display: flex;
   background-color: #0D0D0D;

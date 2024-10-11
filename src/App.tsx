@@ -18,6 +18,7 @@ import CustomBubbleMenu from './components/BubbleMenu';
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
+   const [isProcessing, setIsProcessing] = useState(false); // New state for processing
 
   const editor = useEditor({
     extensions: [
@@ -44,7 +45,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="editor-container">
+    <div className={`editor-container ${isProcessing ? 'processing' : ''}`}> {/* Conditional class */}
       <div className="editor">
         <MenuBar editor={editor} />
         <EditorContent className="editor__content" editor={editor} spellCheck={false} />
@@ -53,7 +54,12 @@ const App: React.FC = () => {
             {characterCount} characters
           </div>
         </div>
-        <CustomBubbleMenu editor={editor} isTyping={isTyping} setIsTyping={setIsTyping} />
+        <CustomBubbleMenu 
+          editor={editor} 
+          isTyping={isTyping} 
+          setIsTyping={setIsTyping} 
+          setIsProcessing={setIsProcessing} // Pass the setter
+        />
       </div>
     </div>
   );
