@@ -10,7 +10,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
-import Strike from '@tiptap/extension-strike'
+import Strike from '@tiptap/extension-strike'; // Ensure Strikethrough is included
 import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
@@ -18,7 +18,7 @@ import CustomBubbleMenu from './components/BubbleMenu';
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
-   const [isProcessing, setIsProcessing] = useState(false); // New state for processing
+  const [isProcessing, setIsProcessing] = useState(false); // New state for processing
 
   const editor = useEditor({
     extensions: [
