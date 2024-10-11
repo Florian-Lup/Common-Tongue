@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'; // Added useEffect import
+// CustomBubbleMenu.tsx
+import React, { useState, useEffect } from 'react';
 import { BubbleMenu, Editor } from '@tiptap/react';
-import './BubbleMenu.scss'; // Ensure spinner styles and error message styles are added here
+import './BubbleMenu.scss';
 
 interface CustomBubbleMenuProps {
   editor: Editor;
@@ -28,6 +29,11 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       setIsFixing(true);
       setErrorMessage(null); // Reset any previous error messages
 
+      // Apply Strikethrough to the selected text
+      if (!editor.isActive('strike')) {
+        editor.chain().focus().toggleStrike().run();
+      }
+
       const response = await fetch('/api/fixGrammar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -44,15 +50,30 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
 
         editor.commands.focus();
 
+        // Remove Strikethrough before replacing text
+        if (editor.isActive('strike')) {
+          editor.chain().focus().toggleStrike().run();
+        }
+
         // Start the typewriter effect
         typeWriterEffect(editor, from, to, finalRevision);
       } else {
         console.error('Error fixing grammar:', data.error || data.details);
         setErrorMessage('An error occurred.');
+
+        // Remove Strikethrough since the operation failed
+        if (editor.isActive('strike')) {
+          editor.chain().focus().toggleStrike().run();
+        }
       }
     } catch (error) {
       console.error('Error fixing grammar:', error);
       setErrorMessage('An error occurred.');
+
+      // Remove Strikethrough since the operation failed
+      if (editor.isActive('strike')) {
+        editor.chain().focus().toggleStrike().run();
+      }
     } finally {
       setIsFixing(false);
     }
