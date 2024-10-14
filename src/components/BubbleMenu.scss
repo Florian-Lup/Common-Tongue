@@ -1,8 +1,8 @@
+/* BubbleMenu.scss */
+
 .editor-container.processing ::selection {
   background-color: #fff;
-  /* Example: Yellow highlight during processing */
   color: inherit;
-  /* Maintain the text color */
 }
 
 .bubble-menu {
@@ -12,6 +12,10 @@
   border-radius: 0.5rem;
 
   button {
+    display: flex;
+    /* Use flex to align icon and text */
+    align-items: center;
+    /* Vertically center the items */
     border: none;
     background: none;
     color: #ffffffcf;
@@ -22,12 +26,25 @@
     border-radius: 0.3rem;
     transition: background-color 0.2s ease;
 
+    .icon {
+      width: 16px;
+      height: 16px;
+      fill: greenyellow;
+      margin-right: 0.5rem;
+      /* Space between icon and text */
+    }
+
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
 
     &:active {
       background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
 }

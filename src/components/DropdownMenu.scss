@@ -48,7 +48,7 @@
   /* Rotate the arrow when dropdown is open */
   &.open .dropdown-toggle .dropdown-arrow {
     transform: rotate(180deg) scale(1.2); // Rotate and scale
-    fill: green;
+    fill: red;
   }
 
   .dropdown-content {

@@ -1,25 +1,25 @@
 // CustomBubbleMenu.tsx
 import React, { useState, useEffect } from 'react';
 import { BubbleMenu, Editor } from '@tiptap/react';
+import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg'; // Ensure this import is present
 import './BubbleMenu.scss';
 
 interface CustomBubbleMenuProps {
   editor: Editor;
   isTyping: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>; // New prop
+  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   editor,
   isTyping,
   setIsTyping,
-  setIsProcessing, // Destructure the new prop
+  setIsProcessing,
 }) => {
   const [isFixing, setIsFixing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Define the processing color
   const processingColor = '#d3d3d3'; // Light gray
 
   const handleFixGrammar = async () => {
@@ -32,15 +32,13 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
 
     try {
       setIsFixing(true);
-      setIsProcessing(true); // Set processing state
-      setErrorMessage(null); // Reset any previous error messages
+      setIsProcessing(true);
+      setErrorMessage(null);
 
-      // Apply Strikethrough to the selected text
       if (!editor.isActive('strike')) {
         editor.chain().focus().toggleStrike().run();
       }
 
-      // Apply Processing Color to the selected text
       editor.chain().focus().setColor(processingColor).run();
 
       const response = await fetch('/api/fixGrammar', {
@@ -59,7 +57,6 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
 
         editor.commands.focus();
 
-        // Remove Strikethrough and Processing Color before replacing text
         if (editor.isActive('strike')) {
           editor.chain().focus().toggleStrike().run();
         }
@@ -68,13 +65,11 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
           editor.chain().focus().unsetColor().run();
         }
 
-        // Start the typewriter effect
         typeWriterEffect(editor, from, to, finalRevision);
       } else {
         console.error('Error fixing grammar:', data.error || data.details);
         setErrorMessage('An error occurred.');
 
-        // Remove Strikethrough and Processing Color since the operation failed
         if (editor.isActive('strike')) {
           editor.chain().focus().toggleStrike().run();
         }
@@ -87,7 +82,6 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       console.error('Error fixing grammar:', error);
       setErrorMessage('An error occurred.');
 
-      // Remove Strikethrough and Processing Color since the operation failed
       if (editor.isActive('strike')) {
         editor.chain().focus().toggleStrike().run();
       }
@@ -97,7 +91,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       }
     } finally {
       setIsFixing(false);
-      setIsProcessing(false); // Unset processing state
+      setIsProcessing(false);
     }
   };
 
@@ -164,6 +158,9 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         >
           <div className="bubble-menu">
             <button onClick={handleFixGrammar} disabled={isFixing || isTyping}>
+              <svg className="icon">
+                <use href={`${remixiconUrl}#ri-eraser-fill`} />
+              </svg>
               Fix Grammar
             </button>
             {/* Other buttons can be added here */}
