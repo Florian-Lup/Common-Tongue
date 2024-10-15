@@ -140,7 +140,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         // Render spinner or error message when action is in progress or an error occurred
         <BubbleMenu
           editor={editor}
-          tippyOptions={{ duration: 100, placement: 'bottom' }}
+          tippyOptions={{ duration: 100, placement: 'top' }}
         >
           <div className="bubble-menu">
             {errorMessage ? (
@@ -154,7 +154,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         // Render the bubble menu when no action is in progress
         <BubbleMenu
           editor={editor}
-          tippyOptions={{ duration: 100, placement: 'bottom' }}
+          tippyOptions={{ duration: 100, placement: 'top' }}
         >
           <div className="bubble-menu">
             <button onClick={handleFixGrammar} disabled={isFixing || isTyping}>
