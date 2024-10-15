@@ -164,15 +164,7 @@ body {
   }
 }
 
-.ProseMirror {
-  box-sizing: border-box;
-  max-width: 800px;
-  margin: 0 auto;
-  padding-left: 0.5rem;
 
-  &:focus {
-    outline: #e5e7eb;
-  }
 
   .red-text {
     color: #ff0000;
