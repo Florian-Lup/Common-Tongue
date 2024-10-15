@@ -14,6 +14,8 @@ import Strike from '@tiptap/extension-strike'; // Ensure Strikethrough is includ
 import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
+import Focus from '@tiptap/extension-focus';
+
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -28,11 +30,18 @@ const App: React.FC = () => {
       TaskList,
       TaskItem,
       CharacterCount.configure({ limit: 5000 }),
-      Placeholder.configure({ placeholder: 'Write a short paragraph...', emptyEditorClass: 'is-editor-empty' }),
+      Placeholder.configure({
+      placeholder: 'Write something...',
+      emptyNodeClass: 'empty-node',
+      }),
       Underline,
       TextStyle,
       Color,
       Strike, // Add Strikethrough to extensions
+      Focus.configure({
+        className: 'has-focus', // Custom class for focused nodes
+        mode: 'shallowest',
+    }),
     ],
     editable: !isTyping,
     onUpdate: ({ editor }) => {
