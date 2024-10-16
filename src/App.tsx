@@ -30,16 +30,20 @@ const App: React.FC = () => {
       TaskList,
       TaskItem,
       CharacterCount.configure({ limit: 5000 }),
-      Placeholder.configure({
-        placeholder: ({ node }) => {
-    if (node.type.name === 'heading') {
-      return 'What’s the title?'
-    }, else if (node.type.name === 'paragraph') {
-      return 'Write something...'
-    },
-  },
-      emptyNodeClass: 'empty-node',
-      }),
+Placeholder.configure({
+placeholder: ({ node }) => {
+switch (node.type.name) {
+case 'paragraph':
+return 'Write something...';
+case 'heading':
+return 'Enter a heading...';
+// Add more cases as needed
+default:
+return '';
+}
+},
+emptyNodeClass: 'empty-node',
+}),
       Underline,
       TextStyle,
       Color,
