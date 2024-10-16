@@ -1,37 +1,22 @@
-/* src/components/MenuItem/MenuItem.scss */
-
 .menu-item {
-  background: none;
+  background-color: transparent;
   border: none;
+  border-radius: 0.4rem;
+  color: #fff;
   cursor: pointer;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  /* Space between icon and text */
-  color: #374151;
-  /* Text color */
-  transition: background-color 0.2s ease;
+  height: 1.75rem;
+  margin-right: 0.25rem;
+  padding: 0.25rem;
+  width: 1.75rem;
 
-  &:hover {
-    background-color: #e5e7eb;
-    /* Light gray on hover */
-  }
-
-  &.is-active {
-    background-color: #e5e7eb;
-    /* Slightly darker background for active items */
-  }
-
-  .remix {
-    width: 24px;
-    height: 24px;
+  svg {
     fill: currentColor;
-    /* Icon color matches text color */
+    height: 100%;
+    width: 100%;
   }
 
-  .menu-item__title {
-    font-size: 14px;
-    font-weight: 500;
+  &:hover,
+  &.is-active {
+    background-color: #303030;
   }
 }

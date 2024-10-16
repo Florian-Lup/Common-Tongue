@@ -56,6 +56,10 @@ body {
     max-width: 100%;
   }
 
+        hr {
+          margin: 1rem 0;
+        }
+
   blockquote {
     border-left: 2px solid rgba(13, 13, 13, 0.1);
     padding-left: 1rem;
@@ -64,7 +68,7 @@ body {
   hr {
     border: none;
     border-top: 2px solid rgba(13, 13, 13, 0.1);
-    margin: 1rem 0;
+    margin: 2rem 0;
   }
 
   ul[data-type="taskList"] {
@@ -85,7 +89,11 @@ body {
         flex: 1 1 auto;
       }
     }
+  }
 
+  li p {
+  margin: 0.2rem;
+  padding: 0;
   }
 
   .empty-node::before {
@@ -100,7 +108,7 @@ body {
 .editor-container {
   display: flex;
   justify-content: center;
-  padding: 5rem 0.5rem;
+  padding: 1rem 0.5rem;
 }
 
 .editor {
@@ -114,26 +122,25 @@ body {
   width: 100%;
   /* Ensure the editor doesn't exceed its parent container */
 
-  &__header {
-    background-color: #fff;
+.editor__header {
     position: fixed;
-    /* Already fixed to top */
     top: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1000;
-    /* Ensure it's above other elements */
-    display: flex;
-    /* Use Flexbox */
-    justify-content: center;
-    /* Center horizontally */
-    align-items: center;
-    /* Center vertically if needed */
-    padding: 0.5rem 0;
-    /* Adds space above and below the menu-bar */
+    max-width: 800px;
+    width: 100%;
     box-sizing: border-box;
+    align-items: center;
+    overflow-x: auto;
+    background: #0d0d0d;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 0.25rem;
+    -webkit-overflow-scrolling: touch;
     height: auto;
-    /* Let content dictate height */
+    margin-top: calc(0.25rem * 2 + 3px);
   }
 
   &__content {
@@ -146,6 +153,7 @@ body {
     max-width: 800px;
     /* Ensure content doesn't exceed max width */
     box-sizing: border-box;
+margin-top: calc(0.25rem * 2 + 1.5rem); /* Header padding * 2 + 1.5rem */
   }
 
   &__footer {
@@ -177,7 +185,7 @@ body {
   box-sizing: border-box;
   max-width: 800px;
   margin: 0 auto;
-  padding: 0.5rem;
+  padding: 0.5rem 0.2rem;
 
   .red-text {
     color: #ff0000;
@@ -193,14 +201,12 @@ body {
   outline: none;
 }
 
-
 .editor__content:focus {
   outline: none;
 }
 
-        .has-focus {
-          outline: 2px solid #007BFF;
-          background-color: rgba(0, 123, 255, 0.1);
-          /* Light blue background */
-          border-radius: 4px;
-        }
+.has-focus {
+  outline: 2px solid #007BFF;
+  background-color: rgba(0, 123, 255, 0.1);
+  border-radius: 4px;
+}

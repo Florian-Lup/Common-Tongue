@@ -1,17 +1,7 @@
-.menu-bar {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border-radius: 0.5rem;
-  padding: 0.3rem;
-  /* Remove margin: 0 auto; since Flexbox centers it */
-  box-sizing: border-box;
-  gap: 8px;
-  width: fit-content; /* Adjust width to fit content */
-  border:1px solid #e5e7eb;
-
-  /* Responsive design */
-  @media (max-width: 600px) {
-    flex-wrap: wrap;
-  }
+.divider {
+  background-color: rgba(#fff, 0.25);
+  height: 1.25rem;
+  margin-left: 0.5rem;
+  margin-right: 0.75rem;
+  width: 1px;
 }
