@@ -34,9 +34,9 @@ const App: React.FC = () => {
         placeholder: ({ node }) => {
     if (node.type.name === 'heading') {
       return 'What’s the title?'
-    }
-
-    return 'Can you add some further context?'
+    }, else if (node.type.name === 'paragraph') {
+      return 'Write something...'
+    },
   },
       emptyNodeClass: 'empty-node',
       }),
