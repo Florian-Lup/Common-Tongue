@@ -36,7 +36,7 @@ switch (node.type.name) {
 case 'paragraph':
 return 'Write something...';
 case 'heading':
-return 'Enter a heading...';
+return 'What’s the title';
 // Add more cases as needed
 default:
 return '';
