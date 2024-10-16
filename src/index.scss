@@ -143,6 +143,11 @@ body {
     margin-top: calc(0.25rem * 2 + 3px);
   }
 
+    .editor__header>* {
+      flex: 0 0 auto;
+      /* Prevent items from shrinking or growing */
+    }
+
   &__content {
     flex: 1 1 auto;
     overflow-x: hidden;
