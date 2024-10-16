@@ -31,7 +31,13 @@ const App: React.FC = () => {
       TaskItem,
       CharacterCount.configure({ limit: 5000 }),
       Placeholder.configure({
-      placeholder: 'Write something...',
+        placeholder: ({ node }) => {
+    if (node.type.name === 'heading') {
+      return 'What’s the title?'
+    }
+
+    return 'Can you add some further context?'
+  },
       emptyNodeClass: 'empty-node',
       }),
       Underline,
