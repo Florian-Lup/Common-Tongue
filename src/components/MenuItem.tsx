@@ -1,35 +1,17 @@
-// MenuItem.jsx
-import React, { useState, memo } from 'react';
-import './MenuItem.scss';
-import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
+import './MenuItem.scss'
 
-const MenuItem = memo(function MenuItem ({
+import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg'
+
+export default function MenuItem ({
   icon, title, action, isActive = null,
 }: {icon?: string, title?: string, action?: () => void, isActive?: (() => boolean) | null } ) {
-  const [isDebouncing, setIsDebouncing] = useState(false);
-
-  const handleClick = () => {
-    if (isDebouncing) return;
-
-    if (action) action();
-
-    setIsDebouncing(true);
-    setTimeout(() => setIsDebouncing(false), 300); // 300ms debounce
-  };
-
-  return (
-    <button
+  return <button
       className={`menu-item${isActive && isActive() ? ' is-active' : ''}`}
-      onClick={handleClick}
+      onClick={action}
       title={title}
-      aria-pressed={isActive && isActive()}
-      disabled={isDebouncing}
     >
       <svg className="remix">
-        <use href={`${remixiconUrl}#ri-${icon}`} />
+        <use xlinkHref={`${remixiconUrl}#ri-${icon}`}/>
       </svg>
     </button>
-  );
-});
-
-export default MenuItem;
+}
