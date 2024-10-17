@@ -49,18 +49,28 @@
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Scrollbar Buttons */
-.menu-bar::-webkit-scrollbar-button {
-  width: 16px;
-  height: 16px;
-  background-color: #0d0d0d; /* Match menu-bar background */
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 8px 8px; /* Size of the arrow */
+/* Scroll Indicators Using Pseudo-Elements (Using Unicode Arrows) */
+.menu-bar-container::before,
+.menu-bar-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 3;
 }
 
-.menu-bar::-webkit-scrollbar-button:hover {
-  background-color: rgba(13, 13, 13, 0.8);
+.menu-bar-container::before {
+  left: 10px;
+  content: '◀'; /* Left arrow */
 }
 
+.menu-bar-container::after {
+  right: 10px;
+  content: '▶'; /* Right arrow */
+}
 
