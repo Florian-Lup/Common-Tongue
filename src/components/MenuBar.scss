@@ -16,7 +16,6 @@
     box-sizing: border-box;
     background-color: #0d0d0d;
     padding: 0.5rem;
-  padding-bottom: 1rem;
     flex-wrap: nowrap; /* Prevents items from wrapping to the next line */
     border-radius: 0.25rem; /* Matches the header's border radius */
   scroll-snap-type: x mandatory;
@@ -28,7 +27,7 @@
 
 /* WebKit scrollbar styling */
 .menu-bar::-webkit-scrollbar {
-  height: 0.7rem;
+  height: 1.5rem;
 }
 
 .menu-bar::-webkit-scrollbar-track {
