@@ -27,7 +27,8 @@
 
 /* WebKit scrollbar styling */
 .menu-bar::-webkit-scrollbar {
-  height: 8px;
+  height: 1rem;
+  padding: 0.5rem;
   border-radius: 1rem;
 }
 
