@@ -37,7 +37,7 @@
 
 .menu-bar::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
+  border-radius: 0.5rem;
 }
 
 .menu-bar::-webkit-scrollbar-thumb:hover {
@@ -47,18 +47,6 @@
 /* Firefox scrollbar styling */
 .menu-bar {
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-}
-
-/* Gradient overlays */
-.menu-bar::before,
-.menu-bar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 30px;
-  pointer-events: none;
-  z-index: 1001;
 }
 
 .menu-bar::-webkit-scrollbar-thumb {
