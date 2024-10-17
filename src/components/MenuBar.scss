@@ -1,5 +1,5 @@
 .divider {
-  background-color: rgba(#fff, 0.25);
+  background-color: rgba(255, 255, 255, 0.25);;
   height: 1.25rem;
   margin-left: 0.5rem;
   margin-right: 0.75rem;
@@ -26,7 +26,7 @@
 
 /* WebKit scrollbar styling */
 .menu-bar::-webkit-scrollbar {
-  height: 16px;
+  height: 15px;
 }
 
 .menu-bar::-webkit-scrollbar-track {
@@ -35,11 +35,51 @@
 
 .menu-bar::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 0.5rem;
+  /* Thumb color */
+  border-radius: 8px;
+  /* Rounded corners */
+  border: 5px solid #0d0d0d;
+  /* Simulated padding */
+  box-sizing: border-box;
+  /* Includes border in thumb size */
   transition: background-color 0.3s;
+  /* Smooth transition on hover */
 }
 
 .menu-bar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
+/* Scroll Indicators Using Pseudo-Elements */
+.menu-bar::before,
+.menu-bar::after {
+  content: '';
+  /* This will be overridden below */
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  /* Size of the arrow indicators */
+  height: 24px;
+  font-size: 16px;
+  /* Adjust size as needed */
+  color: rgba(255, 255, 255, 0.5);
+  /* Semi-transparent color */
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* Allows clicks to pass through */
+  z-index: 3;
+}
+
+/* Left Arrow */
+.menu-bar::before {
+  left: 10px;
+  content: '◀';
+  /* Unicode left arrow */
+}
+
+/* Right Arrow */
+.menu-bar::after {
+  right: 10px;
+  content: '▶';
+  /* Unicode right arrow */
+}
