@@ -24,8 +24,4 @@
 /* Optional: Styling for Menu Items */
 .menu-bar > * {
     flex: 0 0 auto; /* Prevents menu items from shrinking */
-    margin: 0 0.5rem; /* Adds spacing between menu items */
-    color: #fff;      /* Ensures menu items are visible on dark background */
-    text-decoration: none; /* Removes underline from links, if any */
-    /* Add additional styling as needed */
 }
