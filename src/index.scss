@@ -140,6 +140,11 @@ body {
     padding: 0.25rem;
     -webkit-overflow-scrolling: touch;
     height: auto;
+
+    @media (max-width: 768px) {
+    max-width: 450px; // Set the max-width to 450px for mobile devices
+    width: 100%;
+  }
   }
 
     .editor__header>* {
