@@ -120,6 +120,7 @@ body {
   /* Set a max width for the editor */
   width: 100%;
   /* Ensure the editor doesn't exceed its parent container */
+  padding: 1rem;
 
 .editor__header {
     position: fixed;
@@ -134,7 +135,7 @@ body {
     justify-content: center; /* Centers the inner content horizontally */
     align-items: center;     /* Centers the inner content vertically */
     background-color: #fff;
-    padding: 0.5rem 0;
+
 }
 
   &__content {
