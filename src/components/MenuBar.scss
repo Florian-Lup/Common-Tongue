@@ -28,11 +28,12 @@
 
 /* WebKit scrollbar styling */
 .menu-bar::-webkit-scrollbar {
-  height: 6px;
+  height: 8px;
 }
 
 .menu-bar::-webkit-scrollbar-track {
   background: transparent;
+  border-radius: 0.5rem;
 }
 
 .menu-bar::-webkit-scrollbar-thumb {
