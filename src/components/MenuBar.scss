@@ -49,28 +49,3 @@
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Scroll Indicators Using Pseudo-Elements (Using Unicode Arrows) */
-.menu-bar-container::before,
-.menu-bar-container::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 16px;
-  color: #fff;
-  transform: translateY(-50%);
-  pointer-events: none;
-  z-index: 3;
-}
-
-.menu-bar-container::before {
-  left: 10px;
-  content: '◀'; /* Left arrow */
-}
-
-.menu-bar-container::after {
-  right: 10px;
-  content: '▶'; /* Right arrow */
-}
-
