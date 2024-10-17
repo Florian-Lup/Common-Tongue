@@ -61,16 +61,6 @@
   z-index: 1001;
 }
 
-.menu-bar::before {
-  left: 0;
-  background: linear-gradient(to right, #0d0d0d, rgba(13, 13, 13, 0));
-}
-
-.menu-bar::after {
-  right: 0;
-  background: linear-gradient(to left, #0d0d0d, rgba(13, 13, 13, 0));
-}
-
 .menu-bar::-webkit-scrollbar-thumb {
   transition: background-color 0.3s;
 } 
