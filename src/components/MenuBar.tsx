@@ -54,13 +54,13 @@ export default function MenuBar({ editor }: { editor: Editor }) {
       action: () => editor.chain().focus().toggleStrike().run(),
       isActive: () => editor.isActive('strike'),
     },
-    {
+   {
       icon: 'palette-line',
       title: 'Text Color',
       action: () => {
         if (editor.isActive('textStyle', { color: '#fb7185' })) {
-          // Unset only the color attribute
-          editor.chain().focus().setColor(null).run();
+          // Unset the color
+          editor.chain().focus().unsetColor().run();
         } else {
           editor.chain().focus().setColor('#fb7185').run();
         }
@@ -72,8 +72,8 @@ export default function MenuBar({ editor }: { editor: Editor }) {
       title: 'Highlight',
       action: () => {
         if (editor.isActive('highlight', { color: '#fdba74' })) {
-          // Unset only the highlight color
-          editor.chain().focus().setHighlight({ color: null }).run();
+          // Unset the highlight
+          editor.chain().focus().unsetHighlight().run();
         } else {
           editor.chain().focus().setHighlight({ color: '#fdba74' }).run();
         }
