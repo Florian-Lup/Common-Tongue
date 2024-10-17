@@ -1,13 +1,32 @@
+// MenuBar.tsx (or MenuBar.jsx)
+import React, { useEffect, useState, Fragment } from "react";
 import "./MenuBar.scss";
 import type { Editor } from "@tiptap/react";
-
-import { Fragment } from "react";
-
 import MenuItem from "./MenuItem.jsx";
-
 import validator from "validator";
 
 export default function MenuBar({ editor }: { editor: Editor }) {
+  const [_, setEditorState] = useState(0); // Dummy state to trigger re-render
+
+  useEffect(() => {
+    if (!editor) {
+      return;
+    }
+
+    const updateHandler = () => {
+      // Trigger a re-render by updating dummy state
+      setEditorState((prev) => prev + 1);
+    };
+
+    // Subscribe to editor's update event
+    editor.on("update", updateHandler);
+
+    // Cleanup subscription on unmount
+    return () => {
+      editor.off("update", updateHandler);
+    };
+  }, [editor]);
+  
   const items = [
     {
       icon: "bold",
