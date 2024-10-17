@@ -25,12 +25,6 @@
   scroll-snap-align: start;
 }
 
-/* Firefox scrollbar styling */
-.menu-bar {
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-  scrollbar-width: thin;
-}
-
 /* WebKit scrollbar styling */
 .menu-bar::-webkit-scrollbar {
   height: 8px;
