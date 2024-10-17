@@ -135,7 +135,7 @@ body {
     justify-content: center; /* Centers the inner content horizontally */
     align-items: center;     /* Centers the inner content vertically */
     background-color: #fff;
-    padding: 0.5rem;
+    padding: 0.5rem 0;
 }
 
   &__content {
@@ -148,7 +148,7 @@ body {
     max-width: 800px;
     /* Ensure content doesn't exceed max width */
     box-sizing: border-box;
-margin-top: calc(0.25rem * 2 + 2rem); /* Header padding * 2 + 2rem */
+margin-top: calc(0.25rem * 2 + 2.5rem); /* Header padding * 2 + 2.5rem */
   }
 
   &__footer {
