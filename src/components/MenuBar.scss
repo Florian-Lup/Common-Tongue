@@ -19,14 +19,8 @@
     flex-wrap: nowrap; /* Prevents items from wrapping to the next line */
     border-radius: 0.25rem; /* Matches the header's border radius */
     scrollbar-width: thin; /* For Firefox */
-}
 
-/* Optional: Styling for Menu Items */
-.menu-bar > * {
-    flex: 0 0 auto; /* Prevents menu items from shrinking */
-}
-
-/* WebKit scrollbar styling */
+  /* WebKit scrollbar styling */
 .menu-bar::-webkit-scrollbar {
   height: 8px;
 }
@@ -53,10 +47,12 @@
 
 .menu-bar::-webkit-scrollbar-thumb {
   transition: background-color 0.3s;
-} 
-
-@media (max-width: 600px) {
-  .menu-bar::-webkit-scrollbar {
-    height: 8px;
-  }
 }
+}
+
+/* Optional: Styling for Menu Items */
+.menu-bar > * {
+    flex: 0 0 auto; /* Prevents menu items from shrinking */
+}
+
+
