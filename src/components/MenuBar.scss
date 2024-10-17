@@ -54,17 +54,12 @@
 .menu-bar::before,
 .menu-bar::after {
   content: '';
-  /* This will be overridden below */
-  position: absolute;
-  top: 50%;
   width: 24px;
   /* Size of the arrow indicators */
   height: 24px;
   font-size: 16px;
-  /* Adjust size as needed */
   color: rgba(255, 255, 255, 0.5);
   /* Semi-transparent color */
-  transform: translateY(-50%);
   pointer-events: none;
   /* Allows clicks to pass through */
   z-index: 3;
