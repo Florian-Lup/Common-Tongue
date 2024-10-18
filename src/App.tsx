@@ -14,7 +14,7 @@ import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
-
+import './App.scss'; // Ensure you have necessary styles
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -29,27 +29,27 @@ const App: React.FC = () => {
       TaskList,
       TaskItem,
       CharacterCount.configure({ limit: 5000 }),
-Placeholder.configure({
-placeholder: ({ node }) => {
-switch (node.type.name) {
-case 'paragraph':
-return 'Write something...';
-case 'heading':
-return 'What’s the title';
-// Add more cases as needed
-default:
-return '';
-}
-},
-emptyNodeClass: 'empty-node',
-}),
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          switch (node.type.name) {
+            case 'paragraph':
+              return 'Write something...';
+            case 'heading':
+              return 'What’s the title';
+            // Add more cases as needed
+            default:
+              return '';
+          }
+        },
+        emptyNodeClass: 'empty-node',
+      }),
       Underline,
       TextStyle,
       Color,
       Focus.configure({
         className: 'has-focus', // Custom class for focused nodes
         mode: 'shallowest',
-    }),
+      }),
     ],
     editable: !isTyping,
     onUpdate: ({ editor }) => {
@@ -62,7 +62,7 @@ emptyNodeClass: 'empty-node',
   }
 
   return (
-    <div className={`editor-container ${isProcessing ? 'processing' : ''}`}> {/* Conditional class */}
+    <div className={`editor-container ${isProcessing ? 'processing' : ''}`}>
       <div className="editor">
         <MenuBar editor={editor} />
         <EditorContent className="editor__content" editor={editor} spellCheck={false} />
@@ -75,7 +75,7 @@ emptyNodeClass: 'empty-node',
           editor={editor} 
           isTyping={isTyping} 
           setIsTyping={setIsTyping} 
-          setIsProcessing={setIsProcessing} // Pass the setter
+          setIsProcessing={setIsProcessing} 
         />
       </div>
     </div>

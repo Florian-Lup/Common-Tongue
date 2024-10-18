@@ -1,3 +1,4 @@
+/* MenuItem.scss */
 .menu-item {
   background-color: transparent;
   border: none;
@@ -18,5 +19,10 @@
   &:hover,
   &.is-active {
     background-color: #303030;
+  }
+
+  /* Remove default focus outline */
+  &:focus {
+    outline: none;
   }
 }
