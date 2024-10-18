@@ -1,11 +1,12 @@
-import "./MenuBar.scss";
-import type { Editor } from "@tiptap/react";
-import { Fragment } from "react";
-import MenuItem from "./MenuItem.jsx";
-import validator from "validator";
-import { useEffect, useState } from 'react';
+// MenuBar.tsx
 
-export default function MenuBar({ editor }) {
+import { useEffect, useState } from 'react';
+import type { Editor } from '@tiptap/react'; // Correctly import the Editor type
+import { Fragment } from 'react';
+import MenuItem from './MenuItem.jsx';
+import validator from 'validator';
+
+export default function MenuBar({ editor }: { editor: Editor }) {
   const [, setState] = useState(0);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function MenuBar({ editor }) {
       editor.off('transaction', update);
     };
   }, [editor]);
+
   const items = [
     {
       icon: "bold",
