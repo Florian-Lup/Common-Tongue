@@ -223,10 +223,17 @@ body {
   padding: 8px;
   cursor: pointer;
   z-index: 1000;
+
+  .remix {
+    width: 24px;
+    height: 24px;
+    fill: #333; /* Adjust the color as needed */
+  }
 }
 
-.toggle-menu-bar-button .remix {
-  width: 24px;
-  height: 24px;
-  fill: #333; /* Adjust color as needed */
+/* Hide the toggle button on desktop screens */
+@media (min-width: 769px) {
+  .toggle-menu-bar-button {
+    display: none;
+  }
 }
