@@ -255,7 +255,6 @@ export default function MenuBar({ editor }: { editor: Editor }) {
 
   return (
     <div className="editor__header">
-      <div className="menu-bar">
         {items.map((item, index) => (
           <Fragment key={index}>
             {item.type === "divider" ? (
@@ -265,7 +264,6 @@ export default function MenuBar({ editor }: { editor: Editor }) {
             )}
           </Fragment>
         ))}
-      </div>
     </div>
   );
 }
