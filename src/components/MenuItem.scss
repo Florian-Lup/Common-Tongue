@@ -8,8 +8,11 @@
   margin-right: 0.5rem;
   padding: 0.25rem;
   width: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  svg {
+  .remix {
     fill: currentColor;
     height: 100%;
     width: 100%;
