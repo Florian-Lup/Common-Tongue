@@ -231,6 +231,13 @@ body {
   }
 }
 
+.menu-bar {
+  transition: transform 0.3s ease;
+}
+.menu-bar.hidden {
+  transform: translateY(-100%);
+}
+
 /* Hide the toggle button on desktop screens */
 @media (min-width: 769px) {
   .toggle-menu-bar-button {
