@@ -22,11 +22,28 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, title, action, isActive = nul
     }
   };
 
+  const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault(); // Prevent focus on mouse down
+  };
+
+  const handleTouchEnd = () => {
+    if (buttonRef.current) {
+      buttonRef.current.blur(); // Remove focus after touch
+    }
+  };
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLButtonElement>) => {
+    event.preventDefault(); // Prevent default touch behavior
+  };
+
   return (
     <button
       ref={buttonRef}
       className={`menu-item${isActive && isActive() ? ' is-active' : ''}`}
       onClick={handleClick}
+      onMouseDown={handleMouseDown}
+      onTouchEnd={handleTouchEnd}
+      onTouchStart={handleTouchStart}
       title={title}
     >
       <svg className="remix">

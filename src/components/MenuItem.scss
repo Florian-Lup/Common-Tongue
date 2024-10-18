@@ -9,6 +9,9 @@
   margin-right: 0.5rem;
   padding: 0.25rem;
   width: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   svg {
     fill: currentColor;
@@ -25,4 +28,23 @@
   &:focus {
     outline: none;
   }
+
+  /* Adjust active state for touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    &:active {
+      background-color: transparent;
+      /* Prevent persistent highlight */
+    }
+  }
+
+  /* Provide focus styles only for non-touch devices */
+  @media (hover: hover) and (pointer: fine) {
+    &:focus {
+      outline: 2px solid #60a5fa;
+      /* Visible outline for keyboard users */
+    }
+  }
+
+  /* Ensure touch responsiveness */
+  touch-action: manipulation;
 }
