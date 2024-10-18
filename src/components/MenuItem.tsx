@@ -10,7 +10,7 @@ export default function MenuItem ({
     if (action) {
       action();
     }
-    // Remove focus after click
+    // Remove focus after click to prevent persistent highlight
     e.currentTarget.blur();
   };
 
@@ -19,7 +19,7 @@ export default function MenuItem ({
       className={`menu-item${isActive && isActive() ? ' is-active' : ''}`}
       onClick={handleClick}
       title={title}
-      type="button" // Ensure it's a button type to prevent unintended form submissions
+      type="button" // Ensures it's a button type to prevent unintended form submissions
     >
       <svg className="remix">
         <use xlinkHref={`${remixiconUrl}#ri-${icon}`}/>
