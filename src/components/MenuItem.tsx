@@ -1,32 +1,17 @@
-// components/MenuItem.tsx
-import React from 'react';
-import './MenuItem.scss';
-import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
+import './MenuItem.scss'
 
-interface MenuItemProps {
-  icon?: string;
-  title?: string;
-  action?: () => void;
-  isActive?: () => boolean;
-}
+import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg'
 
-const MenuItem: React.FC<MenuItemProps> = ({ icon, title, action, isActive }) => {
-  const active = isActive ? isActive() : false;
-
-  return (
-    <button
-      className={`menu-item${active ? ' is-active' : ''}`}
+export default function MenuItem ({
+  icon, title, action, isActive = null,
+}: {icon?: string, title?: string, action?: () => void, isActive?: (() => boolean) | null } ) {
+  return <button
+      className={`menu-item${isActive && isActive() ? ' is-active' : ''}`}
       onClick={action}
       title={title}
-      type="button"
     >
-      {icon && (
-        <svg className="remix">
-          <use xlinkHref={`${remixiconUrl}#ri-${icon}`} />
-        </svg>
-      )}
+      <svg className="remix">
+        <use xlinkHref={`${remixiconUrl}#ri-${icon}`}/>
+      </svg>
     </button>
-  );
-};
-
-export default React.memo(MenuItem);
+}
