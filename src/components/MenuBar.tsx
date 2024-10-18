@@ -1,9 +1,22 @@
-// MenuBar.tsx
 import './MenuBar.scss';
 import type { Editor } from '@tiptap/react';
 import { Fragment } from 'react';
-import MenuItem from './MenuItem.jsx';
+import MenuItem from './MenuItem';
 import validator from 'validator';
+
+interface MenuItemType {
+  icon: string;
+  title: string;
+  action: () => void;
+  isActive?: () => boolean;
+  type?: undefined;
+}
+
+interface DividerType {
+  type: 'divider';
+}
+
+type MenuItemOrDivider = MenuItemType | DividerType;
 
 export default function MenuBar({
   editor,
@@ -245,7 +258,7 @@ export default function MenuBar({
       <div className="menu-bar">
         {items.map((item, index) => (
           <Fragment key={index}>
-            {item.type === 'divider' ? (
+            {'type' in item && item.type === 'divider' ? (
               <div className="divider" />
             ) : (
               <MenuItem {...item} onMenuItemClick={onMenuItemClick} />
