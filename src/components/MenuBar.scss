@@ -49,32 +49,3 @@
 .menu-bar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.5);
 }
-
-/* Scroll Indicators Using Pseudo-Elements */
-.menu-bar::before,
-.menu-bar::after {
-  content: '';
-  width: 24px;
-  /* Size of the arrow indicators */
-  height: 24px;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.5);
-  /* Semi-transparent color */
-  pointer-events: none;
-  /* Allows clicks to pass through */
-  z-index: 3;
-}
-
-/* Left Arrow */
-.menu-bar::before {
-  left: 10px;
-  content: '◀';
-  /* Unicode left arrow */
-}
-
-/* Right Arrow */
-.menu-bar::after {
-  right: 10px;
-  content: '▶';
-  /* Unicode right arrow */
-}
