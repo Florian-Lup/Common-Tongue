@@ -120,7 +120,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         // Set the cursor position after the inserted text
         editor.commands.setTextSelection(from + length);
       }
-    }, 25);
+    }, 10); //typewriter speed
   };
 
   // Automatically dismiss error message after 3 seconds
