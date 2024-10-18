@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState, useEffect } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
@@ -90,11 +91,28 @@ const App: React.FC = () => {
           onClick={() => setIsMenuBarVisible(!isMenuBarVisible)}
         >
           <svg className="remix">
-            <use xlinkHref={`${remixiconUrl}#ri-${isMenuBarVisible ? 'close-line' : 'menu-line'}`} />
+            <use
+              xlinkHref={`${remixiconUrl}#ri-${
+                isMenuBarVisible ? 'close-line' : 'menu-line'
+              }`}
+            />
           </svg>
         </button>
-        {isMenuBarVisible && <MenuBar editor={editor} />}
-        <EditorContent className="editor__content" editor={editor} spellCheck={false} />
+        {isMenuBarVisible && (
+          <MenuBar
+            editor={editor}
+            onMenuItemClick={() => {
+              if (window.innerWidth <= 768) {
+                setIsMenuBarVisible(false);
+              }
+            }}
+          />
+        )}
+        <EditorContent
+          className="editor__content"
+          editor={editor}
+          spellCheck={false}
+        />
         <div className="editor__footer">
           <div className="character-count">{characterCount} characters</div>
         </div>
