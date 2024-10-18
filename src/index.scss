@@ -180,7 +180,6 @@ body {
   max-width: 800px;
   margin: 0 auto;
   padding: 0.5rem;
-  border-left: 0.3rem solid #fff;
 
   .red-text {
     color: #ff0000;
@@ -188,6 +187,7 @@ body {
 
     >* {
       padding: 0.5rem;
+      border-left: 0.3rem solid #fff;
     }
 
 }
