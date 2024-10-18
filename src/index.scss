@@ -200,9 +200,8 @@ body {
 }
 
 .has-focus {
-  outline: 2px solid #CCCCCC; /* Subtle gray outline */
-  background-color: rgba(204, 204, 204, 0.1); /* Light gray background */
-  border-radius: 4px;
+  background-color: rgba(204, 204, 204, 0.05); /* Very light gray background */
+  border-left: 0.2rem solid #CCCCCC; /* Subtle gray border */
 }
 
 /* Apply hover effect to elements that have the has-focus class */
