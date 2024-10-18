@@ -1,4 +1,3 @@
-/* MenuItem.scss */
 .menu-item {
   background-color: transparent;
   border: none;
@@ -10,32 +9,14 @@
   padding: 0.25rem;
   width: 1.75rem;
 
-  /* Remove default tap highlight on mobile */
-  -webkit-tap-highlight-color: transparent;
-
-  /* Remove default focus outline */
-  outline: none;
-
   svg {
     fill: currentColor;
     height: 100%;
     width: 100%;
   }
 
-  /* Handle hover and is-active states */
   &:hover,
   &.is-active {
     background-color: #303030;
-  }
-
-  /* Override :focus and :active states */
-  &:focus,
-  &:active {
-    outline: none;
-    /* Remove focus outline */
-    box-shadow: none;
-    /* Remove any box-shadow */
-    background-color: none;
-    /* Match hover and is-active background */
   }
 }

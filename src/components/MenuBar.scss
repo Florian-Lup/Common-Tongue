@@ -1,5 +1,6 @@
 .divider {
-  background-color: rgba(255, 255, 255, 0.25);;
+  background-color: rgba(255, 255, 255, 0.25);
+  ;
   height: 1.25rem;
   margin-left: 0.5rem;
   margin-right: 0.75rem;
@@ -7,21 +8,25 @@
 }
 
 .menu-bar {
-    display: flex;
-    align-items: center;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS */
-    max-width: 800px;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #0d0d0d;
-    padding: 0.5rem;
-    flex-wrap: nowrap; /* Prevents items from wrapping to the next line */
-    border-radius: 0.25rem; /* Matches the header's border radius */
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Enables smooth scrolling on iOS */
+  max-width: 800px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #0d0d0d;
+  padding: 0.5rem;
+  flex-wrap: nowrap;
+  /* Prevents items from wrapping to the next line */
+  border-radius: 0.25rem;
+  /* Matches the header's border radius */
 }
 
-.menu-bar > * {
-    flex: 0 0 auto; /* Prevents menu items from shrinking */
+.menu-bar>* {
+  flex: 0 0 auto;
+  /* Prevents menu items from shrinking */
 }
 
 /* WebKit scrollbar styling */

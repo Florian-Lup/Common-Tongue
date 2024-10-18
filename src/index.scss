@@ -56,9 +56,9 @@ body {
     max-width: 100%;
   }
 
-        hr {
-          margin: 1rem 0;
-        }
+  hr {
+    margin: 1rem 0;
+  }
 
   blockquote {
     border-left: 2px solid rgba(13, 13, 13, 0.1);
@@ -92,8 +92,8 @@ body {
   }
 
   li p {
-  margin: 0.2rem;
-  padding: 0;
+    margin: 0.2rem;
+    padding: 0;
   }
 
   .empty-node::before {
@@ -121,7 +121,7 @@ body {
   width: 100%;
   /* Ensure the editor doesn't exceed its parent container */
 
-.editor__header {
+  .editor__header {
     position: fixed;
     top: 0;
     left: 50%;
@@ -131,12 +131,14 @@ body {
     width: 100%;
     box-sizing: border-box;
     display: flex;
-    justify-content: center; /* Centers the inner content horizontally */
-    align-items: center;     /* Centers the inner content vertically */
+    justify-content: center;
+    /* Centers the inner content horizontally */
+    align-items: center;
+    /* Centers the inner content vertically */
     background-color: #fff;
-   padding: 0.5rem;
+    padding: 0.5rem;
 
-}
+  }
 
   &__content {
     flex: 1 1 auto;
@@ -185,10 +187,10 @@ body {
     color: #ff0000;
   }
 
-    >* {
-      padding: 0.5rem;
-      border-left: 0.3rem solid #fff;
-    }
+  >* {
+    padding: 0.5rem;
+    border-left: 0.3rem solid #fff;
+  }
 
 }
 
@@ -201,13 +203,16 @@ body {
 }
 
 .has-focus {
-  background-color: rgba(204, 204, 204, 0.05); /* Very light gray background */
-  border-left: 0.3rem solid #CCCCCC; /* Subtle gray border */
+  background-color: rgba(204, 204, 204, 0.05);
+  /* Very light gray background */
+  border-left: 0.3rem solid #CCCCCC;
+  /* Subtle gray border */
 }
 
 /* Apply hover effect to elements that have the has-focus class */
 .ProseMirror>*:hover {
-  background-color: rgba(204, 204, 204, 0.05); /* Very light gray background */
-  border-left: 0.3rem solid #CCCCCC; /* Subtle gray border */
+  background-color: rgba(204, 204, 204, 0.05);
+  /* Very light gray background */
+  border-left: 0.3rem solid #CCCCCC;
+  /* Subtle gray border */
 }
-
