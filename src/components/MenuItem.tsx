@@ -1,4 +1,5 @@
 // MenuItem.tsx
+
 import './MenuItem.scss';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 
@@ -11,7 +12,7 @@ export default function MenuItem({
 }: {
   icon?: string;
   title?: string;
-  action?: () => void;
+  action: () => void; // Now required
   isActive?: (() => boolean) | null;
   onMenuItemClick?: () => void;
 }) {
