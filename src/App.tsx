@@ -1,5 +1,5 @@
 // App.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
 import Highlight from '@tiptap/extension-highlight';
@@ -15,63 +15,43 @@ import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
-import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
+
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isMenuBarVisible, setIsMenuBarVisible] = useState(true);
-
-  useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth <= 768) {
-        setIsMenuBarVisible(false);
-      } else {
-        setIsMenuBarVisible(true);
-      }
-    }
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const [isProcessing, setIsProcessing] = useState(false); // New state for processing
 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Link.configure({
-        openOnClick: true,
-        linkOnPaste: true,
-      }),
-      Highlight.configure({
-        multicolor: true,
-      }),
+      Link.configure({ openOnClick: true, linkOnPaste: true }),
+      Highlight.configure({ multicolor: true }),
       TaskList,
       TaskItem,
-      CharacterCount.configure({
-        limit: 5000,
-      }),
-      Placeholder.configure({
-        placeholder: ({ node }) => {
-          switch (node.type.name) {
-            case 'paragraph':
-              return 'Write something...';
-            case 'heading':
-              return 'What’s the title';
-            default:
-              return '';
-          }
-        },
-        emptyNodeClass: 'empty-node',
-      }),
+      CharacterCount.configure({ limit: 5000 }),
+Placeholder.configure({
+placeholder: ({ node }) => {
+switch (node.type.name) {
+case 'paragraph':
+return 'Write something...';
+case 'heading':
+return 'What’s the title';
+// Add more cases as needed
+default:
+return '';
+}
+},
+emptyNodeClass: 'empty-node',
+}),
       Underline,
       TextStyle,
       Color,
-      Strike,
+      Strike, // Add Strikethrough to extensions
       Focus.configure({
-        className: 'has-focus',
+        className: 'has-focus', // Custom class for focused nodes
         mode: 'shallowest',
-      }),
+    }),
     ],
     editable: !isTyping,
     onUpdate: ({ editor }) => {
@@ -84,43 +64,20 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={`editor-container ${isProcessing ? 'processing' : ''}`}>
+    <div className={`editor-container ${isProcessing ? 'processing' : ''}`}> {/* Conditional class */}
       <div className="editor">
-        <button
-          className="toggle-menu-bar-button"
-          onClick={() => setIsMenuBarVisible(!isMenuBarVisible)}
-        >
-          <svg className="remix">
-            <use
-              xlinkHref={`${remixiconUrl}#ri-${
-                isMenuBarVisible ? 'close-line' : 'menu-line'
-              }`}
-            />
-          </svg>
-        </button>
-        {isMenuBarVisible && (
-          <MenuBar
-            editor={editor}
-            onMenuItemClick={() => {
-              if (window.innerWidth <= 768) {
-                setIsMenuBarVisible(false);
-              }
-            }}
-          />
-        )}
-        <EditorContent
-          className="editor__content"
-          editor={editor}
-          spellCheck={false}
-        />
+        <MenuBar editor={editor} />
+        <EditorContent className="editor__content" editor={editor} spellCheck={false} />
         <div className="editor__footer">
-          <div className="character-count">{characterCount} characters</div>
+          <div className="character-count">
+            {characterCount} characters
+          </div>
         </div>
-        <CustomBubbleMenu
-          editor={editor}
-          isTyping={isTyping}
-          setIsTyping={setIsTyping}
-          setIsProcessing={setIsProcessing}
+        <CustomBubbleMenu 
+          editor={editor} 
+          isTyping={isTyping} 
+          setIsTyping={setIsTyping} 
+          setIsProcessing={setIsProcessing} // Pass the setter
         />
       </div>
     </div>
