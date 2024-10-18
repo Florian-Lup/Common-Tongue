@@ -180,6 +180,7 @@ body {
   max-width: 800px;
   margin: 0 auto;
   padding: 0.5rem;
+  border-left: 0.3rem solid #fff;
 
   .red-text {
     color: #ff0000;
@@ -201,12 +202,12 @@ body {
 
 .has-focus {
   background-color: rgba(204, 204, 204, 0.05); /* Very light gray background */
-  border-left: 0.2rem solid #CCCCCC; /* Subtle gray border */
+  border-left: 0.3rem solid #CCCCCC; /* Subtle gray border */
 }
 
 /* Apply hover effect to elements that have the has-focus class */
 .ProseMirror>*:hover {
   background-color: rgba(204, 204, 204, 0.05); /* Very light gray background */
-  border-left: 0.2rem solid #CCCCCC; /* Subtle gray border */
+  border-left: 0.3rem solid #CCCCCC; /* Subtle gray border */
 }
 
