@@ -9,6 +9,12 @@
   padding: 0.25rem;
   width: 1.75rem;
 
+    /* Remove default tap highlight on mobile */
+      -webkit-tap-highlight-color: transparent;
+    
+      /* Remove default focus outline */
+      outline: none;
+
   svg {
     fill: currentColor;
     height: 100%;
