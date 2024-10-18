@@ -1,32 +1,13 @@
-// MenuBar.jsx
 import "./MenuBar.scss";
 import type { Editor } from "@tiptap/react";
-import { Fragment, useEffect, useState } from "react"; // Import useState and useEffect
+
+import { Fragment } from "react";
+
 import MenuItem from "./MenuItem.jsx";
+
 import validator from "validator";
 
 export default function MenuBar({ editor }: { editor: Editor }) {
-  const [renderToggle, setRenderToggle] = useState(false); // State to trigger re-render
-
-  useEffect(() => {
-    if (!editor) return;
-
-    // Define a callback that toggles the renderToggle state
-    const handleUpdate = () => {
-      setRenderToggle((prev) => !prev);
-    };
-
-    // Subscribe to editor's update and selectionUpdate events
-    editor.on("update", handleUpdate);
-    editor.on("selectionUpdate", handleUpdate);
-
-    // Cleanup subscriptions on unmount
-    return () => {
-      editor.off("update", handleUpdate);
-      editor.off("selectionUpdate", handleUpdate);
-    };
-  }, [editor]);
-  
   const items = [
     {
       icon: "bold",
@@ -256,18 +237,18 @@ export default function MenuBar({ editor }: { editor: Editor }) {
   ];
 
   return (
-    <div className="editor__header">
-      <div className="menu-bar">
-        {items.map((item, index) => (
-          <Fragment key={index}>
-            {item.type === "divider" ? (
-              <div className="divider" />
-            ) : (
-              <MenuItem {...item} />
-            )}
-          </Fragment>
-        ))}
-      </div>
+  <div className="editor__header">
+    <div className="menu-bar">
+      {items.map((item, index) => (
+        <Fragment key={index}>
+          {item.type === "divider" ? (
+            <div className="divider" />
+          ) : (
+            <MenuItem {...item} />
+          )}
+        </Fragment>
+      ))}
     </div>
-  );
+  </div>
+);
 }

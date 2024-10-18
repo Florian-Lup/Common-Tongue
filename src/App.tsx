@@ -10,7 +10,6 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
-import Strike from '@tiptap/extension-strike';
 import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
@@ -47,7 +46,6 @@ emptyNodeClass: 'empty-node',
       Underline,
       TextStyle,
       Color,
-      Strike, // Add Strikethrough to extensions
       Focus.configure({
         className: 'has-focus', // Custom class for focused nodes
         mode: 'shallowest',
