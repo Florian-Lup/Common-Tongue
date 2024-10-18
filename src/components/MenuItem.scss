@@ -4,10 +4,10 @@
   border-radius: 0.4rem;
   color: #fff;
   cursor: pointer;
-  height: 1.75rem;
+  height: 1.8rem;
   margin-right: 0.5rem;
   padding: 0.25rem;
-  width: 1.75rem;
+  width: 1.8rem;
 
   svg {
     fill: currentColor;
@@ -15,9 +15,7 @@
     width: 100%;
   }
 
-  &:hover {
-    background-color: #303030;
-  }
+  &:hover,
   &.is-active {
     background-color: #303030;
   }
