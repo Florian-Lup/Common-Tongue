@@ -9,27 +9,25 @@
   display: flex;
   background-color: #0D0D0D;
   padding: 0.25rem;
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
    z-index: 1000;
 
   button {
     display: flex;
-    /* Use flex to align icon and text */
     align-items: center;
-    /* Vertically center the items */
     border: none;
     background: none;
     color: #ffffffcf;
-    font-size: 0.7rem;
+    font-size: 1rem;
     font-weight: 600;
     padding: 0.2rem 0.3rem;
     cursor: pointer;
-    border-radius: 0.3rem;
+    border-radius: 0.25rem;
     transition: background-color 0.2s ease;
 
     .icon {
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       fill: greenyellow;
       margin-right: 0.5rem;
       /* Space between icon and text */
