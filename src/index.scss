@@ -203,7 +203,7 @@ body {
 }
 
 .has-focus {
-  background-color: rgba(204, 204, 204, 0.05);
+  background-color: rgba(204, 204, 204, 0.15);
   /* Very light gray background */
   border-left: 0.3rem solid #CCCCCC;
   /* Subtle gray border */
@@ -211,7 +211,7 @@ body {
 
 /* Apply hover effect to elements that have the has-focus class */
 .ProseMirror>*:hover {
-  background-color: rgba(204, 204, 204, 0.05);
+  background-color: rgba(204, 204, 204, 0.15);
   /* Very light gray background */
   border-left: 0.3rem solid #CCCCCC;
   /* Subtle gray border */
