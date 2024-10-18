@@ -214,28 +214,26 @@ body {
 
 }
 
-/* index.scss or MenuBar.scss */
+.toggle-menu-bar-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 1000;
 
-/* Initially, the menu is hidden and off-screen */
-.menu-bar {
-  transition: transform 0.3s ease, opacity 0.3s ease; /* Slide and fade in/out effect */
-  transform: translateY(-100%); /* Initially slide it up, out of view */
-  opacity: 0; /* Initially invisible */
+  .remix {
+    width: 24px;
+    height: 24px;
+    fill: #333; /* Adjust the color as needed */
+  }
 }
 
-/* When the menu is visible */
-.menu-bar.visible {
-  transform: translateY(0); /* Slide into view */
-  opacity: 1; /* Fully visible */
-}
-
-/* Optional: Mobile-specific handling */
-@media (max-width: 768px) {
-  .menu-bar {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: white; /* Adjust background color as necessary */
+/* Hide the toggle button on desktop screens */
+@media (min-width: 769px) {
+  .toggle-menu-bar-button {
+    display: none;
   }
 }
