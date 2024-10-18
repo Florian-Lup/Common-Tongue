@@ -86,7 +86,6 @@ const App: React.FC = () => {
   return (
     <div className={`editor-container ${isProcessing ? 'processing' : ''}`}>
       <div className="editor">
-        {/* Toggle button to show/hide the menu bar */}
         <button
           className="toggle-menu-bar-button"
           onClick={() => setIsMenuBarVisible(!isMenuBarVisible)}
@@ -99,28 +98,24 @@ const App: React.FC = () => {
             />
           </svg>
         </button>
-
-        {/* Add 'visible' class based on isMenuBarVisible state */}
-        <MenuBar
-          editor={editor}
-          className={isMenuBarVisible ? 'visible' : ''} // Add visible class
-          onMenuItemClick={() => {
-            if (window.innerWidth <= 768) {
-              setIsMenuBarVisible(false); // Close menu bar after click
-            }
-          }}
-        />
-
+        {isMenuBarVisible && (
+          <MenuBar
+            editor={editor}
+            onMenuItemClick={() => {
+              if (window.innerWidth <= 768) {
+                setIsMenuBarVisible(false);
+              }
+            }}
+          />
+        )}
         <EditorContent
           className="editor__content"
           editor={editor}
           spellCheck={false}
         />
-
         <div className="editor__footer">
           <div className="character-count">{characterCount} characters</div>
         </div>
-
         <CustomBubbleMenu
           editor={editor}
           isTyping={isTyping}
