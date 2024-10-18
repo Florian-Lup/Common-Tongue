@@ -1,30 +1,13 @@
 import "./MenuBar.scss";
 import type { Editor } from "@tiptap/react";
-import { Fragment, useState, useEffect } from "react";
+
+import { Fragment } from "react";
+
 import MenuItem from "./MenuItem.jsx";
+
 import validator from "validator";
 
 export default function MenuBar({ editor }: { editor: Editor }) {
-  // State to force re-render
-  const [, setState] = useState(0);
-
-  useEffect(() => {
-    // Handler to update state
-    const handleUpdate = () => {
-      setState((prev) => prev + 1);
-    };
-
-    // Subscribe to editor events
-    editor.on("update", handleUpdate);
-    editor.on("selectionUpdate", handleUpdate);
-
-    // Cleanup subscription on unmount
-    return () => {
-      editor.off("update", handleUpdate);
-      editor.off("selectionUpdate", handleUpdate);
-    };
-  }, [editor]);
-  
   const items = [
     {
       icon: "bold",
@@ -197,6 +180,9 @@ export default function MenuBar({ editor }: { editor: Editor }) {
       isActive: () => editor.isActive("code"),
     },
     {
+      type: "divider",
+    },
+    {
       icon: "double-quotes-l",
       title: "Blockquote",
       action: () => editor.chain().focus().toggleBlockquote().run(),
@@ -242,6 +228,9 @@ export default function MenuBar({ editor }: { editor: Editor }) {
       action: () => editor.chain().focus().clearNodes().unsetAllMarks().run(),
     },
     {
+      type: "divider",
+    },
+    {
       icon: "arrow-go-back-line",
       title: "Undo",
       action: () => editor.chain().focus().undo().run(),
@@ -251,21 +240,22 @@ export default function MenuBar({ editor }: { editor: Editor }) {
       title: "Redo",
       action: () => editor.chain().focus().redo().run(),
     },
+    {
+      type: "divider",
+    },
   ];
 
   return (
     <div className="editor__header">
-      <div className="menu-bar">
-        {items.map((item, index) => (
-          <Fragment key={index}>
-            {item.type === "divider" ? (
-              <div className="divider" />
-            ) : (
-              <MenuItem {...item} />
-            )}
-          </Fragment>
-        ))}
-      </div>
+      {items.map((item, index) => (
+        <Fragment key={index}>
+          {item.type === "divider" ? (
+            <div className="divider" />
+          ) : (
+            <MenuItem {...item} />
+          )}
+        </Fragment>
+      ))}
     </div>
   );
 }
