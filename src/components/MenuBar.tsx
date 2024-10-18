@@ -1,13 +1,17 @@
-import "./MenuBar.scss";
-import type { Editor } from "@tiptap/react";
+// MenuBar.tsx
+import './MenuBar.scss';
+import type { Editor } from '@tiptap/react';
+import { Fragment } from 'react';
+import MenuItem from './MenuItem.jsx';
+import validator from 'validator';
 
-import { Fragment } from "react";
-
-import MenuItem from "./MenuItem.jsx";
-
-import validator from "validator";
-
-export default function MenuBar({ editor }: { editor: Editor }) {
+export default function MenuBar({
+  editor,
+  onMenuItemClick,
+}: {
+  editor: Editor;
+  onMenuItemClick: () => void;
+}) {
   const items = [
     {
       icon: "bold",
@@ -236,19 +240,19 @@ export default function MenuBar({ editor }: { editor: Editor }) {
     },
   ];
 
-  return (
-  <div className="editor__header">
-    <div className="menu-bar">
-      {items.map((item, index) => (
-        <Fragment key={index}>
-          {item.type === "divider" ? (
-            <div className="divider" />
-          ) : (
-            <MenuItem {...item} />
-          )}
-        </Fragment>
-      ))}
+ return (
+    <div className="editor__header">
+      <div className="menu-bar">
+        {items.map((item, index) => (
+          <Fragment key={index}>
+            {item.type === 'divider' ? (
+              <div className="divider" />
+            ) : (
+              <MenuItem {...item} onMenuItemClick={onMenuItemClick} />
+            )}
+          </Fragment>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
 }
