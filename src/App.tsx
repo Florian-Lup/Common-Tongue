@@ -14,12 +14,12 @@ import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
-
+import CustomFloatingMenu from './components/CustomFloatingMenu'; // Updated import
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false); // New state for processing
+  const [isProcessing, setIsProcessing] = useState(false); // State for processing
 
   const editor = useEditor({
     extensions: [
@@ -29,27 +29,27 @@ const App: React.FC = () => {
       TaskList,
       TaskItem,
       CharacterCount.configure({ limit: 5000 }),
-Placeholder.configure({
-placeholder: ({ node }) => {
-switch (node.type.name) {
-case 'paragraph':
-return 'Write something...';
-case 'heading':
-return 'What’s the title';
-// Add more cases as needed
-default:
-return '';
-}
-},
-emptyNodeClass: 'empty-node',
-}),
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          switch (node.type.name) {
+            case 'paragraph':
+              return 'Write something...';
+            case 'heading':
+              return 'What’s the title';
+            // Add more cases as needed
+            default:
+              return '';
+          }
+        },
+        emptyNodeClass: 'empty-node',
+      }),
       Underline,
       TextStyle,
       Color,
       Focus.configure({
         className: 'has-focus', // Custom class for focused nodes
         mode: 'shallowest',
-    }),
+      }),
     ],
     editable: !isTyping,
     onUpdate: ({ editor }) => {
@@ -62,21 +62,20 @@ emptyNodeClass: 'empty-node',
   }
 
   return (
-    <div className={`editor-container ${isProcessing ? 'processing' : ''}`}> {/* Conditional class */}
+    <div className={`editor-container ${isProcessing ? 'processing' : ''}`}>
       <div className="editor">
         <MenuBar editor={editor} />
         <EditorContent className="editor__content" editor={editor} spellCheck={false} />
         <div className="editor__footer">
-          <div className="character-count">
-            {characterCount} characters
-          </div>
+          <div className="character-count">{characterCount} characters</div>
         </div>
-        <CustomBubbleMenu 
-          editor={editor} 
-          isTyping={isTyping} 
-          setIsTyping={setIsTyping} 
+        <CustomBubbleMenu
+          editor={editor}
+          isTyping={isTyping}
+          setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing} // Pass the setter
         />
+        <CustomFloatingMenu editor={editor} /> {/* Added Custom Floating Menu */}
       </div>
     </div>
   );

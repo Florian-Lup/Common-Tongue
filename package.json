@@ -28,7 +28,8 @@
     "@vercel/node": "^3.2.17",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "remixicon": "^4.2.0",
+    "remixicon": "^4.3.0",
+    "remixicon-react": "^1.0.0",
     "validator": "^13.12.0",
     "vite-plugin": "^0.0.0"
   },
