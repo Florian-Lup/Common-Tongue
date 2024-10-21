@@ -14,7 +14,7 @@ import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
-import CustomFloatingMenu from './components/CustomFloatingMenu'; // Updated import
+import CustomFloatingMenu from './components/FloatingMenu';
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);

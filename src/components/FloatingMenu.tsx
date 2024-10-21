@@ -2,7 +2,7 @@
 import React from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg'; 
-import './CustomFloatingMenu.scss';
+import './FloatingMenu.scss';
 
 interface CustomFloatingMenuProps {
   editor: Editor;
