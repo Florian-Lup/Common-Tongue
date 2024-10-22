@@ -18,7 +18,15 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleButtonClick = () => {
-    setShowInput((prev) => !prev);
+    setShowInput((prev) => {
+      const newShowInput = !prev;
+      if (!newShowInput) {
+        // Reset input and error states when hiding the input field
+        setInputValue('');
+        setHasError(false);
+      }
+      return newShowInput;
+    });
   };
 
   const handleSubmit = async () => {
@@ -42,8 +50,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
       setShowInput(false);
     } catch (err) {
       console.error('Submission error:', err);
-      // If you want to handle other errors, you can set them here
-      // setError('Failed to process input.');
+      // Optionally handle other errors here
     } finally {
       setIsProcessing(false);
     }
@@ -83,7 +90,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
           <div className="floating-menu-input-container">
             <input
               type="text"
-              className="floating-menu-input"
+              className={`floating-menu-input ${hasError ? 'error' : ''}`} // Add error class if hasError
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Enter your prompt..."
@@ -112,7 +119,8 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
             </button>
           </div>
         )}
-        {/* Removed the error message as per the requirement */}
+        {/* Optionally display an error message */}
+        {hasError && <div className="floating-menu-error">Please enter a prompt.</div>}
       </div>
     </TiptapFloatingMenu>
   );
