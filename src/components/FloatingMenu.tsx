@@ -12,7 +12,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
   const [showInput, setShowInput] = useState(false); // State to manage input visibility
   const [inputValue, setInputValue] = useState(''); // State to manage input value
   const [isSubmitting, setIsSubmitting] = useState(false); // State for processing
-  const [hasError, setHasError] = useState(false); // State for error indication
+  const [error, setError] = useState<string | null>(null); // State for error handling
   const inputRef = useRef<HTMLInputElement>(null); // Ref for input field
 
   const handleAIWriterClick = () => {
@@ -21,14 +21,12 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
 
   const handleInputSubmit = async () => {
     if (!inputValue.trim()) {
-      setHasError(true);
-      // Reset the error state after 2 seconds
-      setTimeout(() => setHasError(false), 2000);
+      setError('Input cannot be empty.');
       return;
     }
 
     setIsSubmitting(true);
-    setHasError(false);
+    setError(null);
 
     try {
       // Example: Call your AI service here
@@ -40,20 +38,13 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
 
       // Reset input field
       setInputValue('');
-      setShowInput(false); // Close the input field
+      setShowInput(false);
     } catch (err) {
+      setError('Failed to process your request.');
       console.error(err);
-      // Optionally, handle submission errors here
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleCloseInput = () => {
-    setShowInput(false);
-    setInputValue('');
-    setHasError(false);
-    editor.commands.blur(); // Clear the editor's selection to hide the floating menu
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -68,21 +59,12 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
     }
   }, [showInput]);
 
-  // Handle clicks outside the floating menu
-  const handleClickOutside = () => {
-    if (showInput) {
-      handleCloseInput();
-    }
-  };
-
   return (
     <TiptapFloatingMenu
       editor={editor}
       tippyOptions={{
         duration: 100,
         placement: 'bottom-start',
-        interactive: true, // Allow interactions within the floating menu
-        onClickOutside: handleClickOutside, // Handle clicks outside
       }}
       className="floating-menu"
     >
@@ -90,7 +72,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
         <button
           onClick={handleAIWriterClick}
           className="floating-menu-button"
-          aria-label={showInput ? "Close AI Writer" : "Open AI Writer"}
+          aria-label="AI Writer"
         >
           <svg className="icon">
             <use href={`${remixiconUrl}#ri-edit-fill`} />
@@ -109,23 +91,18 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
               className="ai-input-field"
               disabled={isSubmitting}
               onKeyDown={handleKeyDown}
-              aria-label="AI Writer Prompt"
             />
             <button
               onClick={handleInputSubmit}
-              className={`submit-button ${hasError ? 'error' : ''}`}
+              className="submit-button"
               disabled={isSubmitting}
               aria-label="Submit AI prompt"
             >
-              {isSubmitting ? (
-                <div className="spinner"></div>
-              ) : (
-                <svg className="arrow-icon">
-                  <use href={`${remixiconUrl}#ri-arrow-right-line`} />
-                </svg>
-              )}
+              <svg className="arrow-icon">
+                <use href={`${remixiconUrl}#ri-arrow-right-line`} />
+              </svg>
             </button>
-            {/* Removed the 'X' close button */}
+            {error && <div className="error-message">{error}</div>}
           </div>
         )}
       </div>
