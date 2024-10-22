@@ -209,10 +209,16 @@ body {
   /* Subtle gray border */
 }
 
-/* Apply hover effect to elements that have the has-focus class */
-.ProseMirror>*:hover {
+.ProseMirror>p:hover,
+.ProseMirror>h1:hover,
+.ProseMirror>h2:hover,
+.ProseMirror>h3:hover,
+.ProseMirror>blockquote:hover,
+.ProseMirror>ul:hover,
+.ProseMirror>ol:hover,
+.ProseMirror>li:hover,
+.ProseMirror>pre:hover,
+.ProseMirror>code:hover {
   background-color: rgba(204, 204, 204, 0.20);
-  /* Very light gray background */
   border-left: 0.3rem solid #CCCCCC;
-  /* Subtle gray border */
 }
