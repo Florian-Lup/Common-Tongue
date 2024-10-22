@@ -77,6 +77,12 @@ export default function MenuBar({ editor }: { editor: Editor }) {
       action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
       isActive: () => editor.isActive("heading", { level: 2 }),
     },
+        {
+      icon: "h-3",
+      title: "Heading 3",
+      action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+      isActive: () => editor.isActive("heading", { level: 3 }),
+    },
     {
       icon: "paragraph",
       title: "Paragraph",

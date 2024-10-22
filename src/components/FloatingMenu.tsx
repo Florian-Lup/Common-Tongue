@@ -1,5 +1,5 @@
 // components/CustomFloatingMenu.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg'; 
 import './FloatingMenu.scss';
@@ -12,17 +12,24 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [hasError, setHasError] = useState(false); // State for error highlighting
+
+  // Ref for the input field
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleButtonClick = () => {
     setShowInput((prev) => !prev);
   };
 
   const handleSubmit = async () => {
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim()) {
+      setHasError(true);
+      // Remove the error highlight after 5 seconds
+      setTimeout(() => setHasError(false), 5000);
+      return;
+    }
 
     setIsProcessing(true);
-    setError(null);
 
     try {
       // Example action: Insert input text into the editor
@@ -35,11 +42,21 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
       setShowInput(false);
     } catch (err) {
       console.error('Submission error:', err);
-      setError('Failed to process input.');
+      // If you want to handle other errors, you can set them here
+      // setError('Failed to process input.');
     } finally {
       setIsProcessing(false);
     }
   };
+
+  // useEffect to handle focusing
+  useEffect(() => {
+    if (showInput) {
+      // Focus the input field when it's shown
+      inputRef.current?.focus();
+    }
+    // When showInput is false, do not focus anything
+  }, [showInput]);
 
   return (
     <TiptapFloatingMenu
@@ -76,10 +93,12 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
                 }
               }}
               disabled={isProcessing}
+              ref={inputRef} // Attach the ref to the input
+              // autoFocus removed as useEffect handles focusing
             />
             <button
               onClick={handleSubmit}
-              className="floating-menu-submit-button"
+              className={`floating-menu-submit-button ${hasError ? 'error' : ''}`}
               aria-label="Submit"
               disabled={isProcessing}
             >
@@ -93,7 +112,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
             </button>
           </div>
         )}
-        {error && <div className="error-message">{error}</div>}
+        {/* Removed the error message as per the requirement */}
       </div>
     </TiptapFloatingMenu>
   );

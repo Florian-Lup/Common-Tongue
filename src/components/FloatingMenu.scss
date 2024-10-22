@@ -1,4 +1,5 @@
 /* components/FloatingMenu.scss */
+
 .floating-menu {
   display: flex;
   background-color: #252627;
@@ -41,7 +42,10 @@
     }
 
     &.active {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(138, 43, 226, 0.2);
+      /* Light purple background */
+      border: 1px solid blueviolet;
+      /* Added border */
     }
 
     @media (hover: hover) and (pointer: fine) {
@@ -107,6 +111,29 @@
       @media (hover: hover) and (pointer: fine) {
         &:hover {
           background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+
+      &.error {
+        border: 1px solid red;
+        /* Red border to indicate error */
+        background-color: rgba(255, 0, 0, 0.1);
+
+        /* Light red background */
+        .icon {
+          fill: red;
+          /* Red icon to emphasize the error */
+        }
+       @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          background-color: rgba(255, 0, 0, 0.15);
+          /* Slightly darker red on hover */
+        }
+      }
+
+        &:active {
+          background-color: rgba(255, 0, 0, 0.2);
+          /* Even darker red on active */
         }
       }
     }
