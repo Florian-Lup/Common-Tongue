@@ -128,41 +128,35 @@
         animation: spin 1s linear infinite;
       }
     }
+  }
 
-    /* Removed .close-button styles */
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 600px) {
-      .floating-menu-content {
-        flex-direction: column; /* Stack elements vertically on small screens */
-        align-items: stretch;
-      }
-
-      .floating-menu-button {
-        margin-bottom: 0.5rem; /* Space between button and input */
-        align-self: stretch; /* Make the button full width */
-      }
-
-      .ai-input-container {
-        flex-direction: column; /* Stack input and submit button vertically */
-        align-items: stretch;
-      }
-
-      .ai-input-field {
-        margin-right: 0;
-        margin-bottom: 0.5rem;
-        width: 100%;
-      }
-
-      .submit-button {
-        width: 100%;
-        margin-right: 0;
-      }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
     }
   }
+
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .floating-menu-content {
+      flex-direction: column; /* Stack elements vertically on small screens */
+      align-items: stretch;
+    }
+
+    .ai-input-container {
+      flex-direction: column; /* Stack input and submit button vertically */
+      align-items: stretch;
+    }
+
+    .ai-input-field {
+      margin-right: 0;
+      margin-bottom: 0.5rem;
+      width: 100%;
+    }
+
+    .submit-button {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+}
