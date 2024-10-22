@@ -14,12 +14,13 @@ import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
-import CustomFloatingMenu from './components/FloatingMenu'; // Ensure correct import path
+import CustomFloatingMenu from './components/FloatingMenu';
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false); // State for processing
+  const [showInputField, setShowInputField] = useState(false); // New state for input field visibility
 
   const editor = useEditor({
     extensions: [
@@ -36,7 +37,6 @@ const App: React.FC = () => {
               return 'Write something...';
             case 'heading':
               return 'What’s the title';
-            // Add more cases as needed
             default:
               return '';
           }
@@ -75,7 +75,11 @@ const App: React.FC = () => {
           setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing} // Pass the setter
         />
-        <CustomFloatingMenu editor={editor} /> {/* Added Custom Floating Menu */}
+        <CustomFloatingMenu 
+          editor={editor} 
+          showInputField={showInputField} 
+          setShowInputField={setShowInputField} // Pass the new state setter
+        />
       </div>
     </div>
   );
