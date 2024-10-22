@@ -1,5 +1,5 @@
 // components/CustomFloatingMenu.tsx
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg'; 
 import './FloatingMenu.scss';
@@ -9,55 +9,37 @@ interface CustomFloatingMenuProps {
 }
 
 const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
-  const [showInput, setShowInput] = useState(false); // State to manage input visibility
-  const [inputValue, setInputValue] = useState(''); // State to manage input value
-  const [isSubmitting, setIsSubmitting] = useState(false); // State for processing
-  const [error, setError] = useState<string | null>(null); // State for error handling
-  const inputRef = useRef<HTMLInputElement>(null); // Ref for input field
+  const [showInput, setShowInput] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleAIWriterClick = () => {
-    setShowInput((prev) => !prev); // Toggle input visibility
+  const handleButtonClick = () => {
+    setShowInput((prev) => !prev);
   };
 
-  const handleInputSubmit = async () => {
-    if (!inputValue.trim()) {
-      setError('Input cannot be empty.');
-      return;
-    }
+  const handleSubmit = async () => {
+    if (!inputValue.trim()) return;
 
-    setIsSubmitting(true);
+    setIsProcessing(true);
     setError(null);
 
     try {
-      // Example: Call your AI service here
-      // Replace the following line with your actual AI integration logic
-      const aiResponse = `AI response to: ${inputValue}`;
+      // Example action: Insert input text into the editor
+      editor.chain().focus().insertContent(inputValue).run();
 
-      // Insert the AI response into the editor
-      editor.chain().focus().insertContent(aiResponse).run();
+      // TODO: Replace the above line with actual AI processing logic if needed
 
-      // Reset input field
+      // Reset input after successful submission
       setInputValue('');
       setShowInput(false);
     } catch (err) {
-      setError('Failed to process your request.');
-      console.error(err);
+      console.error('Submission error:', err);
+      setError('Failed to process input.');
     } finally {
-      setIsSubmitting(false);
+      setIsProcessing(false);
     }
   };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleInputSubmit();
-    }
-  };
-
-  useEffect(() => {
-    if (showInput) {
-      inputRef.current?.focus();
-    }
-  }, [showInput]);
 
   return (
     <TiptapFloatingMenu
@@ -70,7 +52,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
     >
       <div className="floating-menu-content">
         <button
-          onClick={handleAIWriterClick}
+          onClick={handleButtonClick}
           className="floating-menu-button"
           aria-label="AI Writer"
         >
@@ -79,32 +61,38 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
           </svg>
           AI Writer
         </button>
-
         {showInput && (
-          <div className="ai-input-container">
+          <div className="floating-menu-input-container">
             <input
-              ref={inputRef}
               type="text"
+              className="floating-menu-input"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Enter your prompt..."
-              className="ai-input-field"
-              disabled={isSubmitting}
-              onKeyDown={handleKeyDown}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSubmit();
+                }
+              }}
+              disabled={isProcessing}
             />
             <button
-              onClick={handleInputSubmit}
-              className="submit-button"
-              disabled={isSubmitting}
-              aria-label="Submit AI prompt"
+              onClick={handleSubmit}
+              className="floating-menu-submit-button"
+              aria-label="Submit"
+              disabled={isProcessing}
             >
-              <svg className="arrow-icon">
-                <use href={`${remixiconUrl}#ri-arrow-right-line`} />
-              </svg>
+              {isProcessing ? (
+                <div className="spinner"></div>
+              ) : (
+                <svg className="icon">
+                  <use href={`${remixiconUrl}#ri-arrow-right-line`} />
+                </svg>
+              )}
             </button>
-            {error && <div className="error-message">{error}</div>}
           </div>
         )}
+        {error && <div className="error-message">{error}</div>}
       </div>
     </TiptapFloatingMenu>
   );
