@@ -53,8 +53,9 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
       <div className="floating-menu-content">
         <button
           onClick={handleButtonClick}
-          className="floating-menu-button"
+          className={`floating-menu-button ${showInput ? 'active' : ''}`}
           aria-label="AI Writer"
+          aria-pressed={showInput}
         >
           <svg className="icon">
             <use href={`${remixiconUrl}#ri-edit-fill`} />
