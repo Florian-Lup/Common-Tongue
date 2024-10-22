@@ -1,168 +1,136 @@
-/* components/FloatingMenu.scss */
+// components/CustomFloatingMenu.tsx
+import React, { useState, useRef, useEffect } from 'react';
+import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
+import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg'; 
+import './FloatingMenu.scss';
 
-.floating-menu {
-  display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  background-color: #252627;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  z-index: 1000;
-  max-width: 100%; /* Prevent overflow */
+interface CustomFloatingMenuProps {
+  editor: Editor;
+}
 
-  .floating-menu-content {
-    display: flex;
-    flex-direction: column; /* Arrange AI Writer button and input container vertically */
-    align-items: stretch;
-  }
+const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
+  const [showInput, setShowInput] = useState(false); // State to manage input visibility
+  const [inputValue, setInputValue] = useState(''); // State to manage input value
+  const [isSubmitting, setIsSubmitting] = useState(false); // State for processing
+  const [hasError, setHasError] = useState(false); // State for error indication
+  const inputRef = useRef<HTMLInputElement>(null); // Ref for input field
 
-  .floating-menu-button {
-    display: flex;
-    align-items: center;
-    border: none;
-    background: none;
-    color: #ffffffcf;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.2rem 0.3rem;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    transition: background-color 0.2s ease;
-    margin-bottom: 0.5rem; /* Space between button and input */
-    align-self: flex-start; /* Align the button to the start */
+  const handleAIWriterClick = () => {
+    setShowInput((prev) => !prev); // Toggle input visibility
+  };
 
-    .icon {
-      width: 1rem;
-      height: 1rem;
-      fill: blueviolet;
-      margin-right: 0.5rem;
+  const handleInputSubmit = async () => {
+    if (!inputValue.trim()) {
+      setHasError(true);
+      // Reset the error state after 2 seconds
+      setTimeout(() => setHasError(false), 2000);
+      return;
     }
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+    setIsSubmitting(true);
+    setHasError(false);
+
+    try {
+      // Example: Call your AI service here
+      // Replace the following line with your actual AI integration logic
+      const aiResponse = `AI response to: ${inputValue}`;
+
+      // Insert the AI response into the editor
+      editor.chain().focus().insertContent(aiResponse).run();
+
+      // Reset input field
+      setInputValue('');
+      setShowInput(false); // Close the input field
+    } catch (err) {
+      console.error(err);
+      // Optionally, handle submission errors here
+    } finally {
+      setIsSubmitting(false);
     }
+  };
 
-    &:active {
-      background-color: rgba(255, 255, 255, 0.2);
+  const handleCloseInput = () => {
+    setShowInput(false);
+    setInputValue('');
+    setHasError(false);
+    editor.commands.blur(); // Clear the editor's selection to hide the floating menu
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleInputSubmit();
     }
+  };
 
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+  useEffect(() => {
+    if (showInput) {
+      inputRef.current?.focus();
     }
-  }
+  }, [showInput]);
 
-  .ai-input-container {
-    display: flex;
-    flex-direction: row; /* Arrange input and submit button horizontally */
-    align-items: center;
-    background-color: #2c2d2f;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    width: auto;
-
-    .ai-input-field {
-      flex: 1; /* Allow the input to take up available space */
-      padding: 0.4rem;
-      margin-right: 0.5rem;
-      border: 1px solid #444;
-      border-radius: 0.2rem;
-      background-color: #3a3b3d;
-      color: #fff;
-      font-size: 0.9rem;
-
-      &:focus {
-        outline: none;
-        border-color: #666;
-      }
-
-      &:disabled {
-        background-color: #555;
-        cursor: not-allowed;
-      }
+  // Handle clicks outside the floating menu
+  const handleClickOutside = () => {
+    if (showInput) {
+      handleCloseInput();
     }
+  };
 
-    .submit-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border: none;
-      border-radius: 0.2rem;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-      margin-right: 0.3rem;
+  return (
+    <TiptapFloatingMenu
+      editor={editor}
+      tippyOptions={{
+        duration: 100,
+        placement: 'bottom-start',
+        interactive: true, // Allow interactions within the floating menu
+        onClickOutside: handleClickOutside, // Handle clicks outside
+      }}
+      className="floating-menu"
+    >
+      <div className="floating-menu-content">
+        <button
+          onClick={handleAIWriterClick}
+          className="floating-menu-button"
+          aria-label={showInput ? "Close AI Writer" : "Open AI Writer"}
+        >
+          <svg className="icon">
+            <use href={`${remixiconUrl}#ri-edit-fill`} />
+          </svg>
+          AI Writer
+        </button>
 
-      &.error {
-        background-color: #f44336; /* Red color for error state */
-      }
+        {showInput && (
+          <div className="ai-input-container">
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Enter your prompt..."
+              className="ai-input-field"
+              disabled={isSubmitting}
+              onKeyDown={handleKeyDown}
+              aria-label="AI Writer Prompt"
+            />
+            <button
+              onClick={handleInputSubmit}
+              className={`submit-button ${hasError ? 'error' : ''}`}
+              disabled={isSubmitting}
+              aria-label="Submit AI prompt"
+            >
+              {isSubmitting ? (
+                <div className="spinner"></div>
+              ) : (
+                <svg className="arrow-icon">
+                  <use href={`${remixiconUrl}#ri-arrow-right-line`} />
+                </svg>
+              )}
+            </button>
+            {/* Removed the 'X' close button */}
+          </div>
+        )}
+      </div>
+    </TiptapFloatingMenu>
+  );
+};
 
-      background-color: #4caf50; /* Default green color */
-      color: #fff;
-
-      .arrow-icon {
-        width: 16px;
-        height: 16px;
-        fill: #fff;
-      }
-
-      &:hover:not(:disabled):not(.error) {
-        background-color: #45a049;
-      }
-
-      &:active:not(:disabled):not(.error) {
-        background-color: #3e8e41;
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-
-      .spinner {
-        width: 16px;
-        height: 16px;
-        border: 2px solid #f3f3f3;
-        border-top: 2px solid #555;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-    }
-
-    /* Removed .close-button styles */
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 600px) {
-      .floating-menu-content {
-        flex-direction: column; /* Stack elements vertically on small screens */
-        align-items: stretch;
-      }
-
-      .floating-menu-button {
-        margin-bottom: 0.5rem; /* Space between button and input */
-        align-self: stretch; /* Make the button full width */
-      }
-
-      .ai-input-container {
-        flex-direction: column; /* Stack input and submit button vertically */
-        align-items: stretch;
-      }
-
-      .ai-input-field {
-        margin-right: 0;
-        margin-bottom: 0.5rem;
-        width: 100%;
-      }
-
-      .submit-button {
-        width: 100%;
-        margin-right: 0;
-      }
-    }
-  }
+export default CustomFloatingMenu;
