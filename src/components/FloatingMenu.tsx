@@ -6,10 +6,13 @@ import './FloatingMenu.scss';
 
 interface CustomFloatingMenuProps {
   editor: Editor;
-  onWriterInputClick: () => void; // Updated prop name
+  onWriterInputClick: () => void;
 }
 
-const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor, onWriterInputClick }) => {
+const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
+  editor,
+  onWriterInputClick,
+}) => {
   return (
     <TiptapFloatingMenu
       editor={editor}
@@ -18,7 +21,11 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor, onWrite
     >
       <div className="floating-menu-content">
         <button
-          onClick={onWriterInputClick}
+          onClick={() => {
+            onWriterInputClick();
+            // Move focus away from the editor to ensure the floating menu closes
+            (document.activeElement as HTMLElement)?.blur();
+          }}
           className="floating-menu-button"
           aria-label="Writer Input"
         >
