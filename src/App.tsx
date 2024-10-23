@@ -84,6 +84,7 @@ const App: React.FC = () => {
         <CustomFloatingMenu
           editor={editor}
           onWriterInputClick={() => setShowWriterInput(true)}
+          showWriterInput={showWriterInput} // Pass the state to control visibility
         />
         {/* Render WriterInput when showWriterInput is true */}
         {showWriterInput && (
