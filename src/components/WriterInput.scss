@@ -71,6 +71,43 @@
     }
   }
 
+  /* Styles for the close button */
+  .writer-close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    color: #ffffffcf;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 0.3rem;
+    padding: 0.2rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease;
+
+    .icon {
+      width: 1rem;
+      height: 1rem;
+      fill: #fff;
+    }
+
+    &:active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
   .spinner {
     width: 16px;
     height: 16px;
