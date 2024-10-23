@@ -1,5 +1,4 @@
 /* components/FloatingMenu.scss */
-
 .floating-menu {
   display: flex;
   background-color: #252627;
@@ -41,124 +40,10 @@
       cursor: not-allowed;
     }
 
-    &.active {
-      background-color: rgba(138, 43, 226, 0.2);
-      /* Light purple background */
-      border: 1px solid blueviolet;
-      /* Added border */
-    }
-
     @media (hover: hover) and (pointer: fine) {
       &:hover {
         background-color: rgba(255, 255, 255, 0.1);
       }
-    }
-  }
-
-  .floating-menu-input-container {
-    display: flex;
-    align-items: center;
-    margin-left: 0.5rem;
-
-    .floating-menu-input {
-      padding: 0.2rem 0.4rem;
-      border: 1px solid #444;
-      border-radius: 0.25rem;
-      background-color: #333;
-      color: #fff;
-      font-size: 0.8rem;
-      outline: none;
-      transition: border-color 0.2s ease;
-
-      &:focus {
-        border-color: blueviolet;
-      }
-
-      ::placeholder {
-        color: #ccc;
-      }
-    }
-
-    .floating-menu-submit-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: none;
-      color: #ffffffcf;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-left: 0.3rem;
-      padding: 0.2rem;
-      border-radius: 0.25rem;
-      transition: background-color 0.2s ease;
-
-      .icon {
-        width: 1rem;
-        height: 1rem;
-        fill: blueviolet;
-      }
-
-      &:active {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-
-      @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-        }
-      }
-
-      &.error {
-        border: 1px solid red;
-        /* Red border to indicate error */
-        background-color: rgba(255, 0, 0, 0.1);
-
-        /* Light red background */
-        .icon {
-          fill: red;
-          /* Red icon to emphasize the error */
-        }
-       @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          background-color: rgba(255, 0, 0, 0.15);
-          /* Slightly darker red on hover */
-        }
-      }
-
-        &:active {
-          background-color: rgba(255, 0, 0, 0.2);
-          /* Even darker red on active */
-        }
-      }
-    }
-  }
-
-  .spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid #999;
-    border-top-color: transparent;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  .error-message {
-    color: red;
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 0.2rem;
-    margin-top: 0.3rem;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
     }
   }
 }
