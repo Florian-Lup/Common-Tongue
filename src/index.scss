@@ -205,16 +205,4 @@ body {
   /* Subtle gray border */
 }
 
-.ProseMirror>p:hover,
-.ProseMirror>h1:hover,
-.ProseMirror>h2:hover,
-.ProseMirror>h3:hover,
-.ProseMirror>blockquote:hover,
-.ProseMirror>ul:hover,
-.ProseMirror>ol:hover,
-.ProseMirror>li:hover,
-.ProseMirror>pre:hover,
-.ProseMirror>code:hover {
-  background-color: rgba(204, 204, 204, 0.20);
-  border-left: 0.3rem solid #CCCCCC;
-}
+
