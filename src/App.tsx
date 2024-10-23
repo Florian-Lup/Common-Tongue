@@ -15,24 +15,17 @@ import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
 import CustomFloatingMenu from './components/FloatingMenu';
-import WriterInput from './components/WriterInput';
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [showWriterInput, setShowWriterInput] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false); // State for processing
 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Link.configure({
-        openOnClick: true,
-        linkOnPaste: true,
-      }),
-      Highlight.configure({
-        multicolor: true,
-      }),
+      Link.configure({ openOnClick: true, linkOnPaste: true }),
+      Highlight.configure({ multicolor: true }),
       TaskList,
       TaskItem,
       CharacterCount.configure({ limit: 5000 }),
@@ -43,6 +36,7 @@ const App: React.FC = () => {
               return 'Write something...';
             case 'heading':
               return 'What’s the title';
+            // Add more cases as needed
             default:
               return '';
           }
@@ -53,7 +47,7 @@ const App: React.FC = () => {
       TextStyle,
       Color,
       Focus.configure({
-        className: 'has-focus',
+        className: 'has-focus', // Custom class for focused nodes
         mode: 'shallowest',
       }),
     ],
@@ -79,20 +73,9 @@ const App: React.FC = () => {
           editor={editor}
           isTyping={isTyping}
           setIsTyping={setIsTyping}
-          setIsProcessing={setIsProcessing}
+          setIsProcessing={setIsProcessing} // Pass the setter
         />
-        <CustomFloatingMenu
-          editor={editor}
-          onWriterInputClick={() => setShowWriterInput(true)}
-          showWriterInput={showWriterInput} // Pass the state to control visibility
-        />
-        {/* Render WriterInput when showWriterInput is true */}
-        {showWriterInput && (
-          <WriterInput
-            editor={editor}
-            onClose={() => setShowWriterInput(false)}
-          />
-        )}
+        <CustomFloatingMenu editor={editor} /> {/* Added Custom Floating Menu */}
       </div>
     </div>
   );
