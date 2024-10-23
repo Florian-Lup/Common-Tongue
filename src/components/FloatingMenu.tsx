@@ -119,8 +119,6 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
             </button>
           </div>
         )}
-        {/* Optionally display an error message */}
-        {hasError && <div className="floating-menu-error">Please enter a prompt.</div>}
       </div>
     </TiptapFloatingMenu>
   );
