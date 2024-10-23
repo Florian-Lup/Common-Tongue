@@ -72,6 +72,17 @@ const WriterInput: React.FC<WriterInputProps> = ({ editor, onClose }) => {
           </svg>
         )}
       </button>
+      {/* Added 'x' button to close the input */}
+      <button
+        onClick={onClose}
+        className="writer-close-button"
+        aria-label="Close"
+        disabled={isProcessing}
+      >
+        <svg className="icon">
+          <use href={`${remixiconUrl}#ri-close-line`} />
+        </svg>
+      </button>
       {/* Optionally display an error message */}
       {hasError && <div className="writer-error-message">Please enter a prompt.</div>}
     </div>
