@@ -33,7 +33,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
     if (!inputValue.trim()) {
       setHasError(true);
       // Remove the error highlight after 5 seconds
-      setTimeout(() => setHasError(false), 5000);
+      setTimeout(() => setHasError(false), 3000);
       return;
     }
 
