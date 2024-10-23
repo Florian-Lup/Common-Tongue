@@ -48,7 +48,7 @@ const App: React.FC = () => {
       Color,
       Focus.configure({
         className: 'has-focus', // Custom class for focused nodes
-        mode: 'shallowest',
+        
       }),
     ],
     editable: !isTyping,
