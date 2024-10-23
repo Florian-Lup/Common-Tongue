@@ -198,11 +198,12 @@ body {
   outline: none;
 }
 
+/* CSS for has-focus class */
 .has-focus {
   background-color: rgba(204, 204, 204, 0.20);
-  /* Very light gray background */
   border-left: 0.3rem solid #CCCCCC;
-  /* Subtle gray border */
+  pointer-events: auto; /* Ensure pointer events work */
+  z-index: 1; /* Set z-index if necessary */
 }
 
 .ProseMirror>p:hover,
