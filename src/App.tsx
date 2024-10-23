@@ -15,13 +15,13 @@ import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
 import CustomFloatingMenu from './components/FloatingMenu';
-import WriterInput from './components/WriterInput'; // Updated import
+import WriterInput from './components/WriterInput';
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showWriterInput, setShowWriterInput] = useState(false); // Updated state name
+  const [showWriterInput, setShowWriterInput] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -83,13 +83,13 @@ const App: React.FC = () => {
         />
         <CustomFloatingMenu
           editor={editor}
-          onWriterInputClick={() => setShowWriterInput(true)} // Updated callback
+          onWriterInputClick={() => setShowWriterInput(true)}
         />
         {/* Render WriterInput when showWriterInput is true */}
         {showWriterInput && (
           <WriterInput
             editor={editor}
-            onClose={() => setShowWriterInput(false)} // Updated component name
+            onClose={() => setShowWriterInput(false)}
           />
         )}
       </div>
