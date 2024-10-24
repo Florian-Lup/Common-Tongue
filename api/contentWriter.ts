@@ -1,8 +1,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const apiUrl = process.env.WORDWARE_API_URL;
-  const apiKey = process.env.WORDWARE_API_KEY;
+  const apiUrl = process.env.Writer_WORDWARE_API_URL;
+  const apiKey = process.env.Writer_WORDWARE_API_KEY;
 
   if (!apiUrl) {
     return res
