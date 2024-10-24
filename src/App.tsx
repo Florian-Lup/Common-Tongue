@@ -35,8 +35,7 @@ const App: React.FC = () => {
             case 'paragraph':
               return 'Write something...';
             case 'heading':
-              return 'What’s the title';
-            // Add more cases as needed
+              return 'What’s the title?';
             default:
               return '';
           }
@@ -72,12 +71,14 @@ const App: React.FC = () => {
         <CustomBubbleMenu
           editor={editor}
           isTyping={isTyping}
+          isProcessing={isProcessing}
           setIsTyping={setIsTyping}
-          setIsProcessing={setIsProcessing} // Pass the setter
+          setIsProcessing={setIsProcessing}
         />
         <CustomFloatingMenu
           editor={editor}
           isTyping={isTyping}
+          isProcessing={isProcessing}
           setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing}
         />

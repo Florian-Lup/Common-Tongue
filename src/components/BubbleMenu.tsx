@@ -7,6 +7,7 @@ import './BubbleMenu.scss';
 interface CustomBubbleMenuProps {
   editor: Editor;
   isTyping: boolean;
+  isProcessing: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
 }

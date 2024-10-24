@@ -7,6 +7,7 @@ import './FloatingMenu.scss';
 interface CustomFloatingMenuProps {
   editor: Editor;
   isTyping: boolean;
+  isProcessing: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -14,6 +15,7 @@ interface CustomFloatingMenuProps {
 const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   editor,
   isTyping,
+  isProcessing,
   setIsTyping,
   setIsProcessing,
 }) => {
@@ -128,7 +130,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
           className={`floating-menu-button ${showInput ? 'active' : ''}`}
           aria-label="AI Writer"
           aria-pressed={showInput}
-          disabled={isTyping || isProcessing} // Disable button during typing or processing
+          disabled={isTyping || isProcessing}
         >
           <svg className="icon">
             <use href={`${remixiconUrl}#ri-edit-fill`} />
