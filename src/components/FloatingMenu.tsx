@@ -1,7 +1,7 @@
 // components/CustomFloatingMenu.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
-import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg'; 
+import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 import './FloatingMenu.scss';
 
 interface CustomFloatingMenuProps {
@@ -12,7 +12,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [hasError, setHasError] = useState(false); // State for error highlighting
+  const [hasError, setHasError] = useState(false);
 
   // Ref for the input field
   const inputRef = useRef<HTMLInputElement>(null);
@@ -32,7 +32,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
   const handleSubmit = async () => {
     if (!inputValue.trim()) {
       setHasError(true);
-      // Remove the error highlight after 5 seconds
+      // Remove the error highlight after 3 seconds
       setTimeout(() => setHasError(false), 3000);
       return;
     }
@@ -40,17 +40,35 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
     setIsProcessing(true);
 
     try {
-      // Example action: Insert input text into the editor
-      editor.chain().focus().insertContent(inputValue).run();
+      const response = await fetch('/api/ai-writer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          inputs: { contentRequest: inputValue },
+        }),
+      });
 
-      // TODO: Replace the above line with actual AI processing logic if needed
+      const data = await response.json();
+
+      if (response.ok && data.newContent) {
+        // Insert the generated content into the editor
+        editor.chain().focus().insertContent(data.newContent).run();
+      } else {
+        console.error('API Error:', data.error || 'Unknown error');
+        // Optionally display an error message to the user
+        setHasError(true);
+        // Remove the error highlight after 3 seconds
+        setTimeout(() => setHasError(false), 3000);
+      }
 
       // Reset input after successful submission
       setInputValue('');
       setShowInput(false);
     } catch (err) {
       console.error('Submission error:', err);
-      // Optionally handle other errors here
+      setHasError(true);
+      // Remove the error highlight after 3 seconds
+      setTimeout(() => setHasError(false), 3000);
     } finally {
       setIsProcessing(false);
     }
@@ -90,7 +108,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
           <div className="floating-menu-input-container">
             <input
               type="text"
-              className={`floating-menu-input ${hasError ? 'error' : ''}`} // Add error class if hasError
+              className={`floating-menu-input ${hasError ? 'error' : ''}`}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Enter your prompt..."
@@ -100,8 +118,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
                 }
               }}
               disabled={isProcessing}
-              ref={inputRef} // Attach the ref to the input
-              // autoFocus removed as useEffect handles focusing
+              ref={inputRef}
             />
             <button
               onClick={handleSubmit}
