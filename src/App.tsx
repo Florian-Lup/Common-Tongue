@@ -1,4 +1,4 @@
-// src/App.tsx
+// App.tsx
 import React, { useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
@@ -15,7 +15,6 @@ import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
 import CustomFloatingMenu from './components/FloatingMenu';
-import { TempMessage } from './components/extensions/TempMessage'; // Import the custom node
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -50,7 +49,6 @@ const App: React.FC = () => {
         className: 'has-focus', // Custom class for focused nodes
         mode: 'shallowest',
       }),
-      TempMessage, // Add the TempMessage extension
     ],
     editable: !isTyping,
     onUpdate: ({ editor }) => {
