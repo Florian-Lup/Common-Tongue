@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 import './FloatingMenu.scss';
-import './styles/TempMessage.scss'; // Import the TempMessage styles
+import './extensions/TempMessage.scss'; // Import the TempMessage styles
 
 interface CustomFloatingMenuProps {
   editor: Editor;
