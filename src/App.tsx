@@ -19,7 +19,7 @@ import CustomFloatingMenu from './components/FloatingMenu';
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false); // State for processing
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -46,11 +46,11 @@ const App: React.FC = () => {
       TextStyle,
       Color,
       Focus.configure({
-        className: 'has-focus', // Custom class for focused nodes
+        className: 'has-focus',
         mode: 'shallowest',
       }),
     ],
-    editable: !isTyping,
+    editable: !(isTyping || isProcessing), // Disable editor during typing or processing
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
@@ -64,7 +64,13 @@ const App: React.FC = () => {
     <div className={`editor-container ${isProcessing ? 'processing' : ''}`}>
       <div className="editor">
         <MenuBar editor={editor} />
-        <EditorContent className="editor__content" editor={editor} spellCheck={false} />
+        <EditorContent
+          className={`editor__content ${isProcessing || isTyping ? 'disabled' : ''}`}
+          editor={editor}
+          spellCheck={false}
+        />
+        {/** Overlay to prevent clicks during processing/typing */}
+        {(isProcessing || isTyping) && <div className="editor-overlay"></div>}
         <div className="editor__footer">
           <div className="character-count">{characterCount} characters</div>
         </div>
