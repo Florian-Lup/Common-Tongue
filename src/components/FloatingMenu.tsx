@@ -40,7 +40,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
     setIsProcessing(true);
 
     try {
-      const response = await fetch('/api/ai-writer', {
+      const response = await fetch('/api/contentWriter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
