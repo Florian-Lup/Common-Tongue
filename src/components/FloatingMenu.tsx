@@ -1,8 +1,9 @@
-// components/CustomFloatingMenu.tsx
+// src/components/CustomFloatingMenu.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 import './FloatingMenu.scss';
+import './styles/TempMessage.scss'; // Import the TempMessage styles
 
 interface CustomFloatingMenuProps {
   editor: Editor;
@@ -28,6 +29,9 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
 
   // To store the insertion position
   const insertionPositionRef = useRef<number | null>(null);
+
+  // To store the length of the temporary message
+  const tempMessageLengthRef = useRef<number>(0);
 
   const handleButtonClick = () => {
     setShowInput((prev) => {
@@ -64,7 +68,14 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
 
       insertionPositionRef.current = position;
 
-      // Optionally, you can provide visual feedback here (e.g., disable editor or show a temporary message)
+      // Define the temporary message
+      const tempMessage = 'Generating content...';
+
+      // Insert the temporary message using the custom TempMessage node
+      editor.commands.setTempMessage({ text: tempMessage });
+
+      // Store the length of the temporary message for later removal
+      tempMessageLengthRef.current = tempMessage.length;
 
       // Send the prompt to the API
       const response = await fetch('/api/contentWriter', {
@@ -78,11 +89,15 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       const data = await response.json();
 
       if (response.ok && data.newContent) {
-        // Insert the generated content into the editor with typewriter effect
-        typeWriterEffect(editor, position, data.newContent);
+        // Replace the temporary message with the generated content
+        replaceTempMessageWithContent(position, tempMessage.length, data.newContent);
       } else {
         console.error('API Error:', data.error || 'Unknown error');
+        // Remove the temporary message and inform the user
+        removeTempMessage(position, tempMessage.length);
         setHasError(true);
+        // Insert an error message into the editor
+        insertErrorMessage(position);
         // Remove the error highlight after 3 seconds
         setTimeout(() => setHasError(false), 3000);
       }
@@ -92,6 +107,11 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       setShowInput(false);
     } catch (err) {
       console.error('Submission error:', err);
+      // Remove the temporary message and inform the user
+      if (insertionPositionRef.current !== null) {
+        removeTempMessage(insertionPositionRef.current, tempMessageLengthRef.current);
+        insertErrorMessage(insertionPositionRef.current);
+      }
       setHasError(true);
       // Remove the error highlight after 3 seconds
       setTimeout(() => setHasError(false), 3000);
@@ -100,10 +120,55 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
     }
   };
 
-  // Typewriter effect function
-  const typeWriterEffect = (editor: Editor, from: number, text: string) => {
+  /**
+   * Replaces the temporary message with the generated content using a typewriter effect.
+   * @param from The starting position of the temporary message.
+   * @param length The length of the temporary message.
+   * @param text The generated content to insert.
+   */
+  const replaceTempMessageWithContent = (from: number, length: number, text: string) => {
     setIsTyping(true);
 
+    // Delete the temporary message
+    editor.chain().focus().deleteRange({ from, to: from + length }).run();
+
+    // Insert the generated content with typewriter effect
+    typeWriterEffect(editor, from, text);
+  };
+
+  /**
+   * Removes the temporary message from the editor.
+   * @param from The starting position of the temporary message.
+   * @param length The length of the temporary message.
+   */
+  const removeTempMessage = (from: number, length: number) => {
+    editor.chain().focus().deleteRange({ from, to: from + length }).run();
+  };
+
+  /**
+   * Inserts an error message at the specified position.
+   * @param from The position to insert the error message.
+   */
+  const insertErrorMessage = (from: number) => {
+    const errorMessage = '❌ Failed to generate content.';
+    editor.chain().focus().insertContentAt(from, errorMessage).run();
+
+    // Optionally, wrap the error message in a span with a class for styling
+    // editor.chain().focus().setNode('text', { ... }).run(); // Advanced usage
+
+    // Remove the error message after 3 seconds
+    setTimeout(() => {
+      editor.chain().focus().deleteRange({ from, to: from + errorMessage.length }).run();
+    }, 3000);
+  };
+
+  /**
+   * Typewriter effect function to insert text character by character.
+   * @param editor The TipTap editor instance.
+   * @param from The starting position to insert the text.
+   * @param text The text to insert.
+   */
+  const typeWriterEffect = (editor: Editor, from: number, text: string) => {
     let index = 0;
     const length = text.length;
 
