@@ -139,14 +139,14 @@
     }
   }
 
-  .spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid #999;
-    border-top-color: transparent;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
 
   .error-message {
     color: red;
@@ -161,4 +161,9 @@
       transform: rotate(360deg);
     }
   }
+
+    .floating-menu-input.error,
+    .floating-menu-submit-button.error {
+      border-color: red;
+    }
 }
