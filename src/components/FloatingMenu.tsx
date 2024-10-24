@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 import './FloatingMenu.scss';
-import { nanoid } from 'nanoid'; // Import nanoid for unique IDs
 
 interface CustomFloatingMenuProps {
   editor: Editor;
@@ -27,9 +26,11 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   // Ref for the input field
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // To store the placeholder ID and position
-  const placeholderIdRef = useRef<string | null>(null);
+  // To store the insertion position
   const insertionPositionRef = useRef<number | null>(null);
+
+  // To store the length of the temporary message
+  const tempMessageLengthRef = useRef<number>(0);
 
   const handleButtonClick = () => {
     setShowInput((prev) => {
@@ -61,20 +62,23 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
 
     try {
       // Capture the current selection position
-      const position = editor.state.selection.head; // Current cursor position
+      const { to, empty, head } = editor.state.selection;
+      const position = empty ? head : to; // Insert at cursor if selection is empty, else at end of selection
 
-      // Generate a unique ID for the placeholder
-      const placeholderId = `placeholder-${nanoid()}`;
-      placeholderIdRef.current = placeholderId;
       insertionPositionRef.current = position;
 
-      // Insert a placeholder node at the current position
-      editor.chain()
+      // Define the temporary message
+      const tempMessage = 'Generating content...';
+
+      // Insert the temporary message at the captured position
+      editor
+        .chain()
         .focus()
-        .insertContentAt(position, `<span id="${placeholderId}" class="placeholder">Generating content...</span>`)
+        .insertContentAt(position, `<span class="temp-message">${tempMessage}</span>`)
         .run();
 
-      // Optionally, you can style the placeholder via CSS to indicate it's a placeholder
+      // Store the length of the temporary message for later removal
+      tempMessageLengthRef.current = tempMessage.length;
 
       // Send the prompt to the API
       const response = await fetch('/api/contentWriter', {
@@ -88,13 +92,16 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       const data = await response.json();
 
       if (response.ok && data.newContent) {
-        // Replace the placeholder with the generated content
-        replacePlaceholderWithContent(placeholderId, data.newContent);
+        // Replace the temporary message with the generated content
+        replaceTempMessageWithContent(position, tempMessage.length, data.newContent);
       } else {
         console.error('API Error:', data.error || 'Unknown error');
-        // Remove the placeholder and inform the user
-        removePlaceholder(placeholderId);
+        // Remove the temporary message and inform the user
+        removeTempMessage(position, tempMessage.length);
         setHasError(true);
+        // Optionally, you can show a temporary error message in the editor
+        insertErrorMessage(position);
+        // Remove the error highlight after 3 seconds
         setTimeout(() => setHasError(false), 3000);
       }
 
@@ -103,64 +110,65 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       setShowInput(false);
     } catch (err) {
       console.error('Submission error:', err);
-      // Remove the placeholder and inform the user
-      removePlaceholder(placeholderIdRef.current);
+      // Remove the temporary message and inform the user
+      if (insertionPositionRef.current !== null) {
+        removeTempMessage(insertionPositionRef.current, tempMessageLengthRef.current);
+        insertErrorMessage(insertionPositionRef.current);
+      }
       setHasError(true);
+      // Remove the error highlight after 3 seconds
       setTimeout(() => setHasError(false), 3000);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  // Function to replace the placeholder with generated content using typewriter effect
-  const replacePlaceholderWithContent = (placeholderId: string, text: string) => {
-    const placeholderNode = editor.view.dom.querySelector(`#${placeholderId}`);
-
-    if (!placeholderNode) {
-      console.error('Placeholder node not found.');
-      // As a fallback, insert at the recorded position
-      if (insertionPositionRef.current !== null) {
-        typeWriterEffect(editor, insertionPositionRef.current, text);
-      }
-      return;
-    }
-
-    // Get the position of the placeholder node
-    const pos = editor.view.posAtDOM(placeholderNode, 0);
-
-    if (pos === null) {
-      console.error('Could not determine position of placeholder.');
-      return;
-    }
-
-    // Delete the placeholder node
-    editor.chain().focus().deleteRange({ from: pos, to: pos + placeholderNode.textContent!.length }).run();
-
-    // Insert the generated content with typewriter effect
-    typeWriterEffect(editor, pos, text);
-  };
-
-  // Function to remove the placeholder node
-  const removePlaceholder = (placeholderId: string | null) => {
-    if (!placeholderId) return;
-
-    const placeholderNode = editor.view.dom.querySelector(`#${placeholderId}`);
-
-    if (placeholderNode) {
-      const pos = editor.view.posAtDOM(placeholderNode, 0);
-      if (pos !== null) {
-        editor.chain().focus().deleteRange({ from: pos, to: pos + placeholderNode.textContent!.length }).run();
-      }
-    }
-
-    placeholderIdRef.current = null;
-    insertionPositionRef.current = null;
-  };
-
-  // Typewriter effect function
-  const typeWriterEffect = (editor: Editor, from: number, text: string) => {
+  /**
+   * Replaces the temporary message with the generated content using a typewriter effect.
+   * @param from The starting position of the temporary message.
+   * @param length The length of the temporary message.
+   * @param text The generated content to insert.
+   */
+  const replaceTempMessageWithContent = (from: number, length: number, text: string) => {
     setIsTyping(true);
 
+    // Delete the temporary message
+    editor.chain().focus().deleteRange({ from, to: from + length }).run();
+
+    // Insert the generated content with typewriter effect
+    typeWriterEffect(editor, from, text);
+  };
+
+  /**
+   * Removes the temporary message from the editor.
+   * @param from The starting position of the temporary message.
+   * @param length The length of the temporary message.
+   */
+  const removeTempMessage = (from: number, length: number) => {
+    editor.chain().focus().deleteRange({ from, to: from + length }).run();
+  };
+
+  /**
+   * Inserts an error message at the specified position.
+   * @param from The position to insert the error message.
+   */
+  const insertErrorMessage = (from: number) => {
+    const errorMessage = '❌ Failed to generate content.';
+    editor.chain().focus().insertContentAt(from, `<span class="error-message">${errorMessage}</span>`).run();
+
+    // Optionally, remove the error message after a few seconds
+    setTimeout(() => {
+      editor.chain().focus().deleteRange({ from, to: from + errorMessage.length }).run();
+    }, 3000);
+  };
+
+  /**
+   * Typewriter effect function to insert text character by character.
+   * @param editor The TipTap editor instance.
+   * @param from The starting position to insert the text.
+   * @param text The text to insert.
+   */
+  const typeWriterEffect = (editor: Editor, from: number, text: string) => {
     let index = 0;
     const length = text.length;
 
@@ -215,7 +223,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
               className={`floating-menu-input ${hasError ? 'error' : ''}`}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Write about..."
+              placeholder="Enter your prompt..."
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   handleSubmit();

@@ -166,27 +166,42 @@
     padding: 0.2rem;
     margin-top: 0.3rem;
   }
+}
 
-    .placeholder {
-      display: inline-block;
-      background-color: #f0f0f0;
-      color: #999;
-      border-radius: 4px;
-      padding: 2px 4px;
-      animation: pulse 1s infinite;
-    }
-  
-    @keyframes pulse {
-      0% {
-        background-color: #f0f0f0;
-      }
-  
-      50% {
-        background-color: #e0e0e0;
-      }
-  
-      100% {
-        background-color: #f0f0f0;
-      }
-    }
+.temp-message {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #555;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-style: italic;
+}
+
+.error-message {
+  display: inline-block;
+  background-color: #ffe6e6;
+  color: #cc0000;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-style: italic;
+}
+
+/* Spinner Styles */
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #555;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
