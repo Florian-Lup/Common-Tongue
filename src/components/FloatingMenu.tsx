@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 import './FloatingMenu.scss';
+import { nanoid } from 'nanoid'; // Import nanoid for unique IDs
 
 interface CustomFloatingMenuProps {
   editor: Editor;
@@ -26,6 +27,10 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   // Ref for the input field
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // To store the placeholder ID and position
+  const placeholderIdRef = useRef<string | null>(null);
+  const insertionPositionRef = useRef<number | null>(null);
+
   const handleButtonClick = () => {
     setShowInput((prev) => {
       const newShowInput = !prev;
@@ -46,9 +51,32 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       return;
     }
 
+    if (!editor) {
+      setHasError(true);
+      setTimeout(() => setHasError(false), 3000);
+      return;
+    }
+
     setIsProcessing(true);
 
     try {
+      // Capture the current selection position
+      const position = editor.state.selection.head; // Current cursor position
+
+      // Generate a unique ID for the placeholder
+      const placeholderId = `placeholder-${nanoid()}`;
+      placeholderIdRef.current = placeholderId;
+      insertionPositionRef.current = position;
+
+      // Insert a placeholder node at the current position
+      editor.chain()
+        .focus()
+        .insertContentAt(position, `<span id="${placeholderId}" class="placeholder">Generating content...</span>`)
+        .run();
+
+      // Optionally, you can style the placeholder via CSS to indicate it's a placeholder
+
+      // Send the prompt to the API
       const response = await fetch('/api/contentWriter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -60,13 +88,13 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       const data = await response.json();
 
       if (response.ok && data.newContent) {
-        // Insert the generated content into the editor with typewriter effect
-        typeWriterEffect(editor, data.newContent);
+        // Replace the placeholder with the generated content
+        replacePlaceholderWithContent(placeholderId, data.newContent);
       } else {
         console.error('API Error:', data.error || 'Unknown error');
-        // Optionally display an error message to the user
+        // Remove the placeholder and inform the user
+        removePlaceholder(placeholderId);
         setHasError(true);
-        // Remove the error highlight after 3 seconds
         setTimeout(() => setHasError(false), 3000);
       }
 
@@ -75,20 +103,63 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       setShowInput(false);
     } catch (err) {
       console.error('Submission error:', err);
+      // Remove the placeholder and inform the user
+      removePlaceholder(placeholderIdRef.current);
       setHasError(true);
-      // Remove the error highlight after 3 seconds
       setTimeout(() => setHasError(false), 3000);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  // Typewriter effect function
-  const typeWriterEffect = (editor: Editor, text: string) => {
-    setIsTyping(true);
+  // Function to replace the placeholder with generated content using typewriter effect
+  const replacePlaceholderWithContent = (placeholderId: string, text: string) => {
+    const placeholderNode = editor.view.dom.querySelector(`#${placeholderId}`);
 
-    // Determine the current position in the editor to insert content
-    const position = editor.state.selection.head;
+    if (!placeholderNode) {
+      console.error('Placeholder node not found.');
+      // As a fallback, insert at the recorded position
+      if (insertionPositionRef.current !== null) {
+        typeWriterEffect(editor, insertionPositionRef.current, text);
+      }
+      return;
+    }
+
+    // Get the position of the placeholder node
+    const pos = editor.view.posAtDOM(placeholderNode, 0);
+
+    if (pos === null) {
+      console.error('Could not determine position of placeholder.');
+      return;
+    }
+
+    // Delete the placeholder node
+    editor.chain().focus().deleteRange({ from: pos, to: pos + placeholderNode.textContent!.length }).run();
+
+    // Insert the generated content with typewriter effect
+    typeWriterEffect(editor, pos, text);
+  };
+
+  // Function to remove the placeholder node
+  const removePlaceholder = (placeholderId: string | null) => {
+    if (!placeholderId) return;
+
+    const placeholderNode = editor.view.dom.querySelector(`#${placeholderId}`);
+
+    if (placeholderNode) {
+      const pos = editor.view.posAtDOM(placeholderNode, 0);
+      if (pos !== null) {
+        editor.chain().focus().deleteRange({ from: pos, to: pos + placeholderNode.textContent!.length }).run();
+      }
+    }
+
+    placeholderIdRef.current = null;
+    insertionPositionRef.current = null;
+  };
+
+  // Typewriter effect function
+  const typeWriterEffect = (editor: Editor, from: number, text: string) => {
+    setIsTyping(true);
 
     let index = 0;
     const length = text.length;
@@ -96,13 +167,13 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
     const interval = setInterval(() => {
       if (index < length) {
         const char = text.charAt(index);
-        editor.commands.insertContentAt(position + index, char);
+        editor.commands.insertContentAt(from + index, char);
         index++;
       } else {
         clearInterval(interval);
         setIsTyping(false);
         // Set the cursor position after the inserted text
-        editor.commands.setTextSelection(position + length);
+        editor.commands.setTextSelection(from + length);
       }
     }, 10); // Typewriter speed (in milliseconds)
   };
@@ -144,7 +215,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
               className={`floating-menu-input ${hasError ? 'error' : ''}`}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Enter your prompt..."
+              placeholder="Write about..."
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   handleSubmit();
