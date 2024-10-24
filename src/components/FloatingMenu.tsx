@@ -153,9 +153,6 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
     const errorMessage = '❌ Failed to generate content.';
     editor.chain().focus().insertContentAt(from, errorMessage).run();
 
-    // Optionally, wrap the error message in a span with a class for styling
-    // editor.chain().focus().setNode('text', { ... }).run(); // Advanced usage
-
     // Remove the error message after 3 seconds
     setTimeout(() => {
       editor.chain().focus().deleteRange({ from, to: from + errorMessage.length }).run();

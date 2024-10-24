@@ -1,4 +1,4 @@
-// extensions/TempMessage.ts
+// src/extensions/TempMessage.ts
 import { Node, mergeAttributes } from '@tiptap/core';
 
 export interface TempMessageOptions {
@@ -24,6 +24,10 @@ export const TempMessage = Node.create<TempMessageOptions>({
   inline: true,
 
   atom: true,
+
+  selectable: false,
+
+  draggable: false,
 
   addAttributes() {
     return {

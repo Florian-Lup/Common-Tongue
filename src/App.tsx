@@ -1,4 +1,4 @@
-// App.tsx
+// src/App.tsx
 import React, { useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
