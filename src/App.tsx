@@ -75,7 +75,12 @@ const App: React.FC = () => {
           setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing} // Pass the setter
         />
-        <CustomFloatingMenu editor={editor} /> {/* Added Custom Floating Menu */}
+        <CustomFloatingMenu
+          editor={editor}
+          isTyping={isTyping}
+          setIsTyping={setIsTyping}
+          setIsProcessing={setIsProcessing}
+        />
       </div>
     </div>
   );

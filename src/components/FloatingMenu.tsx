@@ -6,12 +6,19 @@ import './FloatingMenu.scss';
 
 interface CustomFloatingMenuProps {
   editor: Editor;
+  isTyping: boolean;
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
+const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
+  editor,
+  isTyping,
+  setIsTyping,
+  setIsProcessing,
+}) => {
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   // Ref for the input field
@@ -51,8 +58,8 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
       const data = await response.json();
 
       if (response.ok && data.newContent) {
-        // Insert the generated content into the editor
-        editor.chain().focus().insertContent(data.newContent).run();
+        // Insert the generated content into the editor with typewriter effect
+        typeWriterEffect(editor, data.newContent);
       } else {
         console.error('API Error:', data.error || 'Unknown error');
         // Optionally display an error message to the user
@@ -61,7 +68,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
         setTimeout(() => setHasError(false), 3000);
       }
 
-      // Reset input after successful submission
+      // Reset input after submission
       setInputValue('');
       setShowInput(false);
     } catch (err) {
@@ -74,13 +81,36 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
     }
   };
 
+  // Typewriter effect function
+  const typeWriterEffect = (editor: Editor, text: string) => {
+    setIsTyping(true);
+
+    // Determine the current position in the editor to insert content
+    const position = editor.state.selection.head;
+
+    let index = 0;
+    const length = text.length;
+
+    const interval = setInterval(() => {
+      if (index < length) {
+        const char = text.charAt(index);
+        editor.commands.insertContentAt(position + index, char);
+        index++;
+      } else {
+        clearInterval(interval);
+        setIsTyping(false);
+        // Set the cursor position after the inserted text
+        editor.commands.setTextSelection(position + length);
+      }
+    }, 10); // Typewriter speed (in milliseconds)
+  };
+
   // useEffect to handle focusing
   useEffect(() => {
     if (showInput) {
       // Focus the input field when it's shown
       inputRef.current?.focus();
     }
-    // When showInput is false, do not focus anything
   }, [showInput]);
 
   return (
@@ -98,6 +128,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
           className={`floating-menu-button ${showInput ? 'active' : ''}`}
           aria-label="AI Writer"
           aria-pressed={showInput}
+          disabled={isTyping || isProcessing} // Disable button during typing or processing
         >
           <svg className="icon">
             <use href={`${remixiconUrl}#ri-edit-fill`} />
@@ -117,14 +148,14 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({ editor }) => {
                   handleSubmit();
                 }
               }}
-              disabled={isProcessing}
+              disabled={isProcessing || isTyping}
               ref={inputRef}
             />
             <button
               onClick={handleSubmit}
               className={`floating-menu-submit-button ${hasError ? 'error' : ''}`}
               aria-label="Submit"
-              disabled={isProcessing}
+              disabled={isProcessing || isTyping}
             >
               {isProcessing ? (
                 <div className="spinner"></div>
