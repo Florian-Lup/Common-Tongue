@@ -72,25 +72,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
           // Handle the parsing logic based on the content
           if (parsedChunk.value) {
-            // Check if we're entering the AI Writer Agent
+            // Check if we're entering the Writer Agent
             if (
               parsedChunk.value.type === 'prompt' &&
               parsedChunk.value.state === 'start' &&
-              parsedChunk.value.path === 'AI Writer Agent'
+              parsedChunk.value.path === 'Writer Agent'
             ) {
               writerAgentActive = true;
             }
 
-            // Check if we're exiting the AI Writer Agent
+            // Check if we're exiting the Writer Agent
             else if (
               parsedChunk.value.type === 'prompt' &&
               parsedChunk.value.state === 'complete' &&
-              parsedChunk.value.path === 'AI Writer Agent'
+              parsedChunk.value.path === 'Writer Agent'
             ) {
               writerAgentActive = false;
             }
 
-            // Start of newContent within the AI Writer Agent
+            // Start of newContent within the Writer Agent
             else if (
               writerAgentActive &&
               parsedChunk.value.label === 'newContent' &&
@@ -99,7 +99,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               newContentStarted = true;
             }
 
-            // End of newContent within the AI Writer Agent
+            // End of newContent within the Writer Agent
             else if (
               writerAgentActive &&
               parsedChunk.value.label === 'newContent' &&
@@ -134,7 +134,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     } else {
       console.error('Full response buffer:', buffer);
       return res.status(500).json({
-        error: 'newContent from AI Writer Agent not found in response',
+        error: 'newContent from Writer Agent not found in response',
         details: buffer, // Send raw response for debugging
       });
     }
