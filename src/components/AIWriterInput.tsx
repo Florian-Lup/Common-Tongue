@@ -10,6 +10,8 @@ interface AIWriterInputProps {
   onClose: () => void;
   isProcessing: boolean;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
+  isTyping: boolean;
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AIWriterInput: React.FC<AIWriterInputProps> = ({
@@ -18,10 +20,11 @@ const AIWriterInput: React.FC<AIWriterInputProps> = ({
   onClose,
   isProcessing,
   setIsProcessing,
+  isTyping,
+  setIsTyping,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [hasError, setHasError] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,7 +38,6 @@ const AIWriterInput: React.FC<AIWriterInputProps> = ({
     setIsProcessing(true);
 
     try {
-      // Send the prompt to the API
       const response = await fetch('/api/contentWriter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,7 +49,6 @@ const AIWriterInput: React.FC<AIWriterInputProps> = ({
       const data = await response.json();
 
       if (response.ok && data.newContent) {
-        // Insert the generated content into the editor with typewriter effect
         typeWriterEffect(editor, insertionPosition, data.newContent);
       } else {
         console.error('API Error:', data.error || 'Unknown error');
@@ -55,7 +56,6 @@ const AIWriterInput: React.FC<AIWriterInputProps> = ({
         setTimeout(() => setHasError(false), 3000);
       }
 
-      // Reset input after submission
       setInputValue('');
       onClose(); // Close the input component
     } catch (err) {
