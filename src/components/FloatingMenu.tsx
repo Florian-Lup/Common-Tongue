@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+// components/CustomFloatingMenu.tsx
+import React, { useState, useEffect, useRef } from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 import './FloatingMenu.scss';
@@ -25,26 +26,16 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   // Ref for the input field
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Automatically focus the input when it appears
-  useEffect(() => {
-    if (showInput && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [showInput]);
+  // To store the insertion position
+  const insertionPositionRef = useRef<number | null>(null);
 
   const handleButtonClick = () => {
     setShowInput((prev) => {
       const newShowInput = !prev;
-      if (newShowInput) {
-        // Focus the input
-        setTimeout(() => {
-          if (inputRef.current) {
-            inputRef.current.focus();
-          }
-        }, 0);
-      } else {
-        // Optionally focus back on the editor
-        editor.commands.focus();
+      if (!newShowInput) {
+        // Reset input and error states when hiding the input field
+        setInputValue('');
+        setHasError(false);
       }
       return newShowInput;
     });
@@ -53,6 +44,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   const handleSubmit = async () => {
     if (!inputValue.trim()) {
       setHasError(true);
+      // Remove the error highlight after 3 seconds
       setTimeout(() => setHasError(false), 3000);
       return;
     }
@@ -63,15 +55,16 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       return;
     }
 
-    // Close the input
-    setInputValue('');
-    setShowInput(false);
-
     setIsProcessing(true);
 
     try {
+      // Capture the current selection position
       const { to, empty, head } = editor.state.selection;
-      const position = empty ? head : to;
+      const position = empty ? head : to; // Insert at cursor if selection is empty, else at end of selection
+
+      insertionPositionRef.current = position;
+
+      // Optionally, you can provide visual feedback here (e.g., disable editor or show a temporary message)
 
       // Send the prompt to the API
       const response = await fetch('/api/contentWriter', {
@@ -85,26 +78,31 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       const data = await response.json();
 
       if (response.ok && data.newContent) {
+        // Insert the generated content into the editor with typewriter effect
         typeWriterEffect(editor, position, data.newContent);
       } else {
         console.error('API Error:', data.error || 'Unknown error');
         setHasError(true);
+        // Remove the error highlight after 3 seconds
         setTimeout(() => setHasError(false), 3000);
       }
+
+      // Reset input after submission
+      setInputValue('');
+      setShowInput(false);
     } catch (err) {
       console.error('Submission error:', err);
       setHasError(true);
+      // Remove the error highlight after 3 seconds
       setTimeout(() => setHasError(false), 3000);
     } finally {
       setIsProcessing(false);
     }
   };
 
+  // Typewriter effect function
   const typeWriterEffect = (editor: Editor, from: number, text: string) => {
     setIsTyping(true);
-
-    // Focus the editor when the typewriter effect starts
-    editor.commands.focus();
 
     let index = 0;
     const length = text.length;
@@ -117,11 +115,19 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       } else {
         clearInterval(interval);
         setIsTyping(false);
+        // Set the cursor position after the inserted text
         editor.commands.setTextSelection(from + length);
-        // Editor is already focused, no need to focus again
       }
-    }, 10);
+    }, 10); // Typewriter speed (in milliseconds)
   };
+
+  // useEffect to handle focusing
+  useEffect(() => {
+    if (showInput) {
+      // Focus the input field when it's shown
+      inputRef.current?.focus();
+    }
+  }, [showInput]);
 
   return (
     <TiptapFloatingMenu
@@ -129,8 +135,6 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       tippyOptions={{
         duration: 100,
         placement: 'bottom-start',
-        hideOnClick: false,
-        interactive: true,
       }}
       className="floating-menu"
     >
