@@ -83,15 +83,13 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       if (response.ok && data.newContent) {
         setInputValue('');
         setShowInput(false);
-        // Focus back on the editor before starting the typewriter effect
-        editor.commands.focus();
+        // Start the typewriter effect without focusing the editor
         typeWriterEffect(editor, position, data.newContent);
       } else {
         console.error('API Error:', data.error || 'Unknown error');
         setHasError(true);
         setTimeout(() => setHasError(false), 3000);
       }
-
     } catch (err) {
       console.error('Submission error:', err);
       setHasError(true);
@@ -103,9 +101,6 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
 
   const typeWriterEffect = (editor: Editor, from: number, text: string) => {
     setIsTyping(true);
-
-    // Ensure the editor is focused when the typewriter effect starts
-    editor.commands.focus();
 
     let index = 0;
     const length = text.length;
@@ -119,6 +114,8 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
         clearInterval(interval);
         setIsTyping(false);
         editor.commands.setTextSelection(from + length);
+        // Focus the editor after typing is complete
+        editor.commands.focus();
       }
     }, 10);
   };
