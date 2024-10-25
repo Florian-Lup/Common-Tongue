@@ -21,12 +21,11 @@
     background: none;
     color: #ffffffcf;
     font-weight: 600;
-    padding: 0.2rem 0.4rem; // Keep padding consistent
+    padding: 0.2rem 0.4rem;
     cursor: pointer;
     border-radius: 0.25rem;
     transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     flex-shrink: 0; // Prevent the button from shrinking
-    height: 36px; // Set a fixed height to match input field height
 
     .icon {
       width: 19px;
@@ -72,7 +71,6 @@
       transition: border-color 0.2s ease;
       flex: 1; // Allow the input to grow and shrink as needed
       min-width: 0; // Prevent overflow due to min-width
-      height: 36px; // Set a fixed height to ensure uniformity
 
       &:focus {
         border-color: blueviolet;
@@ -101,7 +99,6 @@
       border-radius: 0.25rem;
       transition: background-color 0.2s ease;
       flex-shrink: 0; // Prevent the submit button from shrinking
-      height: 36px; // Set a fixed height to match input field height
 
       .icon {
         width: 20px;
