@@ -158,7 +158,6 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
           <svg className="icon">
             <use href={`${remixiconUrl}#ri-edit-fill`} />
           </svg>
-          AI Writer
         </button>
         {showInput && (
           <div className="floating-menu-input-container">
