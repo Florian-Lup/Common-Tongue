@@ -26,6 +26,23 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const floatingMenuRef = useRef<HTMLDivElement>(null);
 
+  // State to track editor focus
+  const [editorIsFocused, setEditorIsFocused] = useState(editor.isFocused);
+
+  // Update editorIsFocused when the editor gains or loses focus
+  useEffect(() => {
+    const handleFocus = () => setEditorIsFocused(true);
+    const handleBlur = () => setEditorIsFocused(false);
+
+    editor.on('focus', handleFocus);
+    editor.on('blur', handleBlur);
+
+    return () => {
+      editor.off('focus', handleFocus);
+      editor.off('blur', handleBlur);
+    };
+  }, [editor]);
+
   // Automatically focus the input when it appears
   useEffect(() => {
     if (showInput && inputRef.current) {
@@ -138,9 +155,9 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
         duration: 100,
         placement: 'bottom-start',
       }}
-      shouldShow={({ editor }) => {
-        // Keep the menu visible if the input is shown or the editor is focused
-        return showInput || editor.isFocused;
+      shouldShow={() => {
+        // Show if the input is shown or if the editor is focused
+        return showInput || editorIsFocused;
       }}
       className="floating-menu"
     >
