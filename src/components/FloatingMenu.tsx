@@ -166,7 +166,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
               className={`floating-menu-input ${hasError ? 'error' : ''}`}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Enter your prompt..."
+              placeholder="Write about..."
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   handleSubmit();
