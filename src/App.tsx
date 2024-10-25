@@ -14,7 +14,7 @@ import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
-import CustomFloatingMenu from './components/CustomFloatingMenu';
+import CustomFloatingMenu from './components/FloatingMenu';
 import AIWriterInput from './components/AIWriterInput'; // Import the new component
 
 const App: React.FC = () => {
