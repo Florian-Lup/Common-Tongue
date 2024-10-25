@@ -1,4 +1,3 @@
-// App.tsx
 import React, { useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
@@ -67,7 +66,7 @@ const App: React.FC = () => {
 
   // Handler for AI Writer button click
   const handleAIWriterButtonClick = (position: number) => {
-    setShowAIWriterInput(true);
+    setShowAIWriterInput(true); // Show AIWriterInput
     setInsertionPosition(position);
   };
 
@@ -86,10 +85,13 @@ const App: React.FC = () => {
           setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing}
         />
-        <CustomFloatingMenu
-          editor={editor}
-          onAIWriterButtonClick={handleAIWriterButtonClick} // Pass the handler
-        />
+        {/* Only render CustomFloatingMenu if AIWriterInput is not visible */}
+        {!showAIWriterInput && (
+          <CustomFloatingMenu
+            editor={editor}
+            onAIWriterButtonClick={handleAIWriterButtonClick} // Pass the handler
+          />
+        )}
         {showAIWriterInput && (
           <AIWriterInput
             editor={editor}
