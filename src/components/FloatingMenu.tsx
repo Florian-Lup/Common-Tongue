@@ -9,12 +9,16 @@ interface CustomFloatingMenuProps {
   editor: Editor;
   isProcessing: boolean;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
+  isTyping: boolean;
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   editor,
   isProcessing,
   setIsProcessing,
+  isTyping,
+  setIsTyping,
 }) => {
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [insertionPosition, setInsertionPosition] = useState<number | null>(null);
@@ -22,9 +26,8 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   const handleAIWriterClick = () => {
     if (!editor) return;
 
-    // Get the current selection position
     const { to, empty, head } = editor.state.selection;
-    const position = empty ? head : to; // Insert at cursor if selection is empty, else at end of selection
+    const position = empty ? head : to;
 
     setInsertionPosition(position);
     setIsInputVisible(true);
@@ -51,14 +54,14 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
               onClick={handleAIWriterClick}
               className="floating-menu-button"
               aria-label="AI Writer"
-              disabled={isProcessing}
+              disabled={isProcessing || isTyping}
             >
               <svg className="icon">
                 <use href={`${remixiconUrl}#ri-edit-fill`} />
               </svg>
               AI Writer
             </button>
-            {/* You can include other buttons or menu items here */}
+            {/* Other menu items */}
           </div>
         </TiptapFloatingMenu>
       )}
@@ -69,6 +72,8 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
           onClose={handleCloseInput}
           isProcessing={isProcessing}
           setIsProcessing={setIsProcessing}
+          isTyping={isTyping}
+          setIsTyping={setIsTyping}
         />
       )}
     </>
