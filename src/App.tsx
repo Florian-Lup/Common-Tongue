@@ -17,8 +17,9 @@ import Focus from '@tiptap/extension-focus';
 import CustomFloatingMenu from './components/FloatingMenu';
 
 const App: React.FC = () => {
+  const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false); // State for processing
 
   const editor = useEditor({
     extensions: [
@@ -45,10 +46,11 @@ const App: React.FC = () => {
       TextStyle,
       Color,
       Focus.configure({
-        className: 'has-focus',
+        className: 'has-focus', // Custom class for focused nodes
         mode: 'shallowest',
       }),
     ],
+    editable: !isTyping,
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
@@ -66,10 +68,18 @@ const App: React.FC = () => {
         <div className="editor__footer">
           <div className="character-count">{characterCount} characters</div>
         </div>
-        <CustomBubbleMenu editor={editor} />
+        <CustomBubbleMenu
+          editor={editor}
+          isTyping={isTyping}
+          isProcessing={isProcessing}
+          setIsTyping={setIsTyping}
+          setIsProcessing={setIsProcessing}
+        />
         <CustomFloatingMenu
           editor={editor}
+          isTyping={isTyping}
           isProcessing={isProcessing}
+          setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing}
         />
       </div>
