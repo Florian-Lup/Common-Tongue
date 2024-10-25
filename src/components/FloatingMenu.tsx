@@ -29,6 +29,9 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   // To store the insertion position
   const insertionPositionRef = useRef<number | null>(null);
 
+  // Ref to store the previous value of showInput
+  const prevShowInputRef = useRef<boolean>(false);
+
   const handleButtonClick = () => {
     setShowInput((prev) => {
       const newShowInput = !prev;
@@ -63,8 +66,6 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       const position = empty ? head : to; // Insert at cursor if selection is empty, else at end of selection
 
       insertionPositionRef.current = position;
-
-      // Optionally, you can provide visual feedback here (e.g., disable editor or show a temporary message)
 
       // Send the prompt to the API
       const response = await fetch('/api/contentWriter', {
@@ -121,13 +122,21 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
     }, 10); // Typewriter speed (in milliseconds)
   };
 
-  // useEffect to handle focusing
+  // useEffect to handle focusing when the input field is shown
   useEffect(() => {
     if (showInput) {
       // Focus the input field when it's shown
       inputRef.current?.focus();
     }
   }, [showInput]);
+
+  // useEffect to handle focusing back to the editor when AI Writer becomes inactive
+  useEffect(() => {
+    if (prevShowInputRef.current && !showInput && !isProcessing && !isTyping) {
+      editor.commands.focus();
+    }
+    prevShowInputRef.current = showInput;
+  }, [showInput, isProcessing, isTyping, editor]);
 
   return (
     <TiptapFloatingMenu
