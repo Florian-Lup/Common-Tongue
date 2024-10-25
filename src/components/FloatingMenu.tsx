@@ -43,7 +43,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
           }
         }, 0);
       } else {
-        // Focus back on the editor
+        // Optionally focus back on the editor
         editor.commands.focus();
       }
       return newShowInput;
@@ -63,10 +63,9 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       return;
     }
 
-    // Close the input and focus the editor before making the API call
+    // Close the input
     setInputValue('');
     setShowInput(false);
-    editor.commands.focus();
 
     setIsProcessing(true);
 
@@ -103,6 +102,9 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
 
   const typeWriterEffect = (editor: Editor, from: number, text: string) => {
     setIsTyping(true);
+
+    // Focus the editor when the typewriter effect starts
+    editor.commands.focus();
 
     let index = 0;
     const length = text.length;
