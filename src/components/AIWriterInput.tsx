@@ -1,41 +1,32 @@
 // components/AIWriterInput.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Editor } from '@tiptap/react';
+import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 import './AIWriterInput.scss';
 
 interface AIWriterInputProps {
   editor: Editor;
-  insertionPosition: number | null;
-  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
+  insertionPosition: number;
+  onClose: () => void;
   isProcessing: boolean;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
-  onClose: () => void;
 }
 
 const AIWriterInput: React.FC<AIWriterInputProps> = ({
   editor,
   insertionPosition,
-  setIsTyping,
+  onClose,
   isProcessing,
   setIsProcessing,
-  onClose,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [hasError, setHasError] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [isTyping, setIsTyping] = useState(false);
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async () => {
     if (!inputValue.trim()) {
-      setHasError(true);
-      setTimeout(() => setHasError(false), 3000);
-      return;
-    }
-
-    if (!editor || insertionPosition === null) {
       setHasError(true);
       setTimeout(() => setHasError(false), 3000);
       return;
@@ -56,7 +47,7 @@ const AIWriterInput: React.FC<AIWriterInputProps> = ({
       const data = await response.json();
 
       if (response.ok && data.newContent) {
-        // Insert the generated content into the editor with a typewriter effect
+        // Insert the generated content into the editor with typewriter effect
         typeWriterEffect(editor, insertionPosition, data.newContent);
       } else {
         console.error('API Error:', data.error || 'Unknown error');
@@ -76,7 +67,6 @@ const AIWriterInput: React.FC<AIWriterInputProps> = ({
     }
   };
 
-  // Typewriter effect function
   const typeWriterEffect = (editor: Editor, from: number, text: string) => {
     setIsTyping(true);
 
@@ -91,51 +81,55 @@ const AIWriterInput: React.FC<AIWriterInputProps> = ({
       } else {
         clearInterval(interval);
         setIsTyping(false);
-        // Set the cursor position after the inserted text
         editor.commands.setTextSelection(from + length);
       }
-    }, 10); // Typewriter speed (in milliseconds)
+    }, 10);
   };
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   return (
-    <div className="ai-writer-input-container">
-      <div className="ai-writer-input">
-        <input
-          type="text"
-          className={`ai-writer-input-field ${hasError ? 'error' : ''}`}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Enter your prompt..."
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSubmit();
-            }
-          }}
-          disabled={isProcessing}
-          ref={inputRef}
-        />
-        <button
-          onClick={handleSubmit}
-          className={`ai-writer-submit-button ${hasError ? 'error' : ''}`}
-          aria-label="Submit"
-          disabled={isProcessing}
-        >
-          {isProcessing ? (
-            <div className="spinner"></div>
-          ) : (
-            <svg className="icon">
-              <use href="path-to-icons#icon-submit" />
-            </svg>
-          )}
-        </button>
-        <button
-          onClick={onClose}
-          className="ai-writer-cancel-button"
-          disabled={isProcessing}
-        >
-          Cancel
-        </button>
-      </div>
+    <div className="ai-writer-input">
+      <input
+        type="text"
+        className={`ai-writer-input-field ${hasError ? 'error' : ''}`}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder="Enter your prompt..."
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSubmit();
+          }
+        }}
+        disabled={isProcessing || isTyping}
+        ref={inputRef}
+      />
+      <button
+        onClick={handleSubmit}
+        className={`ai-writer-submit-button ${hasError ? 'error' : ''}`}
+        aria-label="Submit"
+        disabled={isProcessing || isTyping}
+      >
+        {isProcessing ? (
+          <div className="spinner"></div>
+        ) : (
+          <svg className="icon">
+            <use href={`${remixiconUrl}#ri-arrow-right-line`} />
+          </svg>
+        )}
+      </button>
+      <button
+        onClick={onClose}
+        className="ai-writer-close-button"
+        aria-label="Close"
+        disabled={isProcessing || isTyping}
+      >
+        <svg className="icon">
+          <use href={`${remixiconUrl}#ri-close-line`} />
+        </svg>
+      </button>
     </div>
   );
 };
