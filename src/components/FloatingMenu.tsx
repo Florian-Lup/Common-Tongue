@@ -73,7 +73,7 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           inputs: { contentRequest: inputValue },
-          version: '^1.1',
+          version: '^1.2',
         }),
       });
 

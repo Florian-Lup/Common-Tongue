@@ -47,7 +47,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           inputs: { manuscript: selectedText },
-          version: '^1.7',
+          version: '^1.2',
         }),
       });
 

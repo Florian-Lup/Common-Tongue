@@ -25,7 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const requestBody = {
       inputs: { contentRequest },
-      version: '^1.1',
+      version: '^1.2',
     };
 
     const response = await fetch(apiUrl, {
