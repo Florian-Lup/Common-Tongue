@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
@@ -13,16 +14,11 @@ import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
-import AIWriterInput from './components/AIWriterInput';
+import CustomFloatingMenu from './components/FloatingMenu';
 
 const App: React.FC = () => {
-  const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  // State to manage the AI Writer input component
-  const [showAIWriterInput, setShowAIWriterInput] = useState(false);
-  const [insertionPosition, setInsertionPosition] = useState<number | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -53,7 +49,6 @@ const App: React.FC = () => {
         mode: 'shallowest',
       }),
     ],
-    editable: !isTyping,
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
@@ -63,13 +58,6 @@ const App: React.FC = () => {
     return null;
   }
 
-  // Handler for AI Writer button click
-  const handleAIWriterButtonClick = () => {
-    const position = editor.state.selection.anchor;
-    setShowAIWriterInput(true); // Show AIWriterInput
-    setInsertionPosition(position);
-  };
-
   return (
     <div className={`editor-container ${isProcessing ? 'processing' : ''}`}>
       <div className="editor">
@@ -78,35 +66,12 @@ const App: React.FC = () => {
         <div className="editor__footer">
           <div className="character-count">{characterCount} characters</div>
         </div>
-        <CustomBubbleMenu
+        <CustomBubbleMenu editor={editor} />
+        <CustomFloatingMenu
           editor={editor}
-          isTyping={isTyping}
           isProcessing={isProcessing}
-          setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing}
         />
-
-        {/* Inline Button for AI Writer - Display only when editor is empty and AIWriterInput is not visible */}
-        {editor.isEmpty && !showAIWriterInput && (
-          <button
-            onClick={handleAIWriterButtonClick}
-            className="ai-writer-inline-button"
-          >
-            Start Writing with AI
-          </button>
-        )}
-
-        {/* Render AIWriterInput when triggered */}
-        {showAIWriterInput && (
-          <AIWriterInput
-            editor={editor}
-            insertionPosition={insertionPosition}
-            isProcessing={isProcessing}
-            setIsTyping={setIsTyping}
-            setIsProcessing={setIsProcessing}
-            onClose={() => setShowAIWriterInput(false)}
-          />
-        )}
       </div>
     </div>
   );
