@@ -49,7 +49,7 @@ const App: React.FC = () => {
         mode: 'shallowest',
       }),
     ],
-    editable: !isTyping && !isProcessing,
+    // Removed 'editable' prop
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
