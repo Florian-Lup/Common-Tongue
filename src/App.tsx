@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import CharacterCount from '@tiptap/extension-character-count';
@@ -49,7 +50,7 @@ const App: React.FC = () => {
         mode: 'shallowest',
       }),
     ],
-    // Removed 'editable' prop
+    editable: !isTyping,
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
