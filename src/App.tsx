@@ -14,12 +14,17 @@ import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
-import CustomFloatingMenu from './components/FloatingMenu';
+import CustomFloatingMenu from './components/CustomFloatingMenu';
+import AIWriterInput from './components/AIWriterInput'; // Import the new component
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false); // State for processing
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // State to manage the AI Writer input component
+  const [showAIWriterInput, setShowAIWriterInput] = useState(false);
+  const [insertionPosition, setInsertionPosition] = useState<number | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -46,7 +51,7 @@ const App: React.FC = () => {
       TextStyle,
       Color,
       Focus.configure({
-        className: 'has-focus', // Custom class for focused nodes
+        className: 'has-focus',
         mode: 'shallowest',
       }),
     ],
@@ -59,6 +64,12 @@ const App: React.FC = () => {
   if (!editor) {
     return null;
   }
+
+  // Handler for AI Writer button click
+  const handleAIWriterButtonClick = (position: number) => {
+    setShowAIWriterInput(true);
+    setInsertionPosition(position);
+  };
 
   return (
     <div className={`editor-container ${isProcessing ? 'processing' : ''}`}>
@@ -77,11 +88,18 @@ const App: React.FC = () => {
         />
         <CustomFloatingMenu
           editor={editor}
-          isTyping={isTyping}
-          isProcessing={isProcessing}
-          setIsTyping={setIsTyping}
-          setIsProcessing={setIsProcessing}
+          onAIWriterButtonClick={handleAIWriterButtonClick} // Pass the handler
         />
+        {showAIWriterInput && (
+          <AIWriterInput
+            editor={editor}
+            insertionPosition={insertionPosition}
+            isProcessing={isProcessing}
+            setIsTyping={setIsTyping}
+            setIsProcessing={setIsProcessing}
+            onClose={() => setShowAIWriterInput(false)}
+          />
+        )}
       </div>
     </div>
   );
