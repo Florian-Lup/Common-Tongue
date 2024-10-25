@@ -13,8 +13,7 @@ import MenuBar from './components/MenuBar';
 import Link from '@tiptap/extension-link';
 import CustomBubbleMenu from './components/BubbleMenu';
 import Focus from '@tiptap/extension-focus';
-import CustomFloatingMenu from './components/FloatingMenu';
-import AIWriterInput from './components/AIWriterInput'; // Import the new component
+import AIWriterInput from './components/AIWriterInput';
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -65,7 +64,8 @@ const App: React.FC = () => {
   }
 
   // Handler for AI Writer button click
-  const handleAIWriterButtonClick = (position: number) => {
+  const handleAIWriterButtonClick = () => {
+    const position = editor.state.selection.anchor;
     setShowAIWriterInput(true); // Show AIWriterInput
     setInsertionPosition(position);
   };
@@ -85,13 +85,18 @@ const App: React.FC = () => {
           setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing}
         />
-        {/* Only render CustomFloatingMenu if AIWriterInput is not visible */}
-        {!showAIWriterInput && (
-          <CustomFloatingMenu
-            editor={editor}
-            onAIWriterButtonClick={handleAIWriterButtonClick} // Pass the handler
-          />
+
+        {/* Inline Button for AI Writer - Display only when editor is empty and AIWriterInput is not visible */}
+        {editor.isEmpty && !showAIWriterInput && (
+          <button
+            onClick={handleAIWriterButtonClick}
+            className="ai-writer-inline-button"
+          >
+            Start Writing with AI
+          </button>
         )}
+
+        {/* Render AIWriterInput when triggered */}
         {showAIWriterInput && (
           <AIWriterInput
             editor={editor}
