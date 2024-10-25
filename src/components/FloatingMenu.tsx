@@ -22,26 +22,8 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   const [inputValue, setInputValue] = useState('');
   const [hasError, setHasError] = useState(false);
 
-  // Refs for the input field and the floating menu container
+  // Ref for the input field
   const inputRef = useRef<HTMLInputElement>(null);
-  const floatingMenuRef = useRef<HTMLDivElement>(null);
-
-  // State to track editor focus
-  const [editorIsFocused, setEditorIsFocused] = useState(editor.isFocused);
-
-  // Update editorIsFocused when the editor gains or loses focus
-  useEffect(() => {
-    const handleFocus = () => setEditorIsFocused(true);
-    const handleBlur = () => setEditorIsFocused(false);
-
-    editor.on('focus', handleFocus);
-    editor.on('blur', handleBlur);
-
-    return () => {
-      editor.off('focus', handleFocus);
-      editor.off('blur', handleBlur);
-    };
-  }, [editor]);
 
   // Automatically focus the input when it appears
   useEffect(() => {
@@ -50,31 +32,19 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
     }
   }, [showInput]);
 
-  // Add event listener to detect clicks outside the floating menu
-  useEffect(() => {
-    if (showInput) {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          floatingMenuRef.current &&
-          !floatingMenuRef.current.contains(event.target as Node)
-        ) {
-          setShowInput(false);
-        }
-      };
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [showInput]);
-
   const handleButtonClick = () => {
     setShowInput((prev) => {
       const newShowInput = !prev;
-      if (!newShowInput) {
-        // Reset input and error states when hiding the input field
-        setInputValue('');
-        setHasError(false);
+      if (newShowInput) {
+        // Input will be shown and focused
+        setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }, 0);
+      } else {
+        // Input will be hidden, focus back on the editor
+        editor.commands.focus();
       }
       return newShowInput;
     });
@@ -120,6 +90,8 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
 
       setInputValue('');
       setShowInput(false);
+      // Focus back on the editor after submitting
+      editor.commands.focus();
     } catch (err) {
       console.error('Submission error:', err);
       setHasError(true);
@@ -154,14 +126,12 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
       tippyOptions={{
         duration: 100,
         placement: 'bottom-start',
-      }}
-      shouldShow={() => {
-        // Show if the input is shown or if the editor is focused
-        return showInput || editorIsFocused;
+        hideOnClick: false,
+        interactive: true,
       }}
       className="floating-menu"
     >
-      <div className="floating-menu-content" ref={floatingMenuRef}>
+      <div className="floating-menu-content">
         <button
           onClick={handleButtonClick}
           className={`floating-menu-button ${showInput ? 'active' : ''}`}
