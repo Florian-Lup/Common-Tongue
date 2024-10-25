@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FloatingMenu as TiptapFloatingMenu, Editor } from '@tiptap/react';
 import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 import './FloatingMenu.scss';
@@ -22,8 +22,34 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
   const [inputValue, setInputValue] = useState('');
   const [hasError, setHasError] = useState(false);
 
-  // Ref for the input field
+  // Refs for the input field and the floating menu container
   const inputRef = useRef<HTMLInputElement>(null);
+  const floatingMenuRef = useRef<HTMLDivElement>(null);
+
+  // Automatically focus the input when it appears
+  useEffect(() => {
+    if (showInput && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [showInput]);
+
+  // Add event listener to detect clicks outside the floating menu
+  useEffect(() => {
+    if (showInput) {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          floatingMenuRef.current &&
+          !floatingMenuRef.current.contains(event.target as Node)
+        ) {
+          setShowInput(false);
+        }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [showInput]);
 
   const handleButtonClick = () => {
     setShowInput((prev) => {
@@ -112,9 +138,13 @@ const CustomFloatingMenu: React.FC<CustomFloatingMenuProps> = ({
         duration: 100,
         placement: 'bottom-start',
       }}
+      shouldShow={({ editor }) => {
+        // Keep the menu visible if the input is shown or the editor is focused
+        return showInput || editor.isFocused;
+      }}
       className="floating-menu"
     >
-      <div className="floating-menu-content">
+      <div className="floating-menu-content" ref={floatingMenuRef}>
         <button
           onClick={handleButtonClick}
           className={`floating-menu-button ${showInput ? 'active' : ''}`}
