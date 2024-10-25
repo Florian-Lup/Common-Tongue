@@ -50,7 +50,7 @@ const App: React.FC = () => {
         mode: 'shallowest',
       }),
     ],
-    editable: !isTyping && !isProcessing, // Updated line
+    editable: !isTyping,
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
