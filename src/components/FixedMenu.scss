@@ -1,0 +1,34 @@
+/* FixedMenu.scss */
+.fixed-menu {
+  display: flex;
+  background-color: #0d0d0d;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.fixed-menu button {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+
+  svg {
+    fill: currentColor;
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-right: 0.25rem;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #303030;
+  }
+}

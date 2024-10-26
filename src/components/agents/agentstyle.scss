@@ -1,0 +1,45 @@
+.compose-input-container {
+  display: flex;
+  margin: 0.5rem 0;
+}
+
+.compose-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  margin-right: 0.5rem;
+
+  &.error {
+    border-color: red;
+  }
+}
+
+.compose-submit-button {
+  background-color: #0d0d0d;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #303030;
+  }
+
+  svg {
+    fill: currentColor;
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}
+
+.error-message {
+  color: red;
+  margin-top: 0.5rem;
+}
