@@ -50,7 +50,7 @@ const App: React.FC = () => {
         mode: 'shallowest',
       }),
     ],
-    editable: !isTyping,
+    editable: !isTyping && !isProcessing,
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
@@ -63,7 +63,13 @@ const App: React.FC = () => {
   return (
     <div className={`editor-container ${isProcessing ? 'processing' : ''}`}>
       <div className="editor">
-        <MenuBar editor={editor} />
+        <MenuBar
+          editor={editor}
+          isTyping={isTyping}
+          setIsTyping={setIsTyping}
+          isProcessing={isProcessing}
+          setIsProcessing={setIsProcessing}
+        />
         <EditorContent className="editor__content" editor={editor} spellCheck={false} />
         <div className="editor__footer">
           <div className="character-count">{characterCount} characters</div>
