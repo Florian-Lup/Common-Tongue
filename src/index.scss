@@ -56,10 +56,6 @@ body {
     max-width: 100%;
   }
 
-  hr {
-    margin: 1rem 0;
-  }
-
   blockquote {
     border-left: 2px solid rgba(13, 13, 13, 0.1);
     padding-left: 1rem;
@@ -68,8 +64,8 @@ body {
   hr {
     border: none;
     border-top: 2px solid rgba(13, 13, 13, 0.1);
-    cursor: pointer;
     margin: 2rem 0;
+    cursor: pointer;
   }
 
   ul[data-type="taskList"] {
@@ -120,24 +116,26 @@ body {
   max-width: 800px;
   /* Set a max width for the editor */
   width: 100%;
+  /* Ensure the editor doesn't exceed its parent container */
 
+  .editor__header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    max-width: 800px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    /* Centers the inner content horizontally */
+    align-items: center;
+    /* Centers the inner content vertically */
+    background-color: #fff;
+    padding: 0.5rem;
 
-  /* .editor__header {
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      max-width: 800px;
-      width: 100%;
-      box-sizing: border-box;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #fff;
-      padding: 0.5rem;
-  
-    } */
+  }
 
   &__content {
     flex: 1 1 auto;
