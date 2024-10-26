@@ -12,7 +12,6 @@ import EditorMarks from './components/EditorMarks';
 import Focus from '@tiptap/extension-focus';
 import EditorNodes from './components/EditorNodes';
 import FixedMenu from './components/FixedMenu';
-import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
 import { GrammarAgent } from './components/agents/GrammarAgent';
 import { WritingAgent } from './components/agents/WritingAgent';
 
@@ -54,7 +53,7 @@ const App: React.FC = () => {
         mode: 'shallowest',
       }),
     ],
-    editable: !isTyping && !isProcessing,
+    editable: !(isProcessing || isTyping),
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
@@ -144,13 +143,9 @@ const App: React.FC = () => {
               aria-label="Submit"
               disabled={isProcessing || isTyping}
             >
-              {isProcessing ? (
-                <div className="spinner"></div>
-              ) : (
-                <svg className="icon">
-                  <use href={`${remixiconUrl}#ri-arrow-right-line`} />
-                </svg>
-              )}
+              <svg className="icon">
+                <use href="path-to-your-icon#icon-name" />
+              </svg>
             </button>
           </div>
         )}
@@ -161,12 +156,6 @@ const App: React.FC = () => {
         <EditorMarks editor={editor} />
         <EditorNodes editor={editor} />
         {errorMessage && <div className="error-message">{errorMessage}</div>}
-        {/* Spinner Overlay */}
-        {(isProcessing || isTyping) && (
-          <div className="spinner-overlay" aria-label="Processing">
-            <div className="spinner"></div>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 // agents/WritingAgent.ts
 import { Editor } from '@tiptap/react';
-import "./agentstyle.scss";
 
 export const WritingAgent = async (
   editor: Editor,

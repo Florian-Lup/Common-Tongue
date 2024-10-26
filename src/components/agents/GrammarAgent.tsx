@@ -1,6 +1,5 @@
 // agents/GrammarAgent.ts
 import { Editor } from '@tiptap/react';
-import "./agentstyle.scss";
 
 export const GrammarAgent = async (
   editor: Editor,
