@@ -1,10 +1,7 @@
 import "./MenuBar.scss";
 import type { Editor } from "@tiptap/react";
-
 import { Fragment } from "react";
-
-import MenuItem from "./MenuItem.jsx";
-
+import MenuItem from "./MenuItem.js";
 import validator from "validator";
 
 export default function MenuBar({ editor }: { editor: Editor }) {
