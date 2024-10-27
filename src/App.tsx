@@ -27,7 +27,7 @@ const App: React.FC = () => {
       Highlight.configure({ multicolor: true }),
       TaskList,
       TaskItem,
-      CharacterCount.configure({ limit: 5000 }),
+      CharacterCount.configure({ limit: 10000 }),
       Placeholder.configure({
         placeholder: ({ node }) => {
           switch (node.type.name) {
