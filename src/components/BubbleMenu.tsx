@@ -23,12 +23,21 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const processingColor = "#d3d3d3"; // Light gray
+  const CHARACTER_LIMIT = 700; // Define the character limit
 
   const handleFixGrammar = async () => {
     const { from, to } = editor.state.selection;
     const selectedText = editor.state.doc.textBetween(from, to, " ");
 
     if (!selectedText) {
+      return;
+    }
+
+    // Check if selected text exceeds the character limit
+    if (selectedText.length > CHARACTER_LIMIT) {
+      setErrorMessage(
+        `Selected text exceeds the ${CHARACTER_LIMIT} character limit.`
+      );
       return;
     }
 
