@@ -218,3 +218,12 @@ body {
   background-color: rgba(204, 204, 204, 0.2);
   border-left: 0.3rem solid #cccccc;
 }
+
+.editor-container.processing ::selection {
+  background: linear-gradient(
+    to right,
+    rgba(52, 152, 219, 0.3),
+    rgba(155, 89, 182, 0.3)
+  ); // Gradient from blue to purple
+  color: inherit;
+}
