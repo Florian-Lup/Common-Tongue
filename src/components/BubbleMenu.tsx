@@ -146,35 +146,38 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   }, [errorMessage]);
 
   return (
-    <BubbleMenu
-      editor={editor}
-      tippyOptions={{ duration: 100, placement: "bottom" }}
-    >
-      <div className="bubble-menu">
-        <button
-          onClick={handleFixGrammar}
-          disabled={isFixing || isTyping || isProcessing}
-          className="bubble-button"
-          title="Fix Grammar" // Tooltip using title attribute
-          aria-label="Fix Grammar" // Accessibility for screen readers
-        >
-          {isFixing || isProcessing || isTyping ? (
-            <div className="spinner" aria-label="Loading"></div>
-          ) : (
-            <svg className="icon" aria-hidden="true">
-              <use href={`${remixiconUrl}#ri-eraser-fill`} />
-            </svg>
-          )}
-          Fix Grammar
-        </button>
-        {/* You can add other buttons here */}
-        {errorMessage && (
-          <div className="error-message" role="alert">
-            {errorMessage}
-          </div>
-        )}
-      </div>
-    </BubbleMenu>
+    <>
+      <BubbleMenu
+        editor={editor}
+        tippyOptions={{ duration: 100, placement: "bottom" }}
+      >
+        <div className="bubble-menu">
+          <button
+            onClick={handleFixGrammar}
+            disabled={isFixing || isTyping || isProcessing}
+            className="bubble-button"
+            title="Fix Grammar" // Tooltip using title attribute
+            aria-label="Fix Grammar" // Accessibility for screen readers
+          >
+            {isFixing || isProcessing || isTyping ? (
+              <div className="spinner" aria-label="Loading"></div>
+            ) : (
+              <svg className="icon" aria-hidden="true">
+                <use href={`${remixiconUrl}#ri-eraser-fill`} />
+              </svg>
+            )}
+            Fix Grammar
+          </button>
+          {/* You can add other buttons here */}
+        </div>
+      </BubbleMenu>
+      {/* Display error message below the BubbleMenu */}
+      {errorMessage && (
+        <div className="error-message" role="alert">
+          {errorMessage}
+        </div>
+      )}
+    </>
   );
 };
 

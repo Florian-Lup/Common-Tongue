@@ -1,7 +1,11 @@
 /* BubbleMenu.scss */
 
 .editor-container.processing ::selection {
-  background-color: #fff;
+  background: linear-gradient(
+    to right,
+    rgba(52, 152, 219, 0.3),
+    rgba(155, 89, 182, 0.3)
+  ); // Gradient from blue to purple
   color: inherit;
 }
 
@@ -57,11 +61,18 @@
   margin-right: 0.5rem;
 }
 
-.bubble-menu .error-message {
-  color: red;
-  font-size: 0.85rem;
+.error-message {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #f8d7da; /* Light red background */
+  color: #721c24; /* Dark red text */
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  max-width: 250px;
   text-align: center;
-  padding: 0.2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 @keyframes spin {
