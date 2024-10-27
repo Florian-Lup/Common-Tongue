@@ -146,6 +146,8 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
           onClick={handleFixGrammar}
           disabled={isFixing || isTyping || isProcessing}
           className="bubble-button"
+          title="Fix Grammar" // Tooltip using title attribute
+          aria-label="Fix Grammar" // Accessibility for screen readers
         >
           {isFixing || isProcessing || isTyping ? (
             <div className="spinner" aria-label="Loading"></div>

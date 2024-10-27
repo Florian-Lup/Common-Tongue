@@ -12,9 +12,8 @@ import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import MenuBar from "./components/MenuBar";
 import Link from "@tiptap/extension-link";
-import CustomBubbleMenu from "./components/BubbleMenu";
+import CustomBubbleMenu from "./components/BubbleMenu"; // Assuming BubbleMenu is the correct path
 import Focus from "@tiptap/extension-focus";
-import CustomFloatingMenu from "./components/FloatingMenu";
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -73,13 +72,6 @@ const App: React.FC = () => {
           <div className="character-count">{characterCount} characters</div>
         </div>
         <CustomBubbleMenu
-          editor={editor}
-          isTyping={isTyping}
-          isProcessing={isProcessing}
-          setIsTyping={setIsTyping}
-          setIsProcessing={setIsProcessing}
-        />
-        <CustomFloatingMenu
           editor={editor}
           isTyping={isTyping}
           isProcessing={isProcessing}
