@@ -1,108 +1,166 @@
-// agents/GrammarAgent.ts
-import { Editor } from '@tiptap/react';
+// GrammarAgent.tsx
+import React, { useState, useEffect } from "react";
+import { Editor } from "@tiptap/react";
+import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg"; // Ensure this import is present
+import "./agentstyle.scss";
 
-export const GrammarAgent = async (
-  editor: Editor,
-  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>,
-  setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>,
-  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  const processingColor = '#d3d3d3'; // Light gray
-  const { from, to } = editor.state.selection;
-  const selectedText = editor.state.doc.textBetween(from, to, ' ');
+interface GrammarAgentProps {
+  editor: Editor;
+  isTyping: boolean;
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-  if (!selectedText) {
-    alert('Please select some text to fix grammar.');
-    return;
-  }
+const GrammarAgent: React.FC<GrammarAgentProps> = ({
+  editor,
+  isTyping,
+  setIsTyping,
+  setIsProcessing,
+}) => {
+  const [isFixing, setIsFixing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  try {
-    setIsProcessing(true);
-    setErrorMessage(null);
+  const processingColor = "#d3d3d3"; // Light gray
 
-    if (!editor.isActive('strike')) {
-      editor.chain().focus().toggleStrike().run();
+  const handleFixGrammar = async () => {
+    const fullText = editor.state.doc.textBetween(
+      0,
+      editor.state.doc.content.size,
+      " "
+    );
+
+    if (!fullText) {
+      return;
     }
 
-    editor.chain().focus().setColor(processingColor).run();
+    try {
+      setIsFixing(true);
+      setIsProcessing(true);
+      setErrorMessage(null);
 
-    const response = await fetch('/api/fixGrammar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        inputs: { manuscript: selectedText },
-        version: '^1.2',
-      }),
-    });
+      if (!editor.isActive("strike")) {
+        editor.chain().focus().toggleStrike().run();
+      }
 
-    const data = await response.json();
+      editor.chain().focus().setColor(processingColor).run();
 
-    if (response.ok) {
-      const { finalRevision } = data;
+      const response = await fetch("/api/fixGrammar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          inputs: { manuscript: fullText },
+          version: "^1.2",
+        }),
+      });
 
-      editor.commands.focus();
+      const data = await response.json();
 
-      if (editor.isActive('strike')) {
+      if (response.ok) {
+        const { finalRevision } = data;
+
+        editor.commands.focus();
+
+        if (editor.isActive("strike")) {
+          editor.chain().focus().toggleStrike().run();
+        }
+
+        if (editor.isActive({ color: processingColor })) {
+          editor.chain().focus().unsetColor().run();
+        }
+
+        typeWriterEffect(
+          editor,
+          0,
+          editor.state.doc.content.size,
+          finalRevision
+        );
+      } else {
+        console.error("Error fixing grammar:", data.error || data.details);
+        setErrorMessage("An error occurred.");
+
+        if (editor.isActive("strike")) {
+          editor.chain().focus().toggleStrike().run();
+        }
+
+        if (editor.isActive({ color: processingColor })) {
+          editor.chain().focus().unsetColor().run();
+        }
+      }
+    } catch (error) {
+      console.error("Error fixing grammar:", error);
+      setErrorMessage("An error occurred.");
+
+      if (editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
       }
 
       if (editor.isActive({ color: processingColor })) {
         editor.chain().focus().unsetColor().run();
       }
+    } finally {
+      setIsFixing(false);
+      setIsProcessing(false);
+    }
+  };
 
-      typeWriterEffect(editor, from, to, finalRevision, setIsTyping);
-    } else {
-      console.error('Error fixing grammar:', data.error || data.details);
-      setErrorMessage('An error occurred.');
+  // Typewriter effect function
+  const typeWriterEffect = (
+    editor: Editor,
+    from: number,
+    to: number,
+    text: string
+  ) => {
+    setIsTyping(true);
 
-      if (editor.isActive('strike')) {
-        editor.chain().focus().toggleStrike().run();
+    editor.commands.deleteRange({ from, to });
+
+    let index = 0;
+    const length = text.length;
+
+    const interval = setInterval(() => {
+      if (index < length) {
+        const char = text.charAt(index);
+        editor.commands.insertContentAt(from + index, char);
+        index++;
+      } else {
+        clearInterval(interval);
+        setIsTyping(false);
+        // Set the cursor position after the inserted text
+        editor.commands.setTextSelection(from + length);
       }
+    }, 10); //typewriter speed
+  };
 
-      if (editor.isActive({ color: processingColor })) {
-        editor.chain().focus().unsetColor().run();
-      }
-    }
-  } catch (error) {
-    console.error('Error fixing grammar:', error);
-    setErrorMessage('An error occurred.');
+  // Automatically dismiss error message after 3 seconds
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000); // Dismiss after 3 seconds
 
-    if (editor.isActive('strike')) {
-      editor.chain().focus().toggleStrike().run();
+      return () => clearTimeout(timer); // Cleanup the timer on component unmount or when errorMessage changes
     }
+  }, [errorMessage]);
 
-    if (editor.isActive({ color: processingColor })) {
-      editor.chain().focus().unsetColor().run();
-    }
-  } finally {
-    setIsProcessing(false);
-  }
+  return (
+    <div className="grammar-agent">
+      <button
+        onClick={handleFixGrammar}
+        disabled={isFixing || isTyping}
+        className={`agent-button ${isFixing || isTyping ? "is-active" : ""}`}
+        title="Fix Grammar"
+      >
+        <svg className="icon">
+          <use href={`${remixiconUrl}#ri-eraser-fill`} />
+        </svg>
+      </button>
+      {isFixing || isTyping ? (
+        <div className="spinner"></div>
+      ) : errorMessage ? (
+        <div className="error-message">{errorMessage}</div>
+      ) : null}
+    </div>
+  );
 };
 
-const typeWriterEffect = (
-  editor: Editor,
-  from: number,
-  to: number,
-  text: string,
-  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  setIsTyping(true);
-
-  editor.commands.deleteRange({ from, to });
-
-  let index = 0;
-  const length = text.length;
-
-  const interval = setInterval(() => {
-    if (index < length) {
-      const char = text.charAt(index);
-      editor.commands.insertContentAt(from + index, char);
-      index++;
-    } else {
-      clearInterval(interval);
-      setIsTyping(false);
-      // Set the cursor position after the inserted text
-      editor.commands.setTextSelection(from + length);
-    }
-  }, 10); // Typewriter speed
-};
+export default GrammarAgent;
