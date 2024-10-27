@@ -18,7 +18,7 @@ import Focus from "@tiptap/extension-focus";
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false); // State for processing
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -49,9 +49,43 @@ const App: React.FC = () => {
         mode: "shallowest",
       }),
     ],
-    editable: !(isTyping || isProcessing), // Disable editing when typing or processing
+
+    editable: true, // Always editable
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
+    },
+    editorProps: {
+      handleDOMEvents: {
+        beforeinput: (_view, event) => {
+          if (isTyping || isProcessing) {
+            event.preventDefault();
+            return true; // Prevent the default behavior
+          }
+          return false; // Allow the default behavior
+        },
+        keydown: (_view, event) => {
+          if (isTyping || isProcessing) {
+            // Prevent key-based editing actions
+            const nonBlockingKeys = [
+              "ArrowLeft",
+              "ArrowRight",
+              "ArrowUp",
+              "ArrowDown",
+              "Shift",
+              "Control",
+              "Alt",
+              "Meta",
+              "Tab",
+              "Escape",
+            ];
+            if (!nonBlockingKeys.includes(event.key)) {
+              event.preventDefault();
+              return true;
+            }
+          }
+          return false;
+        },
+      },
     },
   });
 
@@ -67,6 +101,7 @@ const App: React.FC = () => {
           className="editor__content"
           editor={editor}
           spellCheck={false}
+          aria-disabled={isTyping || isProcessing}
         />
         <div className="editor__footer">
           <div className="character-count">{characterCount} characters</div>
@@ -78,6 +113,9 @@ const App: React.FC = () => {
           setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing}
         />
+        {(isTyping || isProcessing) && (
+          <div className="overlay" aria-hidden="true"></div>
+        )}
       </div>
     </div>
   );
