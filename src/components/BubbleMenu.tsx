@@ -139,7 +139,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   return (
     <BubbleMenu
       editor={editor}
-      tippyOptions={{ duration: 100, placement: "top" }}
+      tippyOptions={{ duration: 100, placement: "bottom" }}
     >
       <div className="bubble-menu">
         <button

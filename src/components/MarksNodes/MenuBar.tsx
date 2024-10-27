@@ -1,8 +1,17 @@
+// MenuBar.tsx
 import "./MenuBar.scss";
 import type { Editor } from "@tiptap/react";
 import { Fragment } from "react";
-import MenuItem from "./MenuItem.js";
 import validator from "validator";
+import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
+
+interface MenuItemProps {
+  type?: string;
+  icon?: string;
+  title?: string;
+  action?: () => void;
+  isActive?: (() => boolean) | null;
+}
 
 export default function MenuBar({ editor }: { editor: Editor }) {
   const items = [
@@ -239,17 +248,33 @@ export default function MenuBar({ editor }: { editor: Editor }) {
     },
   ];
 
+  // Inline MenuItem component logic
+  const renderMenuItem = (item: MenuItemProps, index: number) => {
+    if (item.type === "divider") {
+      return <div className="divider" key={`divider-${index}`} />;
+    }
+
+    const { icon, title, action, isActive } = item;
+
+    return (
+      <button
+        key={`menu-item-${index}`}
+        className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
+        onClick={action}
+        title={title}
+      >
+        <svg className="remix">
+          <use xlinkHref={`${remixiconUrl}#ri-${icon}`} />
+        </svg>
+      </button>
+    );
+  };
+
   return (
     <div className="editor__header">
       <div className="menu-bar">
         {items.map((item, index) => (
-          <Fragment key={index}>
-            {item.type === "divider" ? (
-              <div className="divider" />
-            ) : (
-              <MenuItem {...item} />
-            )}
-          </Fragment>
+          <Fragment key={index}>{renderMenuItem(item, index)}</Fragment>
         ))}
       </div>
     </div>
