@@ -49,7 +49,7 @@ const App: React.FC = () => {
         mode: "shallowest",
       }),
     ],
-    editable: !isTyping,
+    editable: !(isTyping || isProcessing), // Disable editing when typing or processing
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
