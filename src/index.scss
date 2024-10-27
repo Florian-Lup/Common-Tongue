@@ -221,5 +221,6 @@ body {
 
 .editor-container.processing .editor__content {
   pointer-events: none; /* Disable interactions */
-  opacity: 0.6; /* Dim the editor */
+  opacity: 0.6;
+  cursor: not-allowed;
 }
