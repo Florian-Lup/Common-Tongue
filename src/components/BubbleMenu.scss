@@ -1,5 +1,12 @@
 /* BubbleMenu.scss */
-
+.editor-container.processing ::selection {
+  background: linear-gradient(
+    to right,
+    rgba(52, 152, 219, 0.3),
+    rgba(155, 89, 182, 0.3)
+  ); // Gradient from blue to purple
+  color: inherit;
+}
 
 .bubble-menu {
   display: flex;
