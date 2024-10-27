@@ -15,6 +15,7 @@ interface CustomBubbleMenuProps {
 const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   editor,
   isTyping,
+  isProcessing,
   setIsTyping,
   setIsProcessing,
 }) => {
@@ -121,7 +122,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         // Set the cursor position after the inserted text
         editor.commands.setTextSelection(from + length);
       }
-    }, 10); //typewriter speed
+    }, 10); // Typewriter speed
   };
 
   // Automatically dismiss error message after 3 seconds
@@ -136,39 +137,33 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   }, [errorMessage]);
 
   return (
-    <>
-      {isFixing || isTyping || errorMessage ? (
-        // Render spinner or error message when action is in progress or an error occurred
-        <BubbleMenu
-          editor={editor}
-          tippyOptions={{ duration: 100, placement: "top" }}
+    <BubbleMenu
+      editor={editor}
+      tippyOptions={{ duration: 100, placement: "top" }}
+    >
+      <div className="bubble-menu">
+        <button
+          onClick={handleFixGrammar}
+          disabled={isFixing || isTyping || isProcessing}
+          className="bubble-button"
         >
-          <div className="bubble-menu">
-            {errorMessage ? (
-              <div className="error-message">{errorMessage}</div>
-            ) : (
-              <div className="spinner"></div>
-            )}
+          {isFixing || isProcessing || isTyping ? (
+            <div className="spinner" aria-label="Loading"></div>
+          ) : (
+            <svg className="icon" aria-hidden="true">
+              <use href={`${remixiconUrl}#ri-eraser-fill`} />
+            </svg>
+          )}
+          <span className="button-text">Fix Grammar</span>
+        </button>
+        {/* You can add other buttons here */}
+        {errorMessage && (
+          <div className="error-message" role="alert">
+            {errorMessage}
           </div>
-        </BubbleMenu>
-      ) : (
-        // Render the bubble menu when no action is in progress
-        <BubbleMenu
-          editor={editor}
-          tippyOptions={{ duration: 100, placement: "top" }}
-        >
-          <div className="bubble-menu">
-            <button onClick={handleFixGrammar} disabled={isFixing || isTyping}>
-              <svg className="icon">
-                <use href={`${remixiconUrl}#ri-eraser-fill`} />
-              </svg>
-              Fix Grammar
-            </button>
-            {/* Other buttons can be added here */}
-          </div>
-        </BubbleMenu>
-      )}
-    </>
+        )}
+      </div>
+    </BubbleMenu>
   );
 };
 
