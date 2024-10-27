@@ -218,8 +218,3 @@ body {
   background-color: rgba(204, 204, 204, 0.2);
   border-left: 0.3rem solid #cccccc;
 }
-
-.editor-container.processing .editor__content {
-  pointer-events: none; /* Disable interactions */
-  opacity: 0.6; /* Dim the editor */
-}
