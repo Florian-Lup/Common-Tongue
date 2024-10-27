@@ -56,6 +56,10 @@ body {
     max-width: 100%;
   }
 
+  hr {
+    margin: 1rem 0;
+  }
+
   blockquote {
     border-left: 2px solid rgba(13, 13, 13, 0.1);
     padding-left: 1rem;
@@ -65,7 +69,6 @@ body {
     border: none;
     border-top: 2px solid rgba(13, 13, 13, 0.1);
     margin: 2rem 0;
-    cursor: pointer;
   }
 
   ul[data-type="taskList"] {

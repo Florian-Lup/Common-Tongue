@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import CharacterCount from "@tiptap/extension-character-count";
@@ -11,9 +12,9 @@ import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import MenuBar from "./components/MenuBar";
 import Link from "@tiptap/extension-link";
-import EditorMarks from "./components/EditorMarks";
+import CustomBubbleMenu from "./components/BubbleMenu";
 import Focus from "@tiptap/extension-focus";
-import EditorNodes from "./components/EditorNodes";
+import CustomFloatingMenu from "./components/FloatingMenu";
 
 const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -62,12 +63,7 @@ const App: React.FC = () => {
   return (
     <div className={`editor-container ${isProcessing ? "processing" : ""}`}>
       <div className="editor">
-        <MenuBar
-          editor={editor}
-          isTyping={isTyping}
-          setIsTyping={setIsTyping}
-          setIsProcessing={setIsProcessing}
-        />
+        <MenuBar editor={editor} />
         <EditorContent
           className="editor__content"
           editor={editor}
@@ -76,8 +72,20 @@ const App: React.FC = () => {
         <div className="editor__footer">
           <div className="character-count">{characterCount} characters</div>
         </div>
-        <EditorMarks editor={editor} />
-        <EditorNodes editor={editor} />
+        <CustomBubbleMenu
+          editor={editor}
+          isTyping={isTyping}
+          isProcessing={isProcessing}
+          setIsTyping={setIsTyping}
+          setIsProcessing={setIsProcessing}
+        />
+        <CustomFloatingMenu
+          editor={editor}
+          isTyping={isTyping}
+          isProcessing={isProcessing}
+          setIsTyping={setIsTyping}
+          setIsProcessing={setIsProcessing}
+        />
       </div>
     </div>
   );
