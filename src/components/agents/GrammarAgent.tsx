@@ -38,6 +38,9 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
       setIsProcessing(true);
       setErrorMessage(null);
 
+      // Disable editing and menubar
+      editor.setEditable(false);
+
       if (!editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
       }
@@ -100,6 +103,8 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
     } finally {
       setIsFixing(false);
       setIsProcessing(false);
+      // Re-enable editing and menubar
+      editor.setEditable(true);
     }
   };
 
@@ -127,6 +132,7 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
         setIsTyping(false);
         // Set the cursor position after the inserted text
         editor.commands.setTextSelection(from + length);
+        editor.setEditable(true); // Re-enable editing after typewriter effect completes
       }
     }, 10); //typewriter speed
   };
@@ -154,9 +160,7 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
           <use href={`${remixiconUrl}#ri-eraser-fill`} />
         </svg>
       </button>
-      {isFixing || isTyping ? (
-        <div className="spinner"></div>
-      ) : errorMessage ? (
+      {errorMessage ? (
         <div className="error-message">{errorMessage}</div>
       ) : null}
     </div>
