@@ -26,6 +26,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
           isTyping={isTyping}
           setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing}
+          isProcessing={false}
         />
       </div>
     </div>

@@ -7,6 +7,7 @@ import "./agentstyle.scss";
 interface GrammarAgentProps {
   editor: Editor;
   isTyping: boolean;
+  isProcessing: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -23,13 +24,10 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
   const processingColor = "#d3d3d3"; // Light gray
 
   const handleFixGrammar = async () => {
-    const fullText = editor.state.doc.textBetween(
-      0,
-      editor.state.doc.content.size,
-      " "
-    );
+    const { from, to } = editor.state.selection;
+    const selectedText = editor.state.doc.textBetween(from, to, " ");
 
-    if (!fullText) {
+    if (!selectedText) {
       return;
     }
 
@@ -37,9 +35,6 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
       setIsFixing(true);
       setIsProcessing(true);
       setErrorMessage(null);
-
-      // Disable editing and menubar
-      editor.setEditable(false);
 
       if (!editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
@@ -51,7 +46,7 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          inputs: { manuscript: fullText },
+          inputs: { manuscript: selectedText },
           version: "^1.2",
         }),
       });
@@ -71,12 +66,7 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
           editor.chain().focus().unsetColor().run();
         }
 
-        typeWriterEffect(
-          editor,
-          0,
-          editor.state.doc.content.size,
-          finalRevision
-        );
+        typeWriterEffect(editor, from, to, finalRevision);
       } else {
         console.error("Error fixing grammar:", data.error || data.details);
         setErrorMessage("An error occurred.");
@@ -103,8 +93,6 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
     } finally {
       setIsFixing(false);
       setIsProcessing(false);
-      // Re-enable editing and menubar
-      editor.setEditable(true);
     }
   };
 
@@ -132,7 +120,6 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
         setIsTyping(false);
         // Set the cursor position after the inserted text
         editor.commands.setTextSelection(from + length);
-        editor.setEditable(true); // Re-enable editing after typewriter effect completes
       }
     }, 10); //typewriter speed
   };
@@ -151,18 +138,16 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
   return (
     <div className="grammar-agent">
       <button
+        className="agent-button"
+        title="Fix Grammar"
         onClick={handleFixGrammar}
         disabled={isFixing || isTyping}
-        className={`agent-button ${isFixing || isTyping ? "is-active" : ""}`}
-        title="Fix Grammar"
       >
         <svg className="icon">
           <use href={`${remixiconUrl}#ri-eraser-fill`} />
         </svg>
       </button>
-      {errorMessage ? (
-        <div className="error-message">{errorMessage}</div>
-      ) : null}
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
     </div>
   );
 };
