@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState, useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import CharacterCount from "@tiptap/extension-character-count";
@@ -13,6 +14,7 @@ import MenuBar from "./components/MarksNodes/MenuBar";
 import Link from "@tiptap/extension-link";
 import CustomBubbleMenu from "./components/BubbleMenu";
 import Focus from "@tiptap/extension-focus";
+import "./App.scss"; // Ensure you have appropriate styling
 
 const App: React.FC = () => {
   // Global states
@@ -66,36 +68,8 @@ const App: React.FC = () => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
     editorProps: {
-      handleDOMEvents: {
-        beforeinput: (_view, event) => {
-          if (isTyping || isProcessing) {
-            event.preventDefault();
-            return true;
-          }
-          return false;
-        },
-        keydown: (_view, event) => {
-          if (isTyping || isProcessing) {
-            const nonBlockingKeys = [
-              "ArrowLeft",
-              "ArrowRight",
-              "ArrowUp",
-              "ArrowDown",
-              "Shift",
-              "Control",
-              "Alt",
-              "Meta",
-              "Tab",
-              "Escape",
-            ];
-            if (!nonBlockingKeys.includes(event.key)) {
-              event.preventDefault();
-              return true;
-            }
-          }
-          return false;
-        },
-      },
+      // Removed handleDOMEvents
+      // If you have other editorProps, retain them here
     },
   });
 
@@ -139,10 +113,11 @@ const App: React.FC = () => {
           setErrorMessage={setErrorMessage}
         />
 
-        {/* Overlay to Prevent Interaction During Processing/Typing */}
-        {(isTyping || isProcessing) && (
-          <div className="overlay" aria-hidden="true"></div>
-        )}
+        {/* Overlay Removed */}
+        {/* 
+          Previously, the overlay was used to prevent interactions during typing or processing.
+          Since we're removing it, users can freely interact with the editor at all times.
+        */}
       </div>
     </div>
   );
