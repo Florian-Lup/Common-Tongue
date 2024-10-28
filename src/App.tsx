@@ -20,7 +20,6 @@ const App: React.FC = () => {
   const [characterCount, setCharacterCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [selectionColor, setSelectionColor] = useState<string>(""); // New state for selection color
 
   // Automatically hide error message after 3 seconds
   useEffect(() => {
@@ -100,11 +99,6 @@ const App: React.FC = () => {
     },
   });
 
-  // Update selection color based on processing state
-  useEffect(() => {
-    setSelectionColor(isProcessing ? "rgba(255, 255, 0, 0.5)" : ""); // Yellow when processing, otherwise transparent
-  }, [isProcessing]);
-
   if (!editor) {
     return null; // Render nothing if the editor is not initialized
   }
@@ -122,16 +116,12 @@ const App: React.FC = () => {
         {/* Toolbar/Menu Bar */}
         <MenuBar editor={editor} />
 
-        {/* Editor Content with dynamic selection color */}
+        {/* Editor Content with dynamic class for selection */}
         <EditorContent
-          className="editor__content"
+          className={`editor__content ${isProcessing ? "selection-active" : ""}`} // Toggle class based on processing
           editor={editor}
           spellCheck={false}
           aria-disabled={isTyping || isProcessing}
-          style={{ 
-            userSelect: 'text', // Ensure text can be selected
-            backgroundColor: selectionColor // Apply dynamic background color
-          }}
         />
 
         {/* Footer with Character Count */}
