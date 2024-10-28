@@ -22,7 +22,6 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   setErrorMessage, // Destructure the new prop
 }) => {
   const [isFixing, setIsFixing] = useState(false);
-  const processingColor = "#d3d3d3"; // Light gray
   const CHARACTER_LIMIT = 700; // Define the character limit
 
   // Function to handle grammar fixing
@@ -47,12 +46,10 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       setIsProcessing(true);
       setErrorMessage(null); // Clear any existing errors
 
-      // Apply strikethrough and color to indicate processing
+      // Apply strikethrough to indicate processing
       if (!editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
       }
-
-      editor.chain().focus().setColor(processingColor).run();
 
       // API Call to Fix Grammar
       const response = await fetch("/api/fixGrammar", {
@@ -71,13 +68,9 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
 
         editor.commands.focus();
 
-        // Remove strikethrough and color after processing
+        // Remove strikethrough after processing
         if (editor.isActive("strike")) {
           editor.chain().focus().toggleStrike().run();
-        }
-
-        if (editor.isActive({ color: processingColor })) {
-          editor.chain().focus().unsetColor().run();
         }
 
         // Insert the revised text with a typewriter effect
@@ -86,26 +79,18 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         console.error("Error fixing grammar:", data.error || data.details);
         setErrorMessage("An error occurred while fixing grammar.");
 
-        // Remove strikethrough and color if API call fails
+        // Remove strikethrough if API call fails
         if (editor.isActive("strike")) {
           editor.chain().focus().toggleStrike().run();
-        }
-
-        if (editor.isActive({ color: processingColor })) {
-          editor.chain().focus().unsetColor().run();
         }
       }
     } catch (error) {
       console.error("Error fixing grammar:", error);
       setErrorMessage("An unexpected error occurred.");
 
-      // Remove strikethrough and color if an exception occurs
+      // Remove strikethrough if an exception occurs
       if (editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
-      }
-
-      if (editor.isActive({ color: processingColor })) {
-        editor.chain().focus().unsetColor().run();
       }
     } finally {
       setIsFixing(false);
