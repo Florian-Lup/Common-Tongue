@@ -218,3 +218,17 @@ body {
   background-color: rgba(204, 204, 204, 0.2);
   border-left: 0.3rem solid #cccccc;
 }
+
+.error-message {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #f8d7da; /* Light red background */
+  color: #721c24; /* Dark red text */
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  max-width: 250px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+}
