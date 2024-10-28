@@ -1,4 +1,3 @@
-// CustomBubbleMenu.tsx
 import React, { useState } from "react";
 import { BubbleMenu, Editor } from "@tiptap/react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg"; // Ensure this import is correct
@@ -10,7 +9,7 @@ interface CustomBubbleMenuProps {
   isProcessing: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>; // New Prop for Error Messages
+  setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
@@ -19,21 +18,19 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   isProcessing,
   setIsTyping,
   setIsProcessing,
-  setErrorMessage, // Destructure the new prop
+  setErrorMessage,
 }) => {
   const [isFixing, setIsFixing] = useState(false);
-  const CHARACTER_LIMIT = 700; // Define the character limit
+  const CHARACTER_LIMIT = 700;
 
   // Function to handle grammar fixing
   const handleFixGrammar = async () => {
     const { from, to } = editor.state.selection;
     const selectedText = editor.state.doc.textBetween(from, to, " ");
 
-    if (!selectedText) {
-      return; // No text selected
-    }
+    if (!selectedText) return; // No text selected
 
-    // Check if selected text exceeds the character limit
+    // Check for character limit
     if (selectedText.length > CHARACTER_LIMIT) {
       setErrorMessage(
         `Selected text exceeds the ${CHARACTER_LIMIT} character limit.`
@@ -44,14 +41,17 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     try {
       setIsFixing(true);
       setIsProcessing(true);
-      setErrorMessage(null); // Clear any existing errors
+      setErrorMessage(null); // Clear existing errors
 
       // Apply strikethrough to indicate processing
       if (!editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
       }
 
-      // API Call to Fix Grammar
+      // Highlight selected text during processing
+      editor.commands.setMark('highlight', { class: 'processing-background' });
+
+      // API call to fix grammar
       const response = await fetch("/api/fixGrammar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,32 +67,26 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         const { finalRevision } = data;
 
         editor.commands.focus();
-
         // Remove strikethrough after processing
         if (editor.isActive("strike")) {
           editor.chain().focus().toggleStrike().run();
         }
 
-        // Insert the revised text with a typewriter effect
+        // Insert revised text with typewriter effect
         typeWriterEffect(editor, from, to, finalRevision);
       } else {
         console.error("Error fixing grammar:", data.error || data.details);
         setErrorMessage("An error occurred while fixing grammar.");
-
-        // Remove strikethrough if API call fails
-        if (editor.isActive("strike")) {
-          editor.chain().focus().toggleStrike().run();
-        }
       }
     } catch (error) {
       console.error("Error fixing grammar:", error);
       setErrorMessage("An unexpected error occurred.");
-
-      // Remove strikethrough if an exception occurs
+    } finally {
+      // Cleanup: Remove highlights and toggle strikethrough
+      editor.commands.unsetMark('highlight');
       if (editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
       }
-    } finally {
       setIsFixing(false);
       setIsProcessing(false);
     }
@@ -106,9 +100,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     text: string
   ) => {
     setIsTyping(true);
-
-    // Remove the original selected text
-    editor.commands.deleteRange({ from, to });
+    editor.commands.deleteRange({ from, to }); // Remove the original selected text
 
     let index = 0;
     const length = text.length;
@@ -121,10 +113,9 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       } else {
         clearInterval(interval);
         setIsTyping(false);
-        // Set the cursor position after the inserted text
-        editor.commands.setTextSelection(from + length);
+        editor.commands.setTextSelection(from + length); // Set cursor position
       }
-    }, 10); // Adjust typing speed here (milliseconds per character)
+    }, 10); // Adjust typing speed here
   };
 
   return (
@@ -137,7 +128,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
           onClick={handleFixGrammar}
           disabled={isFixing || isTyping || isProcessing}
           className="bubble-button"
-          aria-label="Fix Grammar" // Accessibility for screen readers
+          aria-label="Fix Grammar"
         >
           {isFixing || isProcessing || isTyping ? (
             <div className="spinner" aria-label="Loading"></div>
@@ -148,9 +139,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
           )}
           Fix Grammar
         </button>
-        {/* Additional buttons can be added here */}
       </div>
-      {/* Removed local error message rendering */}
     </BubbleMenu>
   );
 };
