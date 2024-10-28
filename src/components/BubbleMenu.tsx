@@ -1,7 +1,7 @@
 // CustomBubbleMenu.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BubbleMenu, Editor } from "@tiptap/react";
-import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg"; // Ensure this import is present
+import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg"; // Ensure this import is correct
 import "./BubbleMenu.scss";
 
 interface CustomBubbleMenuProps {
@@ -10,6 +10,7 @@ interface CustomBubbleMenuProps {
   isProcessing: boolean;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
   setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>; // New Prop for Error Messages
 }
 
 const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
@@ -18,19 +19,19 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   isProcessing,
   setIsTyping,
   setIsProcessing,
+  setErrorMessage, // Destructure the new prop
 }) => {
   const [isFixing, setIsFixing] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const processingColor = "#d3d3d3"; // Light gray
   const CHARACTER_LIMIT = 700; // Define the character limit
 
+  // Function to handle grammar fixing
   const handleFixGrammar = async () => {
     const { from, to } = editor.state.selection;
     const selectedText = editor.state.doc.textBetween(from, to, " ");
 
     if (!selectedText) {
-      return;
+      return; // No text selected
     }
 
     // Check if selected text exceeds the character limit
@@ -44,14 +45,16 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     try {
       setIsFixing(true);
       setIsProcessing(true);
-      setErrorMessage(null);
+      setErrorMessage(null); // Clear any existing errors
 
+      // Apply strikethrough and color to indicate processing
       if (!editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
       }
 
       editor.chain().focus().setColor(processingColor).run();
 
+      // API Call to Fix Grammar
       const response = await fetch("/api/fixGrammar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -68,6 +71,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
 
         editor.commands.focus();
 
+        // Remove strikethrough and color after processing
         if (editor.isActive("strike")) {
           editor.chain().focus().toggleStrike().run();
         }
@@ -76,11 +80,13 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
           editor.chain().focus().unsetColor().run();
         }
 
+        // Insert the revised text with a typewriter effect
         typeWriterEffect(editor, from, to, finalRevision);
       } else {
         console.error("Error fixing grammar:", data.error || data.details);
-        setErrorMessage("An error occurred.");
+        setErrorMessage("An error occurred while fixing grammar.");
 
+        // Remove strikethrough and color if API call fails
         if (editor.isActive("strike")) {
           editor.chain().focus().toggleStrike().run();
         }
@@ -91,8 +97,9 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       }
     } catch (error) {
       console.error("Error fixing grammar:", error);
-      setErrorMessage("An error occurred.");
+      setErrorMessage("An unexpected error occurred.");
 
+      // Remove strikethrough and color if an exception occurs
       if (editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
       }
@@ -106,7 +113,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
     }
   };
 
-  // Typewriter effect function
+  // Typewriter effect function to insert text character by character
   const typeWriterEffect = (
     editor: Editor,
     from: number,
@@ -115,6 +122,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   ) => {
     setIsTyping(true);
 
+    // Remove the original selected text
     editor.commands.deleteRange({ from, to });
 
     let index = 0;
@@ -131,52 +139,34 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         // Set the cursor position after the inserted text
         editor.commands.setTextSelection(from + length);
       }
-    }, 10); // Typewriter speed
+    }, 10); // Adjust typing speed here (milliseconds per character)
   };
 
-  // Automatically dismiss error message after 3 seconds
-  useEffect(() => {
-    if (errorMessage) {
-      const timer = setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000); // Dismiss after 3 seconds
-
-      return () => clearTimeout(timer); // Cleanup the timer on component unmount or when errorMessage changes
-    }
-  }, [errorMessage]);
-
   return (
-    <>
-      <BubbleMenu
-        editor={editor}
-        tippyOptions={{ duration: 100, placement: "bottom" }}
-      >
-        <div className="bubble-menu">
-          <button
-            onClick={handleFixGrammar}
-            disabled={isFixing || isTyping || isProcessing}
-            className="bubble-button"
-            aria-label="Fix Grammar" // Accessibility for screen readers
-          >
-            {isFixing || isProcessing || isTyping ? (
-              <div className="spinner" aria-label="Loading"></div>
-            ) : (
-              <svg className="icon" aria-hidden="true">
-                <use href={`${remixiconUrl}#ri-eraser-fill`} />
-              </svg>
-            )}
-            Fix Grammar
-          </button>
-          {/* You can add other buttons here */}
-        </div>
-      </BubbleMenu>
-      {/* Display error message below the BubbleMenu */}
-      {errorMessage && (
-        <div className="error-message" role="alert">
-          {errorMessage}
-        </div>
-      )}
-    </>
+    <BubbleMenu
+      editor={editor}
+      tippyOptions={{ duration: 100, placement: "bottom" }}
+    >
+      <div className="bubble-menu">
+        <button
+          onClick={handleFixGrammar}
+          disabled={isFixing || isTyping || isProcessing}
+          className="bubble-button"
+          aria-label="Fix Grammar" // Accessibility for screen readers
+        >
+          {isFixing || isProcessing || isTyping ? (
+            <div className="spinner" aria-label="Loading"></div>
+          ) : (
+            <svg className="icon" aria-hidden="true">
+              <use href={`${remixiconUrl}#ri-eraser-fill`} />
+            </svg>
+          )}
+          Fix Grammar
+        </button>
+        {/* Additional buttons can be added here */}
+      </div>
+      {/* Removed local error message rendering */}
+    </BubbleMenu>
   );
 };
 
