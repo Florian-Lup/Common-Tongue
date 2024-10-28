@@ -48,9 +48,6 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         editor.chain().focus().toggleStrike().run();
       }
 
-      // Highlight selected text during processing
-      editor.commands.setMark('highlight', { class: 'processing-background' });
-
       // API call to fix grammar
       const response = await fetch("/api/fixGrammar", {
         method: "POST",
@@ -82,11 +79,6 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       console.error("Error fixing grammar:", error);
       setErrorMessage("An unexpected error occurred.");
     } finally {
-      // Cleanup: Remove highlights and toggle strikethrough
-      editor.commands.unsetMark('highlight');
-      if (editor.isActive("strike")) {
-        editor.chain().focus().toggleStrike().run();
-      }
       setIsFixing(false);
       setIsProcessing(false);
     }
