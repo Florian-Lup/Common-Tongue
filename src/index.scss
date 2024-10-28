@@ -220,15 +220,43 @@ body {
 }
 
 .error-message {
-  margin-top: 8px;
-  padding: 8px 12px;
+  position: fixed; /* Position it relative to the viewport */
+  top: 20px; /* 20px from the top */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for exact centering */
+  margin-top: 0; /* Remove any top margin */
+  padding: 12px 24px; /* Increase padding for better visibility */
   background-color: #f8d7da; /* Light red background */
   color: #721c24; /* Dark red text */
-  border: 1px solid #f5c6cb;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  max-width: 250px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.3s ease-in-out;
+  border: 1px solid #f5c6cb; /* Border for emphasis */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 1rem; /* Larger font size */
+  max-width: 90%; /* Ensure it doesn't overflow on small screens */
+  text-align: center; /* Center the text */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+  z-index: 10000; /* Ensure it stays above other elements */
+  animation: fadeIn 0.3s ease-in-out, fadeOut 0.3s ease-in-out 2.7s; /* Fade in and out */
+}
+
+/* Keyframes for fadeIn and fadeOut animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
 }
