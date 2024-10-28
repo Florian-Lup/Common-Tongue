@@ -51,6 +51,25 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         editor.chain().focus().toggleStrike().run();
       }
 
+      // Add processing class to the editor container
+      editor.setOptions({
+        ...editor.options,
+        extensions: [
+          ...editor.options.extensions,
+          {
+            name: 'processing',
+            addGlobalStyle() {
+              return `
+                .editor-container.processing ::selection {
+                  background-color: rgba(255, 223, 186, 0.5); // Light orange background
+                  color: inherit; // Keep the original text color
+                }
+              `;
+            },
+          },
+        ],
+      });
+
       // API Call to Fix Grammar
       const response = await fetch("/api/fixGrammar", {
         method: "POST",
@@ -93,6 +112,14 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
         editor.chain().focus().toggleStrike().run();
       }
     } finally {
+      // Remove processing class from editor container
+      editor.setOptions({
+        ...editor.options,
+        extensions: [
+          ...editor.options.extensions.filter(ext => ext.name !== 'processing'),
+        ],
+      });
+
       setIsFixing(false);
       setIsProcessing(false);
     }
