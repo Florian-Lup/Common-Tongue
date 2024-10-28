@@ -1,5 +1,5 @@
 // App.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import CharacterCount from "@tiptap/extension-character-count";
 import Highlight from "@tiptap/extension-highlight";
@@ -21,6 +21,16 @@ const App: React.FC = () => {
   const [characterCount, setCharacterCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // New Error State
+
+  // Automatically hide error message after 3 seconds
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
 
   // Initialize the TipTap editor with desired extensions and configurations
   const editor = useEditor({
@@ -96,8 +106,15 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={`editor-container ${isProcessing ? "processing" : ""}`}>
-      <div className="editor">
+    <div className="editor-container">
+      {/* Error Message Display */}
+      {errorMessage && (
+        <div className="error-message" role="alert">
+          {errorMessage}
+        </div>
+      )}
+
+      <div className={`editor ${isProcessing ? "processing" : ""}`}>
         {/* Toolbar/Menu Bar */}
         <MenuBar editor={editor} />
 
@@ -108,13 +125,6 @@ const App: React.FC = () => {
           spellCheck={false}
           aria-disabled={isTyping || isProcessing}
         />
-
-        {/* Error Message Display */}
-        {errorMessage && (
-          <div className="error-message" role="alert">
-            {errorMessage}
-          </div>
-        )}
 
         {/* Footer with Character Count */}
         <div className="editor__footer">
