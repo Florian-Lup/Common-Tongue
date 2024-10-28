@@ -1,4 +1,3 @@
-// App.tsx
 import React, { useState, useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import CharacterCount from "@tiptap/extension-character-count";
@@ -16,18 +15,18 @@ import CustomBubbleMenu from "./components/BubbleMenu";
 import Focus from "@tiptap/extension-focus";
 
 const App: React.FC = () => {
-  // Global States
+  // Global states
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // New Error State
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Automatically hide error message after 3 seconds
   useEffect(() => {
     if (errorMessage) {
       const timer = setTimeout(() => {
         setErrorMessage(null);
-      }, 3000); // 3 seconds
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [errorMessage]);
@@ -58,11 +57,11 @@ const App: React.FC = () => {
       TextStyle,
       Color,
       Focus.configure({
-        className: "has-focus", // Custom class for focused nodes
+        className: "has-focus",
         mode: "shallowest",
       }),
     ],
-    editable: true, // Always editable
+    editable: true,
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
@@ -71,13 +70,12 @@ const App: React.FC = () => {
         beforeinput: (_view, event) => {
           if (isTyping || isProcessing) {
             event.preventDefault();
-            return true; // Prevent the default behavior
+            return true;
           }
-          return false; // Allow the default behavior
+          return false;
         },
         keydown: (_view, event) => {
           if (isTyping || isProcessing) {
-            // Prevent key-based editing actions except for non-blocking keys
             const nonBlockingKeys = [
               "ArrowLeft",
               "ArrowRight",
@@ -131,14 +129,14 @@ const App: React.FC = () => {
           <div className="character-count">{characterCount} characters</div>
         </div>
 
-        {/* Custom Bubble Menu with Props for Managing States */}
+        {/* Custom Bubble Menu */}
         <CustomBubbleMenu
           editor={editor}
           isTyping={isTyping}
           isProcessing={isProcessing}
           setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing}
-          setErrorMessage={setErrorMessage} // Pass the setter for error messages
+          setErrorMessage={setErrorMessage}
         />
 
         {/* Overlay to Prevent Interaction During Processing/Typing */}
