@@ -59,7 +59,6 @@
 }
 
 //Background color for processing state//
-.editor-container.processing ::selection {
-  background-color: transparent;
-  color: inherit;
+.processing-background {
+  background-color: rgba(255, 255, 0, 0.5); /* Yellow background with some transparency */
 }
