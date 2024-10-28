@@ -14,7 +14,6 @@ import MenuBar from "./components/MarksNodes/MenuBar";
 import Link from "@tiptap/extension-link";
 import CustomBubbleMenu from "./components/BubbleMenu";
 import Focus from "@tiptap/extension-focus";
-import "./App.scss"; // Ensure you have appropriate styling
 
 const App: React.FC = () => {
   // Global states
@@ -68,7 +67,6 @@ const App: React.FC = () => {
       setCharacterCount(editor.storage.characterCount.characters());
     },
     editorProps: {
-      // Removed handleDOMEvents
       // If you have other editorProps, retain them here
     },
   });
@@ -112,12 +110,6 @@ const App: React.FC = () => {
           setIsProcessing={setIsProcessing}
           setErrorMessage={setErrorMessage}
         />
-
-        {/* Overlay Removed */}
-        {/* 
-          Previously, the overlay was used to prevent interactions during typing or processing.
-          Since we're removing it, users can freely interact with the editor at all times.
-        */}
       </div>
     </div>
   );
