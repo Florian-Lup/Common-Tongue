@@ -116,9 +116,9 @@ const App: React.FC = () => {
         {/* Toolbar/Menu Bar */}
         <MenuBar editor={editor} />
 
-        {/* Editor Content with dynamic class for selection */}
+        {/* Editor Content */}
         <EditorContent
-          className={`editor__content ${isProcessing ? "selection-active" : ""}`} // Toggle class based on processing
+          className="editor__content"
           editor={editor}
           spellCheck={false}
           aria-disabled={isTyping || isProcessing}
