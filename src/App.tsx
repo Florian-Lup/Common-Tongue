@@ -16,10 +16,13 @@ import CustomBubbleMenu from "./components/BubbleMenu";
 import Focus from "@tiptap/extension-focus";
 
 const App: React.FC = () => {
+  // Global States
   const [isTyping, setIsTyping] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // New Error State
 
+  // Initialize the TipTap editor with desired extensions and configurations
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -49,7 +52,6 @@ const App: React.FC = () => {
         mode: "shallowest",
       }),
     ],
-
     editable: true, // Always editable
     onUpdate: ({ editor }) => {
       setCharacterCount(editor.storage.characterCount.characters());
@@ -65,7 +67,7 @@ const App: React.FC = () => {
         },
         keydown: (_view, event) => {
           if (isTyping || isProcessing) {
-            // Prevent key-based editing actions
+            // Prevent key-based editing actions except for non-blocking keys
             const nonBlockingKeys = [
               "ArrowLeft",
               "ArrowRight",
@@ -90,29 +92,46 @@ const App: React.FC = () => {
   });
 
   if (!editor) {
-    return null;
+    return null; // Render nothing if the editor is not initialized
   }
 
   return (
     <div className={`editor-container ${isProcessing ? "processing" : ""}`}>
       <div className="editor">
+        {/* Toolbar/Menu Bar */}
         <MenuBar editor={editor} />
+
+        {/* Editor Content */}
         <EditorContent
           className="editor__content"
           editor={editor}
           spellCheck={false}
           aria-disabled={isTyping || isProcessing}
         />
+
+        {/* Error Message Display */}
+        {errorMessage && (
+          <div className="error-message" role="alert">
+            {errorMessage}
+          </div>
+        )}
+
+        {/* Footer with Character Count */}
         <div className="editor__footer">
           <div className="character-count">{characterCount} characters</div>
         </div>
+
+        {/* Custom Bubble Menu with Props for Managing States */}
         <CustomBubbleMenu
           editor={editor}
           isTyping={isTyping}
           isProcessing={isProcessing}
           setIsTyping={setIsTyping}
           setIsProcessing={setIsProcessing}
+          setErrorMessage={setErrorMessage} // Pass the setter for error messages
         />
+
+        {/* Overlay to Prevent Interaction During Processing/Typing */}
         {(isTyping || isProcessing) && (
           <div className="overlay" aria-hidden="true"></div>
         )}
