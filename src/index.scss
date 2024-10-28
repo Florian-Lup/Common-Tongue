@@ -260,8 +260,3 @@ body {
     transform: translate(-50%, -10px);
   }
 }
-
-/* Custom selection color when processing */
-.editor__content.selection-active::selection {
-  background-color: rgba(255, 255, 0, 0.5); /* Yellow background for selection during processing */
-}
