@@ -129,7 +129,7 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
               <use href={`${remixiconUrl}#ri-eraser-fill`} />
             </svg>
           )}
-          Fix Grammar
+          Proofread
         </button>
       </div>
     </BubbleMenu>
