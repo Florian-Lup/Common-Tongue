@@ -1,13 +1,13 @@
-/* BubbleMenu.scss */
+// AgentToolbar.scss
 
-.bubble-menu {
+.agent-toolbar {
   display: flex;
   background-color: #252627;
   padding: 0.25rem;
   border-radius: 0.25rem;
   z-index: 1000;
 
-  button {
+  .agent-toolbar-button {
     display: flex;
     align-items: center;
     border: none;
@@ -40,16 +40,16 @@
       cursor: not-allowed;
     }
   }
-}
 
-.bubble-menu .spinner {
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid #f3f3f3; /* Light gray */
-  border-top: 2px solid #3498db; /* Blue */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-right: 0.5rem;
+  .spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #f3f3f3; /* Light gray */
+    border-top: 2px solid #3498db; /* Blue */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+  }
 }
 
 @keyframes spin {

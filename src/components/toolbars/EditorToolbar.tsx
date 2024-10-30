@@ -1,5 +1,6 @@
-// MenuBar.tsx
-import "./MenuBar.scss";
+// EditorToolbar.tsx
+
+import "./EditorToolbar.scss";
 import type { Editor } from "@tiptap/react";
 import { Fragment } from "react";
 import validator from "validator";
@@ -13,7 +14,7 @@ interface MenuItemProps {
   isActive?: (() => boolean) | null;
 }
 
-export default function MenuBar({ editor }: { editor: Editor }) {
+export default function EditorToolbar({ editor }: { editor: Editor }) {
   const items = [
     {
       icon: "bold",
@@ -67,7 +68,6 @@ export default function MenuBar({ editor }: { editor: Editor }) {
       },
       isActive: () => editor.isActive("highlight", { color: "#fdba74" }), // Check if the custom color is active
     },
-
     {
       type: "divider",
     },
@@ -258,8 +258,10 @@ export default function MenuBar({ editor }: { editor: Editor }) {
 
     return (
       <button
-        key={`menu-item-${index}`}
-        className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
+        key={`toolbar-button-${index}`}
+        className={`toolbar-button${
+          isActive && isActive() ? " is-active" : ""
+        }`}
         onClick={action}
         title={title}
       >
@@ -272,7 +274,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
 
   return (
     <div className="editor__header">
-      <div className="menu-bar">
+      <div className="editor-toolbar">
         {items.map((item, index) => (
           <Fragment key={index}>{renderMenuItem(item, index)}</Fragment>
         ))}

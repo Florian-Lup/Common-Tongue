@@ -1,9 +1,11 @@
+// AgentToolbar.tsx
+
 import React, { useState } from "react";
 import { BubbleMenu, Editor } from "@tiptap/react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg"; // Ensure this import is correct
-import "./BubbleMenu.scss";
+import "./AgentToolbar.scss";
 
-interface CustomBubbleMenuProps {
+interface CustomAgentToolbarProps {
   editor: Editor;
   isTyping: boolean;
   isProcessing: boolean;
@@ -12,7 +14,7 @@ interface CustomBubbleMenuProps {
   setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
+const CustomAgentToolbar: React.FC<CustomAgentToolbarProps> = ({
   editor,
   isTyping,
   isProcessing,
@@ -115,11 +117,11 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
       editor={editor}
       tippyOptions={{ duration: 100, placement: "bottom" }}
     >
-      <div className="bubble-menu">
+      <div className="agent-toolbar">
         <button
           onClick={handleFixGrammar}
           disabled={isFixing || isTyping || isProcessing}
-          className="bubble-button"
+          className="agent-toolbar-button"
           aria-label="Fix Grammar"
         >
           {isFixing || isProcessing || isTyping ? (
@@ -136,4 +138,4 @@ const CustomBubbleMenu: React.FC<CustomBubbleMenuProps> = ({
   );
 };
 
-export default CustomBubbleMenu;
+export default CustomAgentToolbar;

@@ -1,4 +1,5 @@
 // App.tsx
+
 import React, { useState, useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import CharacterCount from "@tiptap/extension-character-count";
@@ -10,9 +11,9 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
-import MenuBar from "./components/MarksNodes/MenuBar";
+import EditorToolbar from "./components/toolbars/EditorToolbar";
 import Link from "@tiptap/extension-link";
-import CustomBubbleMenu from "./components/BubbleMenu";
+import CustomAgentToolbar from "./components/toolbars/AgentToolbar";
 import Focus from "@tiptap/extension-focus";
 
 const App: React.FC = () => {
@@ -85,8 +86,8 @@ const App: React.FC = () => {
       )}
 
       <div className={`editor ${isProcessing ? "processing" : ""}`}>
-        {/* Toolbar/Menu Bar */}
-        <MenuBar editor={editor} />
+        {/* Toolbar */}
+        <EditorToolbar editor={editor} />
 
         {/* Editor Content */}
         <EditorContent
@@ -101,8 +102,8 @@ const App: React.FC = () => {
           <div className="character-count">{characterCount} characters</div>
         </div>
 
-        {/* Custom Bubble Menu */}
-        <CustomBubbleMenu
+        {/* Custom Agent Toolbar */}
+        <CustomAgentToolbar
           editor={editor}
           isTyping={isTyping}
           isProcessing={isProcessing}
