@@ -48,7 +48,7 @@ const App: React.FC = () => {
             case "paragraph":
               return "Write something...";
             case "heading":
-              return "What’s the title?";
+              return "Add a title";
             default:
               return "";
           }
