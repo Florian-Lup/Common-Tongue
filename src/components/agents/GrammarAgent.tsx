@@ -1,7 +1,5 @@
 import { Editor } from "@tiptap/react";
 
-const processingColor = "#d3d3d3"; // Light gray
-
 export const fixGrammar = async (
   editor: Editor,
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>,
@@ -28,11 +26,10 @@ export const fixGrammar = async (
     setIsProcessing(true);
     setErrorMessage(null);
 
+    // Apply strikethrough to indicate processing
     if (!editor.isActive("strike")) {
       editor.chain().focus().toggleStrike().run();
     }
-
-    editor.chain().focus().setColor(processingColor).run();
 
     const response = await fetch("/api/fixGrammar", {
       method: "POST",
@@ -50,12 +47,9 @@ export const fixGrammar = async (
 
       editor.commands.focus();
 
+      // Remove strikethrough after processing
       if (editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
-      }
-
-      if (editor.isActive({ color: processingColor })) {
-        editor.chain().focus().unsetColor().run();
       }
 
       typeWriterEffect(editor, from, to, finalRevision, setIsTyping);
@@ -69,12 +63,9 @@ export const fixGrammar = async (
   } finally {
     setIsProcessing(false);
 
+    // Ensure strikethrough is removed
     if (editor.isActive("strike")) {
       editor.chain().focus().toggleStrike().run();
-    }
-
-    if (editor.isActive({ color: processingColor })) {
-      editor.chain().focus().unsetColor().run();
     }
   }
 };
