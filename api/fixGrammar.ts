@@ -25,7 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const requestBody = {
       inputs: { manuscript },
-      version: '^1.4', // Ensure the correct version is used
+      version: '^1.5', // Ensure the correct version is used
     };
 
     const response = await fetch(apiUrl, {
