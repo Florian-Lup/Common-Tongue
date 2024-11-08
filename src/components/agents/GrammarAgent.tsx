@@ -1,87 +1,54 @@
-// GrammarAgent.tsx
-import React, { useState, useEffect } from "react";
 import { Editor } from "@tiptap/react";
-import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg"; // Ensure this import is present
-import "./agentstyle.scss";
 
-interface GrammarAgentProps {
-  editor: Editor;
-  isTyping: boolean;
-  isProcessing: boolean;
-  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const processingColor = "#d3d3d3"; // Light gray
 
-const GrammarAgent: React.FC<GrammarAgentProps> = ({
-  editor,
-  isTyping,
-  setIsTyping,
-  setIsProcessing,
-}) => {
-  const [isFixing, setIsFixing] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+export const fixGrammar = async (
+  editor: Editor,
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>,
+  setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>
+) => {
+  const CHARACTER_LIMIT = 700;
+  const { from, to } = editor.state.selection;
+  const selectedText = editor.state.doc.textBetween(from, to, " ");
 
-  const processingColor = "#d3d3d3"; // Light gray
+  if (!selectedText) {
+    setErrorMessage("Please select some text to proofread.");
+    return;
+  }
 
-  const handleFixGrammar = async () => {
-    const { from, to } = editor.state.selection;
-    const selectedText = editor.state.doc.textBetween(from, to, " ");
+  if (selectedText.length > CHARACTER_LIMIT) {
+    setErrorMessage(
+      `Selected text exceeds the ${CHARACTER_LIMIT} character limit.`
+    );
+    return;
+  }
 
-    if (!selectedText) {
-      return;
+  try {
+    setIsProcessing(true);
+    setErrorMessage(null);
+
+    if (!editor.isActive("strike")) {
+      editor.chain().focus().toggleStrike().run();
     }
 
-    try {
-      setIsFixing(true);
-      setIsProcessing(true);
-      setErrorMessage(null);
+    editor.chain().focus().setColor(processingColor).run();
 
-      if (!editor.isActive("strike")) {
-        editor.chain().focus().toggleStrike().run();
-      }
+    const response = await fetch("/api/fixGrammar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        inputs: { manuscript: selectedText },
+        version: "^1.5",
+      }),
+    });
 
-      editor.chain().focus().setColor(processingColor).run();
+    const data = await response.json();
 
-      const response = await fetch("/api/fixGrammar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          inputs: { manuscript: selectedText },
-          version: "^1.5",
-        }),
-      });
+    if (response.ok) {
+      const { finalRevision } = data;
 
-      const data = await response.json();
-
-      if (response.ok) {
-        const { finalRevision } = data;
-
-        editor.commands.focus();
-
-        if (editor.isActive("strike")) {
-          editor.chain().focus().toggleStrike().run();
-        }
-
-        if (editor.isActive({ color: processingColor })) {
-          editor.chain().focus().unsetColor().run();
-        }
-
-        typeWriterEffect(editor, from, to, finalRevision);
-      } else {
-        console.error("Error fixing grammar:", data.error || data.details);
-        setErrorMessage("An error occurred.");
-
-        if (editor.isActive("strike")) {
-          editor.chain().focus().toggleStrike().run();
-        }
-
-        if (editor.isActive({ color: processingColor })) {
-          editor.chain().focus().unsetColor().run();
-        }
-      }
-    } catch (error) {
-      console.error("Error fixing grammar:", error);
-      setErrorMessage("An error occurred.");
+      editor.commands.focus();
 
       if (editor.isActive("strike")) {
         editor.chain().focus().toggleStrike().run();
@@ -90,66 +57,52 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
       if (editor.isActive({ color: processingColor })) {
         editor.chain().focus().unsetColor().run();
       }
-    } finally {
-      setIsFixing(false);
-      setIsProcessing(false);
+
+      typeWriterEffect(editor, from, to, finalRevision, setIsTyping);
+    } else {
+      console.error("Error fixing grammar:", data.error || data.details);
+      setErrorMessage("An error occurred while fixing grammar.");
     }
-  };
+  } catch (error) {
+    console.error("Error fixing grammar:", error);
+    setErrorMessage("An unexpected error occurred.");
+  } finally {
+    setIsProcessing(false);
 
-  // Typewriter effect function
-  const typeWriterEffect = (
-    editor: Editor,
-    from: number,
-    to: number,
-    text: string
-  ) => {
-    setIsTyping(true);
-
-    editor.commands.deleteRange({ from, to });
-
-    let index = 0;
-    const length = text.length;
-
-    const interval = setInterval(() => {
-      if (index < length) {
-        const char = text.charAt(index);
-        editor.commands.insertContentAt(from + index, char);
-        index++;
-      } else {
-        clearInterval(interval);
-        setIsTyping(false);
-        // Set the cursor position after the inserted text
-        editor.commands.setTextSelection(from + length);
-      }
-    }, 10); //typewriter speed
-  };
-
-  // Automatically dismiss error message after 3 seconds
-  useEffect(() => {
-    if (errorMessage) {
-      const timer = setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000); // Dismiss after 3 seconds
-
-      return () => clearTimeout(timer); // Cleanup the timer on component unmount or when errorMessage changes
+    if (editor.isActive("strike")) {
+      editor.chain().focus().toggleStrike().run();
     }
-  }, [errorMessage]);
 
-  return (
-    <div className="grammar-agent">
-      <button
-        className="agent-button"
-        title="Fix Grammar"
-        onClick={handleFixGrammar}
-        disabled={isFixing || isTyping}
-      >
-        <svg className="icon">
-          <use href={`${remixiconUrl}#ri-eraser-fill`} />
-        </svg>
-      </button>
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-    </div>
-  );
+    if (editor.isActive({ color: processingColor })) {
+      editor.chain().focus().unsetColor().run();
+    }
+  }
 };
 
-export default GrammarAgent;
+// Typewriter effect function
+const typeWriterEffect = (
+  editor: Editor,
+  from: number,
+  to: number,
+  text: string,
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  setIsTyping(true);
+
+  editor.commands.deleteRange({ from, to });
+
+  let index = 0;
+  const length = text.length;
+
+  const interval = setInterval(() => {
+    if (index < length) {
+      const char = text.charAt(index);
+      editor.commands.insertContentAt(from + index, char);
+      index++;
+    } else {
+      clearInterval(interval);
+      setIsTyping(false);
+      editor.commands.setTextSelection(from + length);
+    }
+  }, 10); // Adjust typing speed here
+};

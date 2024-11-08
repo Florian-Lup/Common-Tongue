@@ -1,5 +1,3 @@
-// App.tsx
-
 import React, { useState, useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import CharacterCount from "@tiptap/extension-character-count";
@@ -14,6 +12,7 @@ import Color from "@tiptap/extension-color";
 import EditorToolbar from "./components/toolbars/EditorToolbar";
 import Link from "@tiptap/extension-link";
 import CustomAgentToolbar from "./components/toolbars/AgentToolbar";
+import { fixGrammar } from "./components/agents/GrammarAgent";
 import Focus from "@tiptap/extension-focus";
 
 const App: React.FC = () => {
@@ -76,6 +75,11 @@ const App: React.FC = () => {
     return null; // Render nothing if the editor is not initialized
   }
 
+  // Handler to fix grammar
+  const handleFixGrammar = async () => {
+    await fixGrammar(editor, setIsTyping, setIsProcessing, setErrorMessage);
+  };
+
   return (
     <div className="editor-container">
       {/* Error Message Display */}
@@ -107,9 +111,7 @@ const App: React.FC = () => {
           editor={editor}
           isTyping={isTyping}
           isProcessing={isProcessing}
-          setIsTyping={setIsTyping}
-          setIsProcessing={setIsProcessing}
-          setErrorMessage={setErrorMessage}
+          onFixGrammar={handleFixGrammar}
         />
       </div>
     </div>
