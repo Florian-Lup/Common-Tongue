@@ -56,7 +56,7 @@ const CustomAgentToolbar: React.FC<CustomAgentToolbarProps> = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           inputs: { manuscript: selectedText },
-          version: "^1.2",
+          version: "^1.5",
         }),
       });
 
