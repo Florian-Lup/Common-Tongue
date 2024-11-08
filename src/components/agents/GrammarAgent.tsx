@@ -47,7 +47,7 @@ const GrammarAgent: React.FC<GrammarAgentProps> = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           inputs: { manuscript: selectedText },
-          version: "^1.4",
+          version: "^1.5",
         }),
       });
 
