@@ -1,6 +1,6 @@
 # Common Tongue
 
-Common Tongue is a rich text editor application designed for creating and editing rich text documents. Built using React and TypeScript, it leverages the Tiptap editor framework for core functionalities. The application offers various text formatting options and supports extensions like highlighting, task lists, and more. The editor is powered by a multi-agent AI system designed to perform various tasks such as fixing grammar in any language.
+Common Tongue is a proofreading tool capable of correcting grammatical errors in any language. It was developed by chaining 3 agents, each using a different LLM at varying temperatures. I assigned specific tasks to each agent using a combination of role-playing prompts, zero-shot learning prompts, and direct instruction prompts. Built using React and TypeScript, it leverages the Tiptap editor framework for core writing functionalities. The application offers various text formatting options and supports extensions like highlighting, task lists, and more.
 
 ## Overview
 
