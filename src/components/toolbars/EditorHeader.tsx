@@ -61,13 +61,12 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
   };
 
   const handleRegenerate = async () => {
-    // Re-run the proofreading process
     setIsProcessing(true);
 
     const text = editor.getText();
 
     try {
-      const response = await fetch("/api/grammar_api", {
+      const response = await fetch("/api/grammarAPI", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,16 +74,20 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
         body: JSON.stringify({ text }),
       });
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `Error: ${response.statusText}`);
+      }
 
       setPreviewText(data.editedText);
     } catch (error) {
       console.error("Error processing text:", error);
-      setPreviewText("An error occurred while processing the text.");
+      setPreviewText(
+        error instanceof Error
+          ? `Error: ${error.message}`
+          : "An unexpected error occurred while processing the text."
+      );
     } finally {
       setIsProcessing(false);
     }
