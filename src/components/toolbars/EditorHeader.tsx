@@ -20,12 +20,10 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
     setIsProcessing(true);
     setShowModal(true);
 
-    // Get the text from the editor
     const text = editor.getText();
 
     try {
-      // Send the text to the API endpoint
-      const response = await fetch("/api/proofread", {
+      const response = await fetch("/api/grammarAPI", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +37,6 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
         throw new Error(data.error || `Error: ${response.statusText}`);
       }
 
-      // Update the state with the edited text
       setPreviewText(data.editedText);
     } catch (error) {
       console.error("Error processing text:", error);
