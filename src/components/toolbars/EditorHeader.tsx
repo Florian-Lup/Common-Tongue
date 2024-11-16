@@ -24,8 +24,8 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
     const text = editor.getText();
 
     try {
-      // Send the text to the backend
-      const response = await fetch("/api/grammar_api", {
+      // Send the text to the API endpoint
+      const response = await fetch("/api/proofread", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,9 +39,8 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
         throw new Error(data.error || `Error: ${response.statusText}`);
       }
 
-      // Update the state with the edited text and reasoning steps
+      // Update the state with the edited text
       setPreviewText(data.editedText);
-      setReasoningSteps(data.reasoningSteps);
     } catch (error) {
       console.error("Error processing text:", error);
       setPreviewText(
@@ -49,7 +48,6 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
           ? `Error: ${error.message}`
           : "An unexpected error occurred while processing the text."
       );
-      setReasoningSteps([]);
     } finally {
       setIsProcessing(false);
     }
