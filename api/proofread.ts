@@ -8,7 +8,7 @@ dotenv.config();
 
 const chatModel = new ChatOpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY,
-  modelName: "gpt-4",
+  modelName: "gpt-4o",
   temperature: 0.7,
 });
 
