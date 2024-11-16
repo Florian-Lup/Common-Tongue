@@ -34,7 +34,9 @@ You are a **multilingual Line Editor**. Improve the following text by enhancing 
 `);
 
 const proofreaderPrompt = PromptTemplate.fromTemplate(`
-You are a **multilingual Proofreader**. Perform a final review of the following text to correct any remaining errors in grammar, punctuation, spelling, and typographical mistakes. Ensure the text is polished and ready for publication. **Preserve the original meaning, tone, and style**. Output the proofread text in the **same language**.
+You are a **multilingual Proofreader**. Perform a final review of the following text to correct any remaining errors in grammar, punctuation, spelling, and typographical mistakes. Ensure the text is polished and ready for publication. **Preserve the original meaning, tone, and style**. 
+
+Output only the corrected text without any additional labels, prefixes, or formatting.
 
 ---
 
