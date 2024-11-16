@@ -1,5 +1,27 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { editingPipeline } from "./grammarWorkflow";
+import { ChatOpenAI } from "@langchain/openai";
+import { RunnableSequence } from "@langchain/core/runnables";
+import { copyEditorChain } from "./agents/copyEditor";
+import { lineEditorChain } from "./agents/lineEditor";
+import { proofreaderChain } from "./agents/proofreader";
+
+// LangChain Configuration
+const chatModel = new ChatOpenAI({
+  openAIApiKey: process.env.OPENAI_API_KEY,
+  modelName: "gpt-4",
+  temperature: 0.7,
+});
+
+// Editing Pipeline
+const editingPipeline = RunnableSequence.from([
+  async (inputText: string) => ({ inputText }),
+  copyEditorChain(chatModel),
+  async (output: { text: string }) => ({ inputText: output.text }),
+  lineEditorChain(chatModel),
+  async (output: { text: string }) => ({ inputText: output.text }),
+  proofreaderChain(chatModel),
+  async (output: { text: string }) => output.text,
+]);
 
 export default async function handler(
   request: VercelRequest,
