@@ -4,15 +4,8 @@ import React from "react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
 import "./styles/ResponsePreview.scss";
 
-interface ReasoningStep {
-  agent: string;
-  reasoning: string;
-  editedText: string;
-}
-
 interface ResponsePreviewProps {
   previewText?: string;
-  reasoningSteps?: ReasoningStep[];
   isProcessing?: boolean;
   onAccept?: () => void;
   onDecline?: () => void;
@@ -21,7 +14,6 @@ interface ResponsePreviewProps {
 
 const ResponsePreview: React.FC<ResponsePreviewProps> = ({
   previewText = "Preview text will appear here...",
-  reasoningSteps = [],
   isProcessing = false,
   onAccept,
   onDecline,
@@ -33,14 +25,6 @@ const ResponsePreview: React.FC<ResponsePreviewProps> = ({
         <div className="loading-spinner">Processing...</div>
       ) : (
         <>
-          <div className="reasoning-steps">
-            {reasoningSteps.map((step, index) => (
-              <div key={index} className="reasoning-step">
-                <h4>{step.agent}</h4>
-                <p>{step.reasoning}</p>
-              </div>
-            ))}
-          </div>
           <div className="preview-content">{previewText}</div>
           <div className="preview-toolbar">
             <button className="toolbar-item" onClick={onAccept} title="Accept">

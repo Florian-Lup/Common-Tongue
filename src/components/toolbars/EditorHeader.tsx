@@ -13,7 +13,6 @@ interface EditorHeaderProps {
 export default function EditorHeader({ editor }: EditorHeaderProps) {
   const [showModal, setShowModal] = useState(false);
   const [previewText, setPreviewText] = useState("");
-  const [reasoningSteps, setReasoningSteps] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleProofread = async () => {
@@ -83,7 +82,6 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
       const data = await response.json();
 
       setPreviewText(data.editedText);
-      setReasoningSteps(data.reasoningSteps);
     } catch (error) {
       console.error("Error processing text:", error);
       setPreviewText("An error occurred while processing the text.");
@@ -110,7 +108,6 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
           <div className="modal-content">
             <ResponsePreview
               previewText={previewText}
-              reasoningSteps={reasoningSteps}
               isProcessing={isProcessing}
               onAccept={handleAccept}
               onDecline={handleDecline}
