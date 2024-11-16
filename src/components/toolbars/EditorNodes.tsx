@@ -1,18 +1,24 @@
-// Nodes.tsx
-import { FloatingMenu, Editor } from '@tiptap/react';
-import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg';
-import "./MarksNodes.scss";
+// EditorNodes.tsx
 
-interface EditorNodesProps {
-  editor: Editor;
+import { Editor } from "@tiptap/react";
+import { FloatingMenu } from "@tiptap/react";
+import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
+import "../styles/MarksNodes.scss";
+
+// Define the interface here or import it
+interface MenuItemProps {
+  icon?: string;
+  title?: string;
+  action?: () => void;
+  isActive?: () => boolean;
 }
 
-export default function EditorNodes({ editor }: EditorNodesProps) {
+export default function EditorNodes({ editor }: { editor: Editor }) {
   if (!editor) {
     return null;
   }
 
-  const items = [
+  const items: MenuItemProps[] = [
     {
       icon: "h-1",
       title: "Heading 1",
@@ -49,23 +55,6 @@ export default function EditorNodes({ editor }: EditorNodesProps) {
       action: () => editor.chain().focus().toggleOrderedList().run(),
       isActive: () => editor.isActive("orderedList"),
     },
-    {
-      icon: "code-box-line",
-      title: "Code Block",
-      action: () => editor.chain().focus().toggleCodeBlock().run(),
-      isActive: () => editor.isActive("codeBlock"),
-    },
-    {
-      icon: "double-quotes-l",
-      title: "Blockquote",
-      action: () => editor.chain().focus().toggleBlockquote().run(),
-      isActive: () => editor.isActive("blockquote"),
-    },
-    {
-      icon: "separator",
-      title: "Horizontal Rule",
-      action: () => editor.chain().focus().setHorizontalRule().run(),
-    },
   ];
 
   return (
@@ -73,23 +62,26 @@ export default function EditorNodes({ editor }: EditorNodesProps) {
       editor={editor}
       tippyOptions={{
         duration: 100,
-        placement: 'bottom-start',
+        placement: "bottom-start",
       }}
+      className="floating-menu"
     >
-      <div className="floating-menu">
-        {items.map((item, index) => (
+      {items.map((item, index) => {
+        const { icon, title, action, isActive } = item;
+
+        return (
           <button
             key={index}
-            className={`menu-item${item.isActive && item.isActive() ? ' is-active' : ''}`}
-            onClick={item.action}
-            title={item.title}
+            className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
+            onClick={action}
+            title={title}
           >
             <svg className="remix">
-              <use xlinkHref={`${remixiconUrl}#ri-${item.icon}`} />
+              <use xlinkHref={`${remixiconUrl}#ri-${icon}`} />
             </svg>
           </button>
-        ))}
-      </div>
+        );
+      })}
     </FloatingMenu>
   );
 }

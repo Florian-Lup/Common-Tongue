@@ -1,21 +1,23 @@
-/* Basic editor styles */
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   margin: 0;
-  /* Remove default margin */
   padding: 0;
-  /* Remove default padding */
 }
 
 .tiptap {
-  > * + * {
-    margin-top: 0.75em;
+  > * {
+    margin: 0.3em 0;
   }
 
   ul,
   ol {
     padding: 0.5rem 1.5rem;
+  }
+
+  li p {
+    margin: 0.2rem;
+    padding: 0;
   }
 
   h1,
@@ -27,73 +29,9 @@ body {
     line-height: 1.1;
   }
 
-  code {
-    background-color: rgba(97, 97, 97, 0.1);
-    color: #616161;
-  }
-
-  pre {
-    background: #0d0d0d;
-    border-radius: 0.5rem;
-    color: #fff;
-    font-family: "JetBrainsMono", monospace;
-    padding: 0.75rem 1.5rem;
-
-    code {
-      background: none;
-      color: inherit;
-      font-size: 0.8rem;
-      padding: 0;
-    }
-  }
-
-  mark {
-    background-color: #faf594;
-  }
-
   img {
     height: auto;
     max-width: 100%;
-  }
-
-  hr {
-    margin: 1rem 0;
-  }
-
-  blockquote {
-    border-left: 2px solid rgba(13, 13, 13, 0.1);
-    padding-left: 1rem;
-  }
-
-  hr {
-    border: none;
-    border-top: 2px solid rgba(13, 13, 13, 0.1);
-    margin: 2rem 0;
-  }
-
-  ul[data-type="taskList"] {
-    list-style: none;
-    padding: 0;
-
-    li {
-      align-items: center;
-      display: flex;
-
-      > label {
-        flex: 0 0 auto;
-        margin-right: 0.5rem;
-        user-select: none;
-      }
-
-      > div {
-        flex: 1 1 auto;
-      }
-    }
-  }
-
-  li p {
-    margin: 0.2rem;
-    padding: 0;
   }
 
   .empty-node::before {
@@ -108,70 +46,24 @@ body {
 .editor-container {
   display: flex;
   justify-content: center;
-}
 
-.editor {
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* Center child elements horizontally */
-  max-width: 800px;
-  /* Set a max width for the editor */
-  width: 100%;
-  /* Ensure the editor doesn't exceed its parent container */
-
-  .editor__header {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    max-width: 800px;
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    /* Centers the inner content horizontally */
-    align-items: center;
-    /* Centers the inner content vertically */
+  .editor {
     background-color: #fff;
-    padding: 0.5rem;
-  }
-
-  &__content {
-    flex: 1 1 auto;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-    /* Take full width of the editor */
-    max-width: 800px;
-    /* Ensure content doesn't exceed max width */
-    box-sizing: border-box;
-    margin: 5rem 0;
-  }
-
-  &__footer {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    align-items: center;
-    border-top: 1px solid #e5e7eb;
     display: flex;
-    flex: 0 0 auto;
-    justify-content: right;
-    padding: 0.5rem;
-    width: 100%;
-    max-width: 800px;
-    box-sizing: border-box;
-    background-color: #fff;
-    z-index: 1000;
+    flex-direction: column;
+    align-items: center; /* Center child elements horizontally */
+    max-width: 800px; /* Set a max width for the editor */
+    width: 100%; /* Ensure the editor doesn't exceed its parent container */
 
-    .character-count {
-      font-size: 0.8rem;
-      color: #888;
+    &__content {
+      flex: 1 1 auto;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%; /* Take full width of the editor */
+      max-width: 800px; /* Ensure content doesn't exceed max width */
+      box-sizing: border-box;
+      margin: 6rem 0;
     }
   }
 }
@@ -186,10 +78,20 @@ body {
     padding: 0.5rem;
     border-left: 0.3rem solid #fff;
   }
-}
 
-.ProseMirror:focus {
-  outline: none;
+  &:focus {
+    outline: none;
+  }
+
+  > p:hover,
+  > h1:hover,
+  > h2:hover,
+  > h3:hover,
+  > ul:hover,
+  > ol:hover {
+    background-color: rgba(204, 204, 204, 0.2);
+    border-left: 0.3rem solid #cccccc;
+  }
 }
 
 .editor__content:focus {
@@ -200,63 +102,6 @@ body {
 .has-focus {
   background-color: rgba(204, 204, 204, 0.2);
   border-left: 0.3rem solid #cccccc;
-  pointer-events: auto;
-  /* Ensure pointer events work */
-  z-index: 1;
-  /* Set z-index if necessary */
-}
-
-.ProseMirror > p:hover,
-.ProseMirror > h1:hover,
-.ProseMirror > h2:hover,
-.ProseMirror > h3:hover,
-.ProseMirror > blockquote:hover,
-.ProseMirror > ul:hover,
-.ProseMirror > ol:hover,
-.ProseMirror > li:hover,
-.ProseMirror > code:hover {
-  background-color: rgba(204, 204, 204, 0.2);
-  border-left: 0.3rem solid #cccccc;
-}
-
-.error-message {
-  position: fixed; /* Position it relative to the viewport */
-  top: 5rem; /* 20px from the top */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Adjust for exact centering */
-  margin-top: 0; /* Remove any top margin */
-  padding: 12px 24px; /* Increase padding for better visibility */
-  background-color: #f8d7da; /* Light red background */
-  color: #721c24; /* Dark red text */
-  border: 1px solid #f5c6cb; /* Border for emphasis */
-  border-radius: 4px; /* Rounded corners */
-  font-size: 1rem; /* Larger font size */
-  max-width: 90%; /* Ensure it doesn't overflow on small screens */
-  text-align: center; /* Center the text */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
-  z-index: 10000; /* Ensure it stays above other elements */
-  animation: fadeIn 0.3s ease-in-out, fadeOut 0.3s ease-in-out 2.7s; /* Fade in and out */
-}
-
-/* Keyframes for fadeIn and fadeOut animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -10px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-50%, -10px);
-  }
+  pointer-events: auto; /* Ensure pointer events work */
+  z-index: 1; /* Set z-index if necessary */
 }

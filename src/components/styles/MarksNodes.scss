@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.2s;
 
   svg {
     fill: currentColor;
@@ -20,13 +21,13 @@
   }
 
   &.is-active {
-    background-color: #303030;
+    background-color: #505050;
   }
 
   /* Apply hover effects only on devices that support hover */
   @media (hover: hover) {
     &:hover {
-      background-color: #303030;
+      background-color: #505050;
     }
   }
 }
@@ -35,29 +36,24 @@
 .bubble-menu {
   display: flex;
   align-items: center;
-  background-color: #1a1a1a;
+  background-color: #303030;
   padding: 0.25rem;
   border-radius: 0.25rem;
-}
 
-.bubble-menu .menu-item {
-  margin-right: 0.25rem;
+  .menu-item {
+    margin-right: 0.25rem;
+  }
 }
 
 /* Floating menu styles */
 .floating-menu {
   display: flex;
   align-items: center;
-  background-color: #1a1a1a;
+  background-color: #303030;
   padding: 0.25rem;
   border-radius: 0.25rem;
-}
 
-.floating-menu .menu-item {
-  margin-right: 0.25rem;
-}
-
-/* Optional: Add transitions to buttons for smoother interaction */
-.menu-item {
-  transition: background-color 0.2s;
+  .menu-item {
+    margin-right: 0.25rem;
+  }
 }
