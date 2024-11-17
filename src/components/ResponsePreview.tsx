@@ -22,7 +22,7 @@ const ResponsePreview: React.FC<ResponsePreviewProps> = ({
   return (
     <div className="preview-container">
       {isProcessing ? (
-        <div className="loading-spinner">Processing...</div>
+        <div className="loading-spinner" aria-label="Loading..." />
       ) : (
         <>
           <div className="preview-content">{previewText}</div>
