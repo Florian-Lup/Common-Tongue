@@ -30,7 +30,7 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
         options: {
           body: { text },
         },
-      });
+      }).response;
 
       const data = response as unknown as GrammarAPIResponse;
 

@@ -1,12 +1,12 @@
-import { Amplify } from "aws-amplify";
+import { ResourcesConfig } from "aws-amplify";
 
-Amplify.configure({
+export const amplifyConfig: ResourcesConfig = {
   API: {
     REST: {
       grammarAPI: {
-        endpoint: process.env.VITE_API_ENDPOINT as string,
-        region: process.env.VITE_AWS_REGION as string,
+        endpoint: process.env.VITE_API_ENDPOINT || "",
+        region: process.env.VITE_AWS_REGION || "",
       },
     },
   },
-});
+};
