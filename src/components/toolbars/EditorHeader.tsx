@@ -5,6 +5,8 @@ import "../styles/EditorHeader.scss";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
 import ResponsePreview from "../ResponsePreview";
 import { Editor } from "@tiptap/react";
+import { post } from "@aws-amplify/api";
+import type { GrammarAPIResponse } from "../../types/api";
 
 interface EditorHeaderProps {
   editor: Editor;
@@ -22,18 +24,18 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
     const text = editor.getText();
 
     try {
-      const response = await fetch("/api/grammarAPI", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await post({
+        apiName: "grammarAPI",
+        path: "/grammar",
+        options: {
+          body: { text },
         },
-        body: JSON.stringify({ text }),
       });
 
-      const data = await response.json();
+      const data = response as unknown as GrammarAPIResponse;
 
-      if (!response.ok) {
-        throw new Error(data.error || `Error: ${response.statusText}`);
+      if (!data || !data.editedText) {
+        throw new Error("No edited text received from the API");
       }
 
       setPreviewText(data.editedText);
@@ -50,56 +52,30 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
   };
 
   const handleAccept = () => {
-    // Replace the editor content with the edited text
     editor.commands.setContent(previewText);
     setShowModal(false);
   };
 
   const handleDecline = () => {
-    // Close the modal without changing the editor content
     setShowModal(false);
   };
 
   const handleRegenerate = async () => {
     setIsProcessing(true);
-
-    const text = editor.getText();
-
-    try {
-      const response = await fetch("/api/grammarAPI", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || `Error: ${response.statusText}`);
-      }
-
-      setPreviewText(data.editedText);
-    } catch (error) {
-      console.error("Error processing text:", error);
-      setPreviewText(
-        error instanceof Error
-          ? `Error: ${error.message}`
-          : "An unexpected error occurred while processing the text."
-      );
-    } finally {
-      setIsProcessing(false);
-    }
+    await handleProofread();
   };
 
   return (
     <>
       <div className="editor-header">
         <div className="agent-toolbar">
-          <button className="toolbar-item" onClick={handleProofread}>
+          <button
+            className="toolbar-item"
+            onClick={handleProofread}
+            disabled={isProcessing}
+          >
             <svg className="remix">
-              <use href={`${remixiconUrl}#ri-eraser-fill`} />
+              <use xlinkHref={`${remixiconUrl}#ri-eraser-fill`} />
             </svg>
             Proofread
           </button>
