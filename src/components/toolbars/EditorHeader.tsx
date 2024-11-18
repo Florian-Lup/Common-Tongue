@@ -5,8 +5,8 @@ import "../styles/EditorHeader.scss";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
 import ResponsePreview from "../ResponsePreview";
 import { Editor } from "@tiptap/react";
-import { post } from "@aws-amplify/api";
-import type { GrammarAPIResponse } from "../../types/api";
+import { post } from "aws-amplify/api";
+import { type GrammarAPIResponse } from "../../types/api";
 
 interface EditorHeaderProps {
   editor: Editor;
@@ -30,15 +30,17 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
         options: {
           body: { text },
         },
-      }).response;
+      });
 
-      const data = response as unknown as GrammarAPIResponse;
+      const responseData = JSON.parse(
+        response as unknown as string
+      ) as GrammarAPIResponse;
 
-      if (!data || !data.editedText) {
+      if (!responseData || !responseData.editedText) {
         throw new Error("No edited text received from the API");
       }
 
-      setPreviewText(data.editedText);
+      setPreviewText(responseData.editedText);
     } catch (error) {
       console.error("Error processing text:", error);
       setPreviewText(
