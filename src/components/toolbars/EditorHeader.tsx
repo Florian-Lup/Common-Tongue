@@ -6,7 +6,7 @@ import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
 import ResponsePreview from "../ResponsePreview";
 import { Editor } from "@tiptap/react";
 import { post } from "aws-amplify/api";
-import { type GrammarAPIResponse } from "../../types/api";
+import { type GrammarAPIResponse } from "../../../amplify/types/api";
 
 interface EditorHeaderProps {
   editor: Editor;

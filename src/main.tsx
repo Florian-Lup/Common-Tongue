@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.scss";
 import { Amplify } from "aws-amplify";
-import { amplifyConfig } from "./amplifyconfiguration";
+import { amplifyConfig } from "../amplify/amplifyconfiguration.ts";
 
+// Configure Amplify with environment variables for local development
 Amplify.configure(amplifyConfig);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
