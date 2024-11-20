@@ -45,8 +45,7 @@
     "remixicon": "^4.3.0",
     "remixicon-react": "^1.0.0",
     "rimraf": "^6.0.1",
-    "tsx": "^4.19.2",
-    "@parcel/watcher": "^2.4.0"
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@types/babel__generator": "^7.6.8",
@@ -61,6 +60,7 @@
     "eslint-plugin-react-refresh": "^0.4.6",
     "sass": "^1.72.0",
     "typescript": "^5.6.3",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "@parcel/watcher": "^2.4.0"
   }
 }
