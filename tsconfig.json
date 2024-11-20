@@ -22,10 +22,6 @@
 
     "types": ["vite/client", "@vercel/analytics"]
   },
-  "include": [
-    "src",
-    "amplify_test/amplifyconfiguration.ts",
-    "amplify_test/types"
-  ],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
