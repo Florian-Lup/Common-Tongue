@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-amplify/backend": "^1.8.0",
+    "@aws-amplify/backend-cli": "^1.4.2",
     "@aws-amplify/ui-react": "^6.0.0",
     "@langchain/core": "^0.3.18",
     "@langchain/openai": "^0.3.13",
@@ -27,13 +29,17 @@
     "@tiptap/react": "^2.2.4",
     "@tiptap/starter-kit": "^2.2.4",
     "aws-amplify": "^6.8.2",
+    "aws-cdk": "^2.168.0",
+    "aws-cdk-lib": "^2.168.0",
     "axios": "^1.7.7",
+    "constructs": "^10.4.2",
     "dotenv": "^16.4.5",
     "openai": "^4.72.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "remixicon": "^4.3.0",
-    "remixicon-react": "^1.0.0"
+    "remixicon-react": "^1.0.0",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@types/babel__generator": "^7.6.8",
