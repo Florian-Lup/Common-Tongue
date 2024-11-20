@@ -12,7 +12,6 @@ Common Tongue utilizes a modern web development stack to deliver a robust and ef
 - **Rich Text Editor**: Tiptap for core rich text editing functionalities.
 - **Icons**: Remixicon for menu bar icons.
 - **Styling**: Sass for styling, including the implementation of the sticky editor header and the `editor__footer` div for displaying the character count.
-- **Analytics**: Vercel Analytics for monitoring application performance and user interactions.
 
 ### Project Structure
 
@@ -31,12 +30,14 @@ Common Tongue utilizes a modern web development stack to deliver a robust and ef
 ### Quickstart
 
 1. **Clone the repository**:
+
    ```sh
    git clone <repository-url>
    cd common-tongue
    ```
 
 2. **Install dependencies**:
+
    ```sh
    npm install
    ```
