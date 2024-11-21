@@ -5,8 +5,10 @@ import "./index.scss";
 import { Amplify } from "aws-amplify";
 import { amplifyConfig } from "../amplify/amplifyconfiguration.ts";
 
-// Configure Amplify with environment variables for local development
-Amplify.configure(amplifyConfig);
+// Only configure Amplify in production
+if (import.meta.env.PROD) {
+  Amplify.configure(amplifyConfig);
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
