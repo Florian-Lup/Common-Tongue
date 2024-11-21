@@ -1,6 +1,6 @@
 import { defineBackend } from "@aws-amplify/backend";
 import { Stack } from "aws-cdk-lib";
-import { RestApi, LambdaIntegration, Cors } from "aws-cdk-lib/aws-apigateway";
+import { RestApi, LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
 import { grammarFunction } from "./functions/grammarAPI/resource";
 
 const backend = defineBackend({
@@ -18,9 +18,19 @@ const api = new RestApi(apiStack, "GrammarRestApi", {
     stageName: "prod",
   },
   defaultCorsPreflightOptions: {
-    allowOrigins: Cors.ALL_ORIGINS,
-    allowMethods: Cors.ALL_METHODS,
-    allowHeaders: ["*"],
+    allowOrigins: [
+      "https://dev.d3bv82ng6wgr42.amplifyapp.com",
+      // Add any other allowed origins here
+    ],
+    allowMethods: ["POST", "OPTIONS"],
+    allowHeaders: [
+      "Content-Type",
+      "X-Amz-Date",
+      "Authorization",
+      "X-Api-Key",
+      "X-Amz-Security-Token",
+    ],
+    allowCredentials: true,
   },
 });
 
