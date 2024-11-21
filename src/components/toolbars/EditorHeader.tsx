@@ -33,21 +33,14 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
             "Content-Type": "application/json",
           },
         },
-      });
+      }).response;
 
-      if (typeof response === "string") {
-        const parsedResponse = JSON.parse(response) as GrammarAPIResponse;
-        if (!parsedResponse.editedText) {
-          throw new Error("No edited text received from the API");
-        }
-        setPreviewText(parsedResponse.editedText);
-      } else {
-        const responseData = response as GrammarAPIResponse;
-        if (!responseData.editedText) {
-          throw new Error("No edited text received from the API");
-        }
-        setPreviewText(responseData.editedText);
+      const responseData =
+        (await response.body.json()) as unknown as GrammarAPIResponse;
+      if (!responseData.editedText) {
+        throw new Error("No edited text received from the API");
       }
+      setPreviewText(responseData.editedText);
     } catch (error) {
       console.error("Error processing text:", error);
       setPreviewText(
