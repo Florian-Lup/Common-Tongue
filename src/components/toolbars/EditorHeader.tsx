@@ -24,21 +24,30 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
     const text = editor.getText();
 
     try {
-      const response: unknown = await post({
+      const response = await post({
         apiName: "grammarAPI",
         path: "grammar",
         options: {
           body: { text },
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
       });
 
-      const responseBody = response as GrammarAPIResponse;
-
-      if (!responseBody || !responseBody.editedText) {
-        throw new Error("No edited text received from the API");
+      if (typeof response === "string") {
+        const parsedResponse = JSON.parse(response) as GrammarAPIResponse;
+        if (!parsedResponse.editedText) {
+          throw new Error("No edited text received from the API");
+        }
+        setPreviewText(parsedResponse.editedText);
+      } else {
+        const responseData = response as GrammarAPIResponse;
+        if (!responseData.editedText) {
+          throw new Error("No edited text received from the API");
+        }
+        setPreviewText(responseData.editedText);
       }
-
-      setPreviewText(responseBody.editedText);
     } catch (error) {
       console.error("Error processing text:", error);
       setPreviewText(
