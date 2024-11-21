@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "framework": "react",
+  "frameworkVersion": "18.2.0",
   "scripts": {
     "start": "vite",
     "dev": "vite",
