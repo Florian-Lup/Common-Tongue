@@ -3,8 +3,7 @@ import { grammarPipeline } from "../../../src/LLMs/workflows/grammarPipeline";
 
 const corsHeaders = {
   "Content-Type": "application/json",
-  "Access-Control-Allow-Origin":
-    "https://master.d3bv82ng6wgr42.amplifyapp.com/",
+  "Access-Control-Allow-Origin": process.env.CORS_ORIGIN || "*",
   "Access-Control-Allow-Methods": "OPTIONS,POST",
   "Access-Control-Allow-Headers":
     "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
