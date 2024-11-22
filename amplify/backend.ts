@@ -18,7 +18,7 @@ const api = new RestApi(apiStack, "GrammarRestApi", {
     stageName: "prod",
   },
   defaultCorsPreflightOptions: {
-    allowOrigins: [process.env.CORS_ORIGIN ?? "*"],
+    allowOrigins: [(process.env.CORS_ORIGIN || "*").replace(/\/$/, "")],
     allowMethods: ["POST", "OPTIONS"],
     allowHeaders: [
       "Content-Type",
