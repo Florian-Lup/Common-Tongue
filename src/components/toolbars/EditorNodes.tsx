@@ -3,7 +3,7 @@
 import { Editor } from "@tiptap/react";
 import { FloatingMenu } from "@tiptap/react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
-import "../styles/MarksNodes.scss";
+import "../../styles/components/editor/MarksNodes.scss";
 
 // Define the interface here or import it
 interface MenuItemProps {

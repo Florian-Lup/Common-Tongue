@@ -1,12 +1,12 @@
 // components/toolbars/EditorHeader.tsx
 
 import { useState } from "react";
-import "../styles/EditorHeader.scss";
+import "../../styles/components/editor/EditorHeader.scss";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
 import ResponsePreview from "../ResponsePreview";
 import { Editor } from "@tiptap/react";
 import { post } from "aws-amplify/api";
-import { type GrammarAPIResponse } from "../../../amplify/types/api";
+import { type GrammarAPIResponse } from "../../types/api";
 
 interface EditorHeaderProps {
   editor: Editor;
