@@ -19,7 +19,7 @@ const api = new RestApi(apiStack, "GrammarRestApi", {
   },
   defaultCorsPreflightOptions: {
     allowOrigins: [
-      "https://dev.d3bv82ng6wgr42.amplifyapp.com",
+      "https://master.d3bv82ng6wgr42.amplifyapp.com/",
       // Add any other allowed origins here
     ],
     allowMethods: ["POST", "OPTIONS"],
