@@ -11,11 +11,16 @@ interface EditorHeaderProps {
   editor: Editor;
 }
 
+// Header component for the editor with AI-powered text processing features
+// Currently implements proofreading functionality
+
 export default function EditorHeader({ editor }: EditorHeaderProps) {
+  // State for managing preview modal and processing status
   const [showModal, setShowModal] = useState(false);
   const [previewText, setPreviewText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Handler for initiating the proofreading process
   const handleProofread = async () => {
     setIsProcessing(true);
     setShowModal(true);
@@ -35,7 +40,9 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
     }
   };
 
+  // Handlers for preview actions
   const handleAccept = () => {
+    // Apply the processed text to the editor
     editor.commands.setContent(previewText);
     setShowModal(false);
   };
@@ -51,6 +58,7 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
 
   return (
     <>
+      {/* Toolbar with AI actions */}
       <div className="editor-header">
         <div className="agent-toolbar">
           <button
@@ -66,6 +74,7 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
         </div>
       </div>
 
+      {/* Preview modal for processed text */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">

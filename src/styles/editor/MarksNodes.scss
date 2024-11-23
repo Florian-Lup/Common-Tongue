@@ -1,59 +1,59 @@
 /* General styles for menu items */
 .menu-item {
-  background-color: transparent;
-  border: none;
-  border-radius: 0.4rem;
-  color: #fff;
-  cursor: pointer;
-  height: 1.75rem;
-  width: 1.75rem;
-  margin-right: 0.5rem;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
+  background-color: transparent; // Transparent background
+  border: none; // No border
+  border-radius: 0.4rem; // Rounded corners
+  color: #fff; // White text color
+  cursor: pointer; // Pointer cursor on hover
+  height: 1.75rem; // Fixed height
+  width: 1.75rem; // Fixed width
+  margin-right: 0.5rem; // Margin to the right
+  padding: 0.25rem; // Padding inside the item
+  display: flex; // Flexbox for alignment
+  align-items: center; // Center items vertically
+  justify-content: center; // Center items horizontally
+  transition: background-color 0.2s; // Smooth background color transition
 
   svg {
-    fill: currentColor;
-    height: 100%;
-    width: 100%;
+    fill: currentColor; // SVG fill color matches text color
+    height: 100%; // Full height
+    width: 100%; // Full width
   }
 
   &.is-active {
-    background-color: #505050;
+    background-color: #505050; // Background color for active items
   }
 
   /* Apply hover effects only on devices that support hover */
   @media (hover: hover) {
     &:hover {
-      background-color: #505050;
+      background-color: #505050; // Background color on hover
     }
   }
 }
 
 /* Bubble menu styles */
 .bubble-menu {
-  display: flex;
-  align-items: center;
-  background-color: #303030;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
+  display: flex; // Flexbox for layout
+  align-items: center; // Center items vertically
+  background-color: #303030; // Dark background
+  padding: 0.25rem; // Padding inside the bubble menu
+  border-radius: 0.25rem; // Rounded corners
 
   .menu-item {
-    margin-right: 0.25rem;
+    margin-right: 0.25rem; // Margin to the right for menu items
   }
 }
 
 /* Floating menu styles */
 .floating-menu {
-  display: flex;
-  align-items: center;
-  background-color: #303030;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
+  display: flex; // Flexbox for layout
+  align-items: center; // Center items vertically
+  background-color: #303030; // Dark background
+  padding: 0.25rem; // Padding inside the floating menu
+  border-radius: 0.25rem; // Rounded corners
 
   .menu-item {
-    margin-right: 0.25rem;
+    margin-right: 0.25rem; // Margin to the right for menu items
   }
 }

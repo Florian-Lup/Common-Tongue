@@ -5,23 +5,28 @@ import type { Editor } from "@tiptap/react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
 import "../../styles/editor/EditorFooter.scss";
 
+// Footer component for the editor with utility actions and character count
+// Provides common operations like copy, clear, undo/redo
+
 interface EditorFooterProps {
-  characterCount: number;
-  editor: Editor;
+  characterCount: number; // Current character count in editor
+  editor: Editor; // TipTap editor instance
 }
 
 interface MenuItemProps {
-  icon: string;
-  title: string;
-  action: () => void;
-  isActive?: () => boolean;
+  icon: string; // Remix icon name
+  title: string; // Tooltip text
+  action: () => void; // Click handler
+  isActive?: () => boolean; // Whether the action is currently active
 }
 
 const EditorFooter: React.FC<EditorFooterProps> = ({
   characterCount,
   editor,
 }) => {
+  // Define utility actions available in the footer
   const items: MenuItemProps[] = [
+    // Copy text, clear content, remove formatting, undo/redo
     {
       icon: "clipboard-line",
       title: "Copy Text",
@@ -76,9 +81,11 @@ const EditorFooter: React.FC<EditorFooterProps> = ({
 
   return (
     <div className="editor-footer">
+      {/* Render action buttons */}
       <div className="action-toolbar">
         {items.map((item, index) => renderMenuItem(item, index))}
       </div>
+      {/* Display character count */}
       <div className="character-count">{characterCount} characters</div>
     </div>
   );

@@ -1,4 +1,5 @@
 body {
+  // Set the default font family and reset margin and padding
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   margin: 0;
@@ -6,18 +7,19 @@ body {
 }
 
 .tiptap {
+  // Styles for the Tiptap editor
   > * {
-    margin: 0.3em 0;
+    margin: 0.3em 0; // Margin for all child elements
   }
 
   ul,
   ol {
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1.5rem; // Padding for lists
   }
 
   li p {
-    margin: 0.2rem;
-    padding: 0;
+    margin: 0.2rem; // Margin for paragraphs in list items
+    padding: 0; // No padding
   }
 
   h1,
@@ -26,61 +28,64 @@ body {
   h4,
   h5,
   h6 {
-    line-height: 1.1;
+    line-height: 1.1; // Line height for headings
   }
 
   img {
-    height: auto;
-    max-width: 100%;
+    height: auto; // Responsive image height
+    max-width: 100%; // Prevent images from exceeding their container
   }
 
   .empty-node::before {
+    // Placeholder for empty nodes
     color: #adb5bd;
     content: attr(data-placeholder);
     float: left;
     height: 0;
-    pointer-events: none;
+    pointer-events: none; // Disable pointer events
   }
 }
 
 .editor-container {
+  // Styles for the editor container
   display: flex;
   justify-content: center;
 
   .editor {
-    background-color: #fff;
+    background-color: #fff; // Background color for the editor
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center child elements horizontally */
-    max-width: 800px; /* Set a max width for the editor */
-    width: 100%; /* Ensure the editor doesn't exceed its parent container */
+    align-items: center; // Center child elements horizontally
+    max-width: 800px; // Set a max width for the editor
+    width: 100%; // Ensure the editor doesn't exceed its parent container
 
     &__content {
-      flex: 1 1 auto;
-      overflow-x: hidden;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      width: 100%; /* Take full width of the editor */
-      max-width: 800px; /* Ensure content doesn't exceed max width */
-      box-sizing: border-box;
-      margin: 6rem 0;
+      flex: 1 1 auto; // Allow content to grow and shrink
+      overflow-x: hidden; // Hide horizontal overflow
+      overflow-y: auto; // Enable vertical scrolling
+      -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+      width: 100%; // Take full width of the editor
+      max-width: 800px; // Ensure content doesn't exceed max width
+      box-sizing: border-box; // Include padding in width calculations
+      margin: 6rem 0; // Margin for content
     }
   }
 }
 
 .ProseMirror {
+  // Styles for ProseMirror editor
   box-sizing: border-box;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0.5rem;
+  max-width: 800px; // Max width for ProseMirror
+  margin: 0 auto; // Center the editor
+  padding: 0.5rem; // Padding for ProseMirror
 
   > * {
-    padding: 0.5rem;
-    border-left: 0.3rem solid #fff;
+    padding: 0.5rem; // Padding for child elements
+    border-left: 0.3rem solid #fff; // Left border for child elements
   }
 
   &:focus {
-    outline: none;
+    outline: none; // Remove outline on focus
   }
 
   > p:hover,
@@ -89,19 +94,25 @@ body {
   > h3:hover,
   > ul:hover,
   > ol:hover {
+    // Hover effects for various elements
     background-color: rgba(204, 204, 204, 0.2);
-    border-left: 0.3rem solid #cccccc;
+    border-left: 0.3rem solid #cccccc; // Change border color on hover
   }
 }
 
 .editor__content:focus {
-  outline: none;
+  outline: none; // Remove outline on focus
 }
 
 /* CSS for has-focus class */
 .has-focus {
-  background-color: rgba(204, 204, 204, 0.2);
-  border-left: 0.3rem solid #cccccc;
-  pointer-events: auto; /* Ensure pointer events work */
-  z-index: 1; /* Set z-index if necessary */
+  background-color: rgba(
+    204,
+    204,
+    204,
+    0.2
+  ); // Background color for focused elements
+  border-left: 0.3rem solid #cccccc; // Left border for focused elements
+  pointer-events: auto; // Ensure pointer events work
+  z-index: 1; // Set z-index if necessary
 }

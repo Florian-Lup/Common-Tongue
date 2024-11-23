@@ -1,62 +1,62 @@
 .editor-footer {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 800px;
-  padding: 0.5rem;
-  background-color: #fff;
-  border-top: 1px solid #e5e7eb;
-  box-sizing: border-box;
+  position: fixed; // Fixed position at the bottom
+  bottom: 0; // Align to the bottom
+  left: 50%; // Center horizontally
+  transform: translateX(-50%); // Adjust for centering
+  display: flex; // Flexbox for layout
+  align-items: center; // Center items vertically
+  justify-content: space-between; // Space between items
+  width: 100%; // Full width
+  max-width: 800px; // Max width for the footer
+  padding: 0.5rem; // Padding inside the footer
+  background-color: #fff; // White background
+  border-top: 1px solid #e5e7eb; // Top border
+  box-sizing: border-box; // Include padding in width calculations
 
   .action-toolbar {
-    display: flex;
-    background-color: #303030;
-    padding: 0.25rem;
-    border-radius: 0.4rem;
+    display: flex; // Flexbox for toolbar
+    background-color: #303030; // Dark background
+    padding: 0.25rem; // Padding inside the toolbar
+    border-radius: 0.4rem; // Rounded corners
   }
 
   .character-count {
-    font-size: 0.8rem;
-    color: #888;
+    font-size: 0.8rem; // Font size for character count
+    color: #888; // Gray color
   }
 
   .toolbar-item {
-    background-color: transparent;
-    border: none;
-    border-radius: 0.4rem;
-    color: #fff;
-    cursor: pointer;
-    height: 1.75rem;
-    width: 1.75rem;
-    margin-right: 0.5rem;
-    padding: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
+    background-color: transparent; // Transparent background
+    border: none; // No border
+    border-radius: 0.4rem; // Rounded corners
+    color: #fff; // White text color
+    cursor: pointer; // Pointer cursor on hover
+    height: 1.75rem; // Fixed height
+    width: 1.75rem; // Fixed width
+    margin-right: 0.5rem; // Margin to the right
+    padding: 0.25rem; // Padding inside the item
+    display: flex; // Flexbox for alignment
+    align-items: center; // Center items vertically
+    justify-content: center; // Center items horizontally
+    transition: background-color 0.2s; // Smooth background color transition
 
     &:last-child {
-      margin-right: 0;
+      margin-right: 0; // No margin for the last item
     }
 
     svg {
-      fill: currentColor;
-      width: 100%;
-      height: 100%;
+      fill: currentColor; // SVG fill color matches text color
+      width: 100%; // Full width
+      height: 100%; // Full height
     }
 
     &.is-active {
-      background-color: #505050;
+      background-color: #505050; // Background color for active items
     }
 
     @media (hover: hover) {
       &:hover {
-        background-color: #505050;
+        background-color: #505050; // Background color on hover
       }
     }
   }

@@ -1,6 +1,10 @@
 import type { APIGatewayProxyHandler } from "aws-lambda";
 import { grammarPipeline } from "../../../src/lib/LLMs/workflows/grammarPipeline";
 
+/**
+ * CORS headers configuration for API responses
+ * Allows specified origins to access the API and defines allowed methods/headers
+ */
 const corsHeaders = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": process.env.CORS_ORIGIN || "*",
@@ -10,6 +14,11 @@ const corsHeaders = {
   "Access-Control-Allow-Credentials": "true",
 };
 
+/**
+ * Lambda function handler for the grammar API endpoint
+ * @param event - API Gateway event containing the request details
+ * @returns Promise containing API response with edited text or error
+ */
 export const handler: APIGatewayProxyHandler = async (event) => {
   try {
     const body = JSON.parse(event.body || "{}");

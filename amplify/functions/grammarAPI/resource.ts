@@ -1,11 +1,17 @@
+/**
+ * Lambda function resource definition
+ * Configures function name, environment variables, and resource allocation
+ */
 import { defineFunction } from "@aws-amplify/backend";
 
 export const grammarFunction = defineFunction({
   name: "grammarAPI",
   environment: {
+    // API keys and configuration for external services
     OPENAI_API_KEY: process.env.OPENAI_API_KEY || "",
     CORS_ORIGIN: process.env.CORS_ORIGIN || "",
   },
-  timeoutSeconds: 30,
-  memoryMB: 512,
+  // Resource allocation settings
+  timeoutSeconds: 30, // Maximum execution time
+  memoryMB: 512, // Allocated memory
 });

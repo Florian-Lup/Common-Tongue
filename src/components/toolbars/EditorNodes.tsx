@@ -5,12 +5,14 @@ import { FloatingMenu } from "@tiptap/react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
 import "../../styles/editor/MarksNodes.scss";
 
-// Define the interface here or import it
+// A floating menu component that provides block-level formatting options
+// Appears when the cursor is at the beginning of a block
+
 interface MenuItemProps {
-  icon?: string;
-  title?: string;
-  action?: () => void;
-  isActive?: () => boolean;
+  icon?: string; // Remix icon name
+  title?: string; // Tooltip text
+  action?: () => void; // Click handler
+  isActive?: () => boolean; // Whether the block format is currently active
 }
 
 export default function EditorNodes({ editor }: { editor: Editor }) {
@@ -18,7 +20,9 @@ export default function EditorNodes({ editor }: { editor: Editor }) {
     return null;
   }
 
+  // Define available block formatting options
   const items: MenuItemProps[] = [
+    // Headings (H1, H2, H3)
     {
       icon: "h-1",
       title: "Heading 1",
@@ -37,12 +41,14 @@ export default function EditorNodes({ editor }: { editor: Editor }) {
       action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
       isActive: () => editor.isActive("heading", { level: 3 }),
     },
+    // Paragraph
     {
       icon: "paragraph",
       title: "Paragraph",
       action: () => editor.chain().focus().setParagraph().run(),
       isActive: () => editor.isActive("paragraph"),
     },
+    // Lists (bullet and ordered)
     {
       icon: "list-unordered",
       title: "Bullet List",
@@ -58,6 +64,7 @@ export default function EditorNodes({ editor }: { editor: Editor }) {
   ];
 
   return (
+    // Render floating menu at the start of blocks
     <FloatingMenu
       editor={editor}
       tippyOptions={{

@@ -1,16 +1,27 @@
 {
+  // TypeScript configuration for the Amplify backend
+  // Configures modern JavaScript features and strict type checking
   "compilerOptions": {
+    // Target modern JavaScript runtime (Node.js in AWS Lambda)
     "target": "es2022",
     "module": "es2022",
+    // Use the bundler module resolution strategy
     "moduleResolution": "bundler",
+    // Enable JSON imports
     "resolveJsonModule": true,
+    // Enable CommonJS/ES modules interoperability
     "esModuleInterop": true,
+    // Enforce consistent file casing
     "forceConsistentCasingInFileNames": true,
+    // Enable strict type checking
     "strict": true,
+    // Skip type checking of declaration files
     "skipLibCheck": true,
+    // Configure path aliases for generated Amplify files
     "paths": {
       "$amplify/*": ["../.amplify/generated/*"]
     },
+    // Add Vite types for environment variables
     "types": ["vite/client"]
   }
 }

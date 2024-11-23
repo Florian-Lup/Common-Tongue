@@ -5,7 +5,7 @@ import "./styles/global/index.scss";
 import { Amplify } from "aws-amplify";
 import { amplifyConfig } from "../amplify/amplifyconfiguration.ts";
 
-// Only configure Amplify in production
+/* Only configure Amplify in production */
 if (import.meta.env.PROD) {
   Amplify.configure(amplifyConfig);
 }

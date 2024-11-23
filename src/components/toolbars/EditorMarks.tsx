@@ -5,11 +5,14 @@ import { BubbleMenu } from "@tiptap/react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
 import "../../styles/editor/MarksNodes.scss";
 
+// A floating bubble menu component that provides text formatting options
+// Appears when text is selected in the editor
+
 interface MenuItemProps {
-  icon?: string;
-  title?: string;
-  action?: () => void;
-  isActive?: () => boolean;
+  icon?: string; // Remix icon name
+  title?: string; // Tooltip text
+  action?: () => void; // Click handler
+  isActive?: () => boolean; // Whether the format is currently active
 }
 
 export default function EditorMarks({ editor }: { editor: Editor }) {
@@ -17,7 +20,9 @@ export default function EditorMarks({ editor }: { editor: Editor }) {
     return null;
   }
 
+  // Define available text formatting options
   const items: MenuItemProps[] = [
+    // Bold, italic, underline, etc. formatting options
     {
       icon: "bold",
       title: "Bold",
@@ -42,6 +47,7 @@ export default function EditorMarks({ editor }: { editor: Editor }) {
       action: () => editor.chain().focus().toggleStrike().run(),
       isActive: () => editor.isActive("strike"),
     },
+    // Text color and highlighting options with specific color values
     {
       icon: "palette-line",
       title: "Text Color",
@@ -69,11 +75,13 @@ export default function EditorMarks({ editor }: { editor: Editor }) {
   ];
 
   return (
+    // Render bubble menu that appears on text selection
     <BubbleMenu
       editor={editor}
       tippyOptions={{ duration: 100 }}
       className="bubble-menu"
     >
+      {/* Map formatting options to buttons */}
       {items.map((item, index) => {
         const { icon, title, action, isActive } = item;
         return (

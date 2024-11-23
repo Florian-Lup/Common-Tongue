@@ -4,12 +4,15 @@ import React from "react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
 import "../../styles/editor/ResponsePreview.scss";
 
+// A component that displays a preview of processed text with accept/decline/regenerate actions
+// Used primarily for displaying AI-processed text before confirming changes
+
 interface ResponsePreviewProps {
-  previewText?: string;
-  isProcessing?: boolean;
-  onAccept?: () => void;
-  onDecline?: () => void;
-  onRegenerate?: () => void;
+  previewText?: string; // The text to be previewed
+  isProcessing?: boolean; // Loading state indicator
+  onAccept?: () => void; // Handler for accepting the changes
+  onDecline?: () => void; // Handler for rejecting the changes
+  onRegenerate?: () => void; // Handler for requesting new changes
 }
 
 const ResponsePreview: React.FC<ResponsePreviewProps> = ({
@@ -21,11 +24,14 @@ const ResponsePreview: React.FC<ResponsePreviewProps> = ({
 }) => {
   return (
     <div className="preview-container">
+      {/* Show loading spinner when processing */}
       {isProcessing ? (
         <div className="loading-spinner" aria-label="Loading..." />
       ) : (
         <>
+          {/* Display the preview text and action buttons */}
           <div className="preview-content">{previewText}</div>
+          {/* Toolbar with accept/decline/regenerate actions */}
           <div className="preview-toolbar">
             <button className="toolbar-item" onClick={onAccept} title="Accept">
               <svg className="remix">

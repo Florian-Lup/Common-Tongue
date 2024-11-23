@@ -1,59 +1,59 @@
 .editor-header {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  max-width: 800px;
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  padding: 0.5rem;
+  position: fixed; // Fixed position at the top
+  top: 0; // Align to the top
+  left: 50%; // Center horizontally
+  transform: translateX(-50%); // Adjust for centering
+  z-index: 1000; // High z-index to stay on top
+  max-width: 800px; // Max width for the header
+  width: 100%; // Full width
+  box-sizing: border-box; // Include padding in width calculations
+  display: flex; // Flexbox for layout
+  justify-content: center; // Center items horizontally
+  align-items: center; // Center items vertically
+  background-color: #fff; // White background
+  padding: 0.5rem; // Padding inside the header
 
   .agent-toolbar {
-    display: flex;
-    align-items: center;
-    max-width: 800px;
-    width: 100%;
-    background-color: #303030;
-    padding: 0.25rem;
-    border-radius: 0.4rem;
+    display: flex; // Flexbox for toolbar
+    align-items: center; // Center items vertically
+    max-width: 800px; // Max width for the toolbar
+    width: 100%; // Full width
+    background-color: #303030; // Dark background
+    padding: 0.25rem; // Padding inside the toolbar
+    border-radius: 0.4rem; // Rounded corners
 
     .toolbar-item {
-      display: flex;
-      align-items: center;
-      border: none;
-      background: transparent;
-      color: #fff;
-      font-size: 0.9rem;
-      font-weight: 500;
-      padding: 0.25rem;
-      cursor: pointer;
-      border-radius: 0.4rem;
-      transition: background-color 0.2s;
+      display: flex; // Flexbox for alignment
+      align-items: center; // Center items vertically
+      border: none; // No border
+      background: transparent; // Transparent background
+      color: #fff; // White text color
+      font-size: 0.9rem; // Font size for toolbar items
+      font-weight: 500; // Medium font weight
+      padding: 0.25rem; // Padding inside the item
+      cursor: pointer; // Pointer cursor on hover
+      border-radius: 0.4rem; // Rounded corners
+      transition: background-color 0.2s; // Smooth background color transition
 
       svg {
-        width: 1.3rem;
-        height: 1.3rem;
-        fill: currentColor;
-        margin-right: 0.5rem;
+        width: 1.3rem; // Fixed width for SVG
+        height: 1.3rem; // Fixed height for SVG
+        fill: currentColor; // SVG fill color matches text color
+        margin-right: 0.5rem; // Margin to the right of SVG
       }
 
       &:active {
-        background-color: #505050;
+        background-color: #505050; // Background color when active
       }
 
       &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+        opacity: 0.5; // Reduced opacity for disabled items
+        cursor: not-allowed; // Not-allowed cursor for disabled items
       }
 
       @media (hover: hover) {
         &:hover {
-          background-color: #505050;
+          background-color: #505050; // Background color on hover
         }
       }
     }
