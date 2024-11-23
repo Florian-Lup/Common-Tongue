@@ -30,3 +30,6 @@ dist-ssr
 .amplify
 amplify_outputs*
 amplifyconfiguration*
+
+#Prompts
+testPrompts.txt

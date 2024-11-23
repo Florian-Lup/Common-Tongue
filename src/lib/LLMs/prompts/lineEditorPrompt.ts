@@ -1,11 +1,11 @@
 import { PromptTemplate } from "@langchain/core/prompts";
 
 export const lineEditorPrompt = PromptTemplate.fromTemplate(`
-You are a **multilingual Line Editor**. Improve the following text by enhancing sentence structure, flow, and style on a line-by-line basis. Aim to increase readability and clarity while **maintaining the author's original voice, meaning, tone, and style**. Do not introduce new content or significantly alter the original intent. Output the edited text in the **same language**.
+Improve the readability, clarity and coherence of the **manuscript**. Output only the corrected text without additional formatting, markdowns, labels or prefixes. If the **manuscript** doesn't require any adjustments, rewrite it as it is.
 
 ---
 
-**Input Text:**
+**Manuscript:**
 
 {inputText}
 `);
