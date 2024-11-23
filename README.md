@@ -1,33 +1,102 @@
 # Common Tongue
 
-Common Tongue is a proofreading tool capable of correcting grammatical errors in any language. It was developed by chaining 3 agents, each using a different LLM at varying temperatures. I assigned specific tasks to each agent using a combination of role-playing prompts, zero-shot learning prompts, and direct instruction prompts. Built using React and TypeScript, it leverages the Tiptap editor framework for core writing functionalities. The application offers various text formatting options and supports extensions like highlighting, task lists, and more.
+Common Tongue is an advanced proofreading and text enhancement tool that leverages a chain of specialized AI agents to provide comprehensive text improvements. The tool processes text through three distinct stages:
 
-## Overview
+1. **Line Editor**: Improves readability and coherence while maintaining the author's voice
+2. **Copy Editor**: Corrects grammatical errors, punctuation, spelling, and syntax issues
+3. **Proofreader**: Performs final polishing and ensures publication-ready quality
 
-Common Tongue utilizes a modern web development stack to deliver a robust and efficient rich text editing experience. The key technologies used in the project include:
+Built with React and TypeScript, it features a modern rich text editor powered by Tiptap, offering a familiar writing experience with professional editing capabilities. The application supports:
 
-- **Frontend**: React and TypeScript for building the user interface.
-- **Build Tool**: Vite for fast and optimized build processes.
-- **Code Quality**: ESLint for maintaining code quality and consistency.
-- **Rich Text Editor**: Tiptap for core rich text editing functionalities.
-- **Icons**: Remixicon for menu bar icons.
-- **Styling**: Sass for styling, including the implementation of the sticky editor header and the `editor__footer` div for displaying the character count.
+- Multi-language grammar correction
+- Real-time text processing
+- Advanced formatting options
+- Character count tracking
+- Customizable editing preferences
 
-### Project Structure
+## Tech Stack & Frameworks
 
-- **Main Directory**: Contains configuration files and scripts for setting up and building the project.
-- **src Directory**: Contains the main editor application, including components, styles, configurations, and analytics integration.
-  - **Components**: Custom components like MenuBar, BubbleMenu, and DropdownMenu.
-  - **Styles**: Sass files for styling various components and the editor interface.
-  - **Configurations**: TypeScript and Vite configuration files.
+### Core Technologies
+
+- **TypeScript** - Primary programming language
+- **React 18.2** - Frontend framework
+- **Vite** - Build tool and development server
+
+### Editor & UI Components
+
+- **Tiptap** - Rich text editor framework with extensions:
+  - Character Count
+  - Highlight
+  - Placeholder
+  - Underline
+  - Text Style
+  - Color
+  - Focus
+- **Remixicon** - Icon library for the UI
+
+### AWS Infrastructure
+
+- **AWS Amplify** - Full-stack development framework
+- **AWS Lambda** - Serverless functions
+- **API Gateway** - REST API management
+- **AWS CDK** - Infrastructure as Code
+
+### AI/ML Integration
+
+- **LangChain** - Framework for LLM applications
+- **OpenAI GPT-4** - Language model integration
+
+### Styling
+
+- **Sass** - CSS preprocessor
+- **CSS Modules** - Scoped styling solution
+
+### Development Tools
+
+- **ESLint** - Code linting
+- **TypeScript ESLint** - TypeScript-specific linting rules
+
+### Testing & Quality
+
+- **React Testing Library** - Component testing
+- **ESLint** - Code quality and consistency
+
+### Package Management
+
+- **npm** - Package management
+- **Node.js** - JavaScript runtime
+
+### Version Control
+
+- **Git** - Version control system
+
+### Development Environment
+
+- **Node.js** - JavaScript runtime environment
+- **npm** - Package manager
+
+## Project Structure
+
+The key directories and their purposes:
+
+- **amplify/**: Contains AWS Amplify backend configuration, including authentication, data models, and Lambda functions
+- **src/**: Main source code directory
+  - **components/**: React components for the editor interface
+  - **lib/**: Core library code, including LLM integrations
+  - **services/**: API service implementations
+  - **styles/**: SCSS stylesheets
+  - **types/**: TypeScript type definitions
 
 ## Getting Started
 
-### Requirements
+### Prerequisites
 
-- Node.js and npm are required to run the project.
+- Node.js (v18 or higher)
+- npm (v9 or higher)
+- Git
+- AWS Account (for deployment)
 
-### Quickstart
+### Environment Setup
 
 1. **Clone the repository**:
 
@@ -36,21 +105,73 @@ Common Tongue utilizes a modern web development stack to deliver a robust and ef
    cd common-tongue
    ```
 
-2. **Install dependencies**:
+2. **Environment Variables**:
+   Create a `.env` file in the root directory with the following variables:
 
+   ```sh
+   VITE_API_ENDPOINT=<your-api-endpoint>
+   VITE_AWS_REGION=<your-aws-region>
+   OPENAI_API_KEY=<your-openai-api-key>
+   ```
+
+3. **Install dependencies**:
    ```sh
    npm install
    ```
 
-3. **Launch the development server**:
-   ```sh
+### Development
+
+- **Start development server**:
+
+  ```sh
    npm run dev
+  ```
+
+  The application will be available at `http://localhost:5173`
+
+- **Lint code**:
+  ```sh
+  npm run lint
+  ```
+
+### Building for Production
+
+1. **Build the application**:
+
+   ```sh
+   npm run build
    ```
 
-### License
+2. **Preview production build**:
+   ```sh
+   npm run preview
+   ```
 
-The project is proprietary. Copyright (c) 2024.
+### Deployment
 
----
+The project uses AWS Amplify for deployment. Make sure you have:
 
-This README file provides a comprehensive overview of the Common Tongue project, its features, and instructions for getting started. For more detailed information, refer to the individual files and documentation within the project.
+1. AWS Amplify CLI installed and configured
+2. Appropriate AWS credentials set up
+
+To deploy:
+
+```sh
+npx ampx pipeline-deploy --branch main --app-id <your-app-id>
+```
+
+### Troubleshooting
+
+- If you encounter CORS issues during development, check your AWS API Gateway CORS settings
+- For OpenAI API issues, verify your API key and rate limits
+- For build errors, ensure all dependencies are properly installed and environment variables are set
+
+## License
+
+Copyright © 2024 Common Tongue
+
+All rights reserved. This software and its source code are proprietary and confidential. No part of this software may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the copyright holder.
+
+This software is provided "as is," without warranty of any kind, express or implied. The copyright holder assumes no liability for any damages or claims arising from the use of this software.
+
+For licensing inquiries, please contact: [flo@commontongue.co](mailto:flo@commontongue.co)
