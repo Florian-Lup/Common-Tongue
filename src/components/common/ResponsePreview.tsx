@@ -2,7 +2,7 @@
 
 import React from "react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
-import "../styles/components/editor/ResponsePreview.scss";
+import "../../styles/editor/ResponsePreview.scss";
 
 interface ResponsePreviewProps {
   previewText?: string;

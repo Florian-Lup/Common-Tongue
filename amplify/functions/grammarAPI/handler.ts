@@ -1,5 +1,5 @@
 import type { APIGatewayProxyHandler } from "aws-lambda";
-import { grammarPipeline } from "../../../src/LLMs/workflows/grammarPipeline";
+import { grammarPipeline } from "../../../src/lib/LLMs/workflows/grammarPipeline";
 
 const corsHeaders = {
   "Content-Type": "application/json",

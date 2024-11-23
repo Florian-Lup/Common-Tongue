@@ -3,7 +3,7 @@
 import React from "react";
 import type { Editor } from "@tiptap/react";
 import remixiconUrl from "remixicon/fonts/remixicon.symbol.svg";
-import "../../styles/components/editor/EditorFooter.scss";
+import "../../styles/editor/EditorFooter.scss";
 
 interface EditorFooterProps {
   characterCount: number;
