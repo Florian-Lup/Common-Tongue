@@ -10,12 +10,12 @@ export async function proofreadText(text: string): Promise<string> {
   try {
     /* Initial request to start processing */
     const response = await post({
-      apiName: "grammarAPI" /* Name of the API */,
-      path: "grammar" /* Path for the grammar endpoint */,
+      apiName: "GrammarRestApi",
+      path: "/prod/grammar",
       options: {
-        body: { text } /* Request body containing the text */,
+        body: { text },
         headers: {
-          "Content-Type": "application/json" /* Set content type to JSON */,
+          "Content-Type": "application/json",
         },
       },
     }).response;
