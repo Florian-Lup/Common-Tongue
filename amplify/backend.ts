@@ -29,10 +29,43 @@ const backend = defineBackend({
 // Create a dedicated CDK stack for API resources
 const apiStack = backend.createStack("GrammarAPI");
 
-/**
- * API Gateway configuration
- * Creates a REST API with CORS support and production deployment stage
- */
+// Create DynamoDB table first
+const resultsTable = new Table(apiStack, "GrammarResults", {
+  partitionKey: { name: "requestId", type: AttributeType.STRING },
+  timeToLiveAttribute: "ttl",
+  removalPolicy: RemovalPolicy.DESTROY,
+});
+
+// Create SQS queue
+const grammarQueue = new Queue(apiStack, "GrammarQueue", {
+  visibilityTimeout: Duration.seconds(300),
+  retentionPeriod: Duration.days(1),
+});
+
+// Set up environment variables before creating API
+backend.processorFunction.addEnvironment(
+  "RESULTS_TABLE",
+  resultsTable.tableName
+);
+backend.grammarFunction.addEnvironment(
+  "GRAMMAR_QUEUE_URL",
+  grammarQueue.queueUrl
+);
+
+// Configure processor with SQS event source
+const processor = backend.processorFunction.resources.lambda;
+processor.addEventSource(
+  new SqsEventSource(grammarQueue, {
+    batchSize: 1,
+  })
+);
+
+// Grant permissions
+resultsTable.grantWriteData(processor);
+resultsTable.grantReadData(backend.statusFunction.resources.lambda);
+grammarQueue.grantSendMessages(backend.grammarFunction.resources.lambda);
+
+// Create API Gateway last
 const api = new RestApi(apiStack, "GrammarRestApi", {
   restApiName: "grammarAPI",
   deploy: true,
@@ -41,7 +74,7 @@ const api = new RestApi(apiStack, "GrammarRestApi", {
   },
   defaultCorsPreflightOptions: {
     allowOrigins: [process.env.CORS_ORIGIN ?? "*"],
-    allowMethods: ["POST", "OPTIONS"],
+    allowMethods: ["POST", "GET", "OPTIONS"],
     allowHeaders: [
       "Content-Type",
       "X-Amz-Date",
@@ -53,36 +86,20 @@ const api = new RestApi(apiStack, "GrammarRestApi", {
   },
 });
 
-/**
- * Connect Lambda function to API Gateway
- * Creates integration between API endpoint and Lambda function
- */
-const integration = new LambdaIntegration(
-  backend.grammarFunction.resources.lambda
-);
-
-// Set up the /grammar endpoint that accepts POST requests
+// Add API routes
 const grammarRoute = api.root.addResource("grammar");
-grammarRoute.addMethod("POST", integration);
-
-// Add this after the existing API Gateway configuration
-const grammarQueue = new Queue(apiStack, "GrammarQueue", {
-  visibilityTimeout: Duration.seconds(300), // 5 minutes timeout
-  retentionPeriod: Duration.days(1),
-});
-
-// Use the processor function from the backend definition
-const processor = backend.processorFunction.resources.lambda;
-processor.addEventSource(
-  new SqsEventSource(grammarQueue, {
-    batchSize: 1,
-  })
+grammarRoute.addMethod(
+  "POST",
+  new LambdaIntegration(backend.grammarFunction.resources.lambda)
 );
 
-// Grant the API Lambda permission to send messages to SQS
-grammarQueue.grantSendMessages(backend.grammarFunction.resources.lambda);
+const statusRoute = api.root.addResource("status");
+statusRoute.addMethod(
+  "GET",
+  new LambdaIntegration(backend.statusFunction.resources.lambda)
+);
 
-// Export API details (endpoint URL and region) for frontend use
+// Export API details
 backend.addOutput({
   custom: {
     API: {
@@ -93,32 +110,5 @@ backend.addOutput({
     },
   },
 });
-
-// Create DynamoDB table and configure permissions
-const resultsTable = new Table(apiStack, "GrammarResults", {
-  partitionKey: { name: "requestId", type: AttributeType.STRING },
-  timeToLiveAttribute: "ttl",
-  removalPolicy: RemovalPolicy.DESTROY,
-});
-
-resultsTable.grantWriteData(processor);
-resultsTable.grantReadData(backend.statusFunction.resources.lambda);
-
-// Add environment variables
-backend.processorFunction.addEnvironment(
-  "RESULTS_TABLE",
-  resultsTable.tableName
-);
-backend.grammarFunction.addEnvironment(
-  "GRAMMAR_QUEUE_URL",
-  grammarQueue.queueUrl
-);
-
-// Add status endpoint
-const statusRoute = api.root.addResource("status");
-statusRoute.addMethod(
-  "GET",
-  new LambdaIntegration(backend.statusFunction.resources.lambda)
-);
 
 export default backend;
