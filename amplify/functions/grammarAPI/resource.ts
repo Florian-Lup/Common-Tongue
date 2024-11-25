@@ -5,7 +5,7 @@
 import { defineFunction } from "@aws-amplify/backend";
 
 export const grammarFunction = defineFunction({
-  name: "grammarAPI",
+  name: "grammarapi",
   environment: {
     // API keys and configuration for external services
     OPENAI_API_KEY: process.env.OPENAI_API_KEY || "",

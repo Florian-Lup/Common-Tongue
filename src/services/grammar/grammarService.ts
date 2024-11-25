@@ -11,7 +11,7 @@ export async function proofreadText(text: string): Promise<string> {
     /* Initial request to start processing */
     const response = await post({
       apiName: "grammarapi",
-      path: "/prod/grammar",
+      path: "/grammar",
       options: {
         body: { text },
         headers: {
@@ -52,8 +52,8 @@ async function pollForResults(requestId: string): Promise<GrammarAPIResponse> {
 
   while (attempts < MAX_POLLING_ATTEMPTS) {
     const response = await get({
-      apiName: "grammarAPI",
-      path: `status?requestId=${requestId}`,
+      apiName: "grammarapi",
+      path: `/status?requestId=${requestId}`,
     }).response;
 
     const result =
