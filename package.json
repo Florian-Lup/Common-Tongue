@@ -52,6 +52,8 @@
     "tsx": "^4.19.2"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.145",
+    "@types/aws-sdk": "^2.7.4",
     "@types/babel__generator": "^7.6.8",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
