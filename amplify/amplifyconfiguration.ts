@@ -5,11 +5,14 @@
  */
 import { type ResourcesConfig } from "aws-amplify";
 
+// Utility function to remove trailing slash from URL
+const removeTrailingSlash = (url: string) => url.replace(/\/$/, "");
+
 export const amplifyConfig: ResourcesConfig = {
   API: {
     REST: {
       grammarapi: {
-        endpoint: import.meta.env.VITE_API_ENDPOINT || "",
+        endpoint: removeTrailingSlash(import.meta.env.VITE_API_ENDPOINT || ""),
         region: import.meta.env.VITE_AWS_REGION || "",
       },
     },
