@@ -10,6 +10,7 @@ import "../../styles/editor/ResponsePreview.scss";
 interface ResponsePreviewProps {
   previewText?: string; // The text to be previewed
   isProcessing?: boolean; // Loading state indicator
+  processingStatus?: string; // Processing status message
   onAccept?: () => void; // Handler for accepting the changes
   onDecline?: () => void; // Handler for rejecting the changes
   onRegenerate?: () => void; // Handler for requesting new changes
@@ -18,20 +19,23 @@ interface ResponsePreviewProps {
 const ResponsePreview: React.FC<ResponsePreviewProps> = ({
   previewText = "Preview text will appear here...",
   isProcessing = false,
+  processingStatus = "",
   onAccept,
   onDecline,
   onRegenerate,
 }) => {
   return (
     <div className="preview-container">
-      {/* Show loading spinner when processing */}
       {isProcessing ? (
-        <div className="loading-spinner" aria-label="Loading..." />
+        <div className="processing-container">
+          <div className="loading-spinner" aria-label="Loading..." />
+          {processingStatus && (
+            <div className="processing-status">{processingStatus}</div>
+          )}
+        </div>
       ) : (
         <>
-          {/* Display the preview text and action buttons */}
           <div className="preview-content">{previewText}</div>
-          {/* Toolbar with accept/decline/regenerate actions */}
           <div className="preview-toolbar">
             <button className="toolbar-item" onClick={onAccept} title="Accept">
               <svg className="remix">

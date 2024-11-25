@@ -1,5 +1,8 @@
-import type { APIGatewayProxyHandler } from "aws-lambda";
-import { grammarPipeline } from "../../../src/lib/LLMs/workflows/grammarPipeline";
+import { APIGatewayProxyHandler } from "aws-lambda";
+import { SQS } from "aws-sdk";
+import { v4 as uuidv4 } from "uuid";
+
+const sqs = new SQS();
 
 /**
  * CORS headers configuration for API responses
@@ -23,13 +26,24 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   try {
     const body = JSON.parse(event.body || "{}");
     const { text } = body;
+    const requestId = uuidv4();
 
-    const editedText = await grammarPipeline.invoke(text);
+    // Send message to SQS
+    await sqs
+      .sendMessage({
+        QueueUrl: process.env.GRAMMAR_QUEUE_URL!,
+        MessageBody: JSON.stringify({ text, requestId }),
+      })
+      .promise();
 
     return {
-      statusCode: 200,
+      statusCode: 202,
       headers: corsHeaders,
-      body: JSON.stringify({ editedText }),
+      body: JSON.stringify({
+        requestId,
+        message: "Text processing started",
+        status: "PROCESSING",
+      }),
     };
   } catch (error) {
     console.error("Error:", error);

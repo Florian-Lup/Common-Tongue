@@ -120,3 +120,19 @@
     transform: rotate(360deg); // Complete rotation
   }
 }
+
+.processing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 1rem;
+}
+
+.processing-status {
+  color: #666;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 1rem;
+}

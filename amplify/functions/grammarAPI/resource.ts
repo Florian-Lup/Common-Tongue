@@ -12,6 +12,6 @@ export const grammarFunction = defineFunction({
     CORS_ORIGIN: process.env.CORS_ORIGIN || "",
   },
   // Resource allocation settings
-  timeoutSeconds: 60, // Maximum execution time
-  memoryMB: 512, // Allocated memory
+  timeoutSeconds: 300, // Maximum execution time
+  memoryMB: 1024, // Allocated memory
 });
