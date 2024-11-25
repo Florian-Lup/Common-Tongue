@@ -19,30 +19,35 @@ import { RemovalPolicy } from "aws-cdk-lib";
  * Sets up API Gateway with Lambda integration and CORS settings
  */
 
-// Define the backend with all Lambda functions
+// Define the backend first
 const backend = defineBackend({
   grammarFunction,
   processorFunction,
   statusFunction,
 });
 
-// Create a dedicated CDK stack for API resources
-const apiStack = backend.createStack("GrammarAPI");
+// Create a dedicated stack for infrastructure
+const infraStack = backend.createStack("InfraStack");
 
-// Create DynamoDB table first
-const resultsTable = new Table(apiStack, "GrammarResults", {
+// Create DynamoDB table
+const resultsTable = new Table(infraStack, "GrammarResults", {
   partitionKey: { name: "requestId", type: AttributeType.STRING },
   timeToLiveAttribute: "ttl",
   removalPolicy: RemovalPolicy.DESTROY,
 });
 
 // Create SQS queue
-const grammarQueue = new Queue(apiStack, "GrammarQueue", {
+const grammarQueue = new Queue(infraStack, "GrammarQueue", {
   visibilityTimeout: Duration.seconds(300),
   retentionPeriod: Duration.days(1),
 });
 
-// Set up environment variables before creating API
+// Grant permissions first
+resultsTable.grantWriteData(backend.processorFunction.resources.lambda);
+resultsTable.grantReadData(backend.statusFunction.resources.lambda);
+grammarQueue.grantSendMessages(backend.grammarFunction.resources.lambda);
+
+// Add environment variables
 backend.processorFunction.addEnvironment(
   "RESULTS_TABLE",
   resultsTable.tableName
@@ -52,20 +57,15 @@ backend.grammarFunction.addEnvironment(
   grammarQueue.queueUrl
 );
 
-// Configure processor with SQS event source
-const processor = backend.processorFunction.resources.lambda;
-processor.addEventSource(
+// Configure SQS trigger for processor
+backend.processorFunction.resources.lambda.addEventSource(
   new SqsEventSource(grammarQueue, {
     batchSize: 1,
   })
 );
 
-// Grant permissions
-resultsTable.grantWriteData(processor);
-resultsTable.grantReadData(backend.statusFunction.resources.lambda);
-grammarQueue.grantSendMessages(backend.grammarFunction.resources.lambda);
-
-// Create API Gateway last
+// Create API Gateway in a separate stack
+const apiStack = backend.createStack("APIStack");
 const api = new RestApi(apiStack, "GrammarRestApi", {
   restApiName: "grammarAPI",
   deploy: true,
@@ -86,7 +86,7 @@ const api = new RestApi(apiStack, "GrammarRestApi", {
   },
 });
 
-// Add API routes
+// Add routes after all resources are created
 const grammarRoute = api.root.addResource("grammar");
 grammarRoute.addMethod(
   "POST",
