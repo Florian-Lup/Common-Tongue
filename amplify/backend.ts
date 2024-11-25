@@ -67,7 +67,7 @@ backend.processorFunction.resources.lambda.addEventSource(
 // Create API Gateway in a separate stack
 const apiStack = backend.createStack("APIStack");
 const api = new RestApi(apiStack, "GrammarRestApi", {
-  restApiName: "GrammarRestApi",
+  restApiName: "grammarapi",
   deploy: true,
   deployOptions: {
     stageName: "prod",
@@ -103,7 +103,7 @@ statusRoute.addMethod(
 backend.addOutput({
   custom: {
     API: {
-      GrammarRestApi: {
+      grammarapi: {
         endpoint: api.url,
         region: Stack.of(apiStack).region,
       },

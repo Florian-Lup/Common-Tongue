@@ -10,7 +10,7 @@ export async function proofreadText(text: string): Promise<string> {
   try {
     /* Initial request to start processing */
     const response = await post({
-      apiName: "GrammarRestApi",
+      apiName: "grammarapi",
       path: "/prod/grammar",
       options: {
         body: { text },
