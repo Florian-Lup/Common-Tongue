@@ -56,6 +56,7 @@ backend.grammarFunction.addEnvironment(
   "GRAMMAR_QUEUE_URL",
   grammarQueue.queueUrl
 );
+backend.statusFunction.addEnvironment("RESULTS_TABLE", resultsTable.tableName);
 
 // Configure SQS trigger for processor
 backend.processorFunction.resources.lambda.addEventSource(
