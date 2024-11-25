@@ -6,7 +6,7 @@
     "target": "es2022",
     "module": "es2022",
     // Use the bundler module resolution strategy
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     // Enable JSON imports
     "resolveJsonModule": true,
     // Enable CommonJS/ES modules interoperability
@@ -22,6 +22,6 @@
       "$amplify/*": ["../.amplify/generated/*"]
     },
     // Add Vite types for environment variables
-    "types": ["vite/client"]
+    "types": ["vite/client", "node"]
   }
 }
