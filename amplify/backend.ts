@@ -101,7 +101,8 @@ statusRoute
     "GET",
     new LambdaIntegration(backend.statusFunction.resources.lambda, {
       requestParameters: {
-        "method.request.querystring.requestId": "true",
+        "integration.request.querystring.requestId":
+          "method.request.querystring.requestId",
       },
       requestTemplates: {
         "application/json": JSON.stringify({
