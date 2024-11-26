@@ -53,7 +53,7 @@ async function pollForResults(requestId: string): Promise<GrammarAPIResponse> {
   while (attempts < MAX_POLLING_ATTEMPTS) {
     const response = await get({
       apiName: "grammarapi",
-      path: `/status?requestId=${requestId}`,
+      path: `/status/${requestId}`,
     }).response;
 
     const result =

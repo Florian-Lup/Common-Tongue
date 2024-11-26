@@ -94,11 +94,36 @@ grammarRoute.addMethod(
   new LambdaIntegration(backend.grammarFunction.resources.lambda)
 );
 
+// Create status endpoint with proper query parameter support
 const statusRoute = api.root.addResource("status");
-statusRoute.addMethod(
-  "GET",
-  new LambdaIntegration(backend.statusFunction.resources.lambda)
-);
+statusRoute
+  .addMethod(
+    "GET",
+    new LambdaIntegration(backend.statusFunction.resources.lambda, {
+      requestParameters: {
+        "method.request.querystring.requestId": "true",
+      },
+      requestTemplates: {
+        "application/json": JSON.stringify({
+          requestId: "$input.params('requestId')",
+        }),
+      },
+      integrationResponses: [
+        {
+          statusCode: "200",
+          responseParameters: {
+            "method.response.header.Access-Control-Allow-Origin": "'*'",
+          },
+        },
+      ],
+    })
+  )
+  .addMethodResponse({
+    statusCode: "200",
+    responseParameters: {
+      "method.response.header.Access-Control-Allow-Origin": true,
+    },
+  });
 
 // Export API details with consistent naming
 backend.addOutput({

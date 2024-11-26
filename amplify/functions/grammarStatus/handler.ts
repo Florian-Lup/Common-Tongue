@@ -13,7 +13,8 @@ const corsHeaders = {
 };
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const requestId = event.queryStringParameters?.requestId;
+  const requestId =
+    event.pathParameters?.requestId || event.queryStringParameters?.requestId;
 
   if (!requestId) {
     return {
