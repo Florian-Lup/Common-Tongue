@@ -100,9 +100,7 @@ statusRoute
   .addMethod(
     "GET",
     new LambdaIntegration(backend.statusFunction.resources.lambda, {
-      requestParameters: {
-        "integration.request.path.requestId": "method.request.path.requestId",
-      },
+      proxy: true,
       integrationResponses: [
         {
           statusCode: "200",
