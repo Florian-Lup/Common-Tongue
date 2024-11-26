@@ -103,9 +103,6 @@ statusRoute
     "GET",
     new LambdaIntegration(backend.statusFunction.resources.lambda, {
       proxy: true,
-      requestParameters: {
-        "method.request.path.requestId": "required",
-      },
     })
   )
   .addMethodResponse({
