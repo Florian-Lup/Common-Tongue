@@ -101,21 +101,6 @@ statusRoute
     "GET",
     new LambdaIntegration(backend.statusFunction.resources.lambda, {
       proxy: true,
-      integrationResponses: [
-        {
-          statusCode: "200",
-          responseParameters: {
-            "method.response.header.Access-Control-Allow-Origin": `'${
-              process.env.CORS_ORIGIN || "*"
-            }'`,
-            "method.response.header.Access-Control-Allow-Methods":
-              "'GET,OPTIONS'",
-            "method.response.header.Access-Control-Allow-Headers":
-              "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-            "method.response.header.Access-Control-Allow-Credentials": "'true'",
-          },
-        },
-      ],
     })
   )
   .addMethodResponse({
@@ -127,6 +112,14 @@ statusRoute
       "method.response.header.Access-Control-Allow-Credentials": true,
     },
   });
+
+// Add OPTIONS method for CORS
+statusRoute.addMethod(
+  "OPTIONS",
+  new LambdaIntegration(backend.statusFunction.resources.lambda, {
+    proxy: true,
+  })
+);
 
 // Export API details with consistent naming
 backend.addOutput({
