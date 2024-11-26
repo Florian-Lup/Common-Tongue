@@ -74,7 +74,7 @@ const api = new RestApi(apiStack, "GrammarRestApi", {
     stageName: "prod",
   },
   defaultCorsPreflightOptions: {
-    allowOrigins: [process.env.CORS_ORIGIN ?? "*"],
+    allowOrigins: [process.env.CORS_ORIGIN || "*"],
     allowMethods: ["POST", "GET", "OPTIONS"],
     allowHeaders: [
       "Content-Type",
@@ -95,21 +95,26 @@ grammarRoute.addMethod(
 );
 
 // Create status endpoint with proper query parameter support
-const statusRoute = api.root.addResource("status");
+const statusRoute = api.root.addResource("status").addResource("{requestId}");
 statusRoute
   .addMethod(
     "GET",
     new LambdaIntegration(backend.statusFunction.resources.lambda, {
-      requestTemplates: {
-        "application/json": JSON.stringify({
-          requestId: "$input.params('requestId')",
-        }),
+      requestParameters: {
+        "integration.request.path.requestId": "method.request.path.requestId",
       },
       integrationResponses: [
         {
           statusCode: "200",
           responseParameters: {
-            "method.response.header.Access-Control-Allow-Origin": "'*'",
+            "method.response.header.Access-Control-Allow-Origin": `'${
+              process.env.CORS_ORIGIN || "*"
+            }'`,
+            "method.response.header.Access-Control-Allow-Methods":
+              "'GET,OPTIONS'",
+            "method.response.header.Access-Control-Allow-Headers":
+              "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+            "method.response.header.Access-Control-Allow-Credentials": "'true'",
           },
         },
       ],
@@ -119,6 +124,9 @@ statusRoute
     statusCode: "200",
     responseParameters: {
       "method.response.header.Access-Control-Allow-Origin": true,
+      "method.response.header.Access-Control-Allow-Methods": true,
+      "method.response.header.Access-Control-Allow-Headers": true,
+      "method.response.header.Access-Control-Allow-Credentials": true,
     },
   });
 
