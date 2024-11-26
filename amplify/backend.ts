@@ -104,12 +104,7 @@ statusRoute
     new LambdaIntegration(backend.statusFunction.resources.lambda, {
       proxy: true,
       requestParameters: {
-        "integration.request.path.requestId": "method.request.path.requestId",
-      },
-      requestTemplates: {
-        "application/json": JSON.stringify({
-          requestId: "$input.params('requestId')",
-        }),
+        "method.request.path.requestId": "required",
       },
     })
   )
