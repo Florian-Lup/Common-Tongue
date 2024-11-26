@@ -96,11 +96,28 @@ grammarRoute.addMethod(
 
 // Create status endpoint with proper query parameter support
 const statusRoute = api.root.addResource("status").addResource("{requestId}");
+
+// Add GET method with proper CORS configuration
 statusRoute
   .addMethod(
     "GET",
     new LambdaIntegration(backend.statusFunction.resources.lambda, {
       proxy: true,
+      integrationResponses: [
+        {
+          statusCode: "200",
+          responseParameters: {
+            "method.response.header.Access-Control-Allow-Origin": `'${
+              process.env.CORS_ORIGIN || "*"
+            }'`,
+            "method.response.header.Access-Control-Allow-Methods":
+              "'GET,OPTIONS'",
+            "method.response.header.Access-Control-Allow-Headers":
+              "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+            "method.response.header.Access-Control-Allow-Credentials": "'true'",
+          },
+        },
+      ],
     })
   )
   .addMethodResponse({
