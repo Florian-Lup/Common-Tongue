@@ -10,9 +10,10 @@ export const handler: SQSHandler = async (event) => {
 
     try {
       console.log(`Processing requestId: ${requestId}`);
+
+      // Invoke the grammar pipeline
       const editedText = await grammarPipeline.invoke(text);
 
-      // Additional logging
       console.log(`Edited text: ${editedText}`);
 
       // Store the result in DynamoDB
