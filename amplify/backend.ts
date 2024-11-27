@@ -94,8 +94,13 @@ grammarRoute.addMethod(
   new LambdaIntegration(backend.grammarFunction.resources.lambda)
 );
 
-// Create status endpoint with proper query parameter support
+// Create status endpoint with path parameter
 const statusRoute = api.root.addResource("status").addResource("{requestId}");
+
+statusRoute.addMethod(
+  "GET",
+  new LambdaIntegration(backend.statusFunction.resources.lambda)
+);
 
 // Add GET method with proper CORS configuration
 statusRoute

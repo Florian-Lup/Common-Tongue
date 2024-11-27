@@ -24,12 +24,16 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   }
 
   try {
+    console.log(`Fetching result for requestId: ${requestId}`);
+
     const result = await dynamoDB
       .get({
         TableName: process.env.RESULTS_TABLE!,
         Key: { requestId },
       })
       .promise();
+
+    console.log(`DynamoDB get result: ${JSON.stringify(result)}`);
 
     if (!result.Item) {
       return {

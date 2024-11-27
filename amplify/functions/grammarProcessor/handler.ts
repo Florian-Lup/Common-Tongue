@@ -9,22 +9,29 @@ export const handler: SQSHandler = async (event) => {
     const { text, requestId } = JSON.parse(record.body);
 
     try {
+      console.log(`Processing requestId: ${requestId}`);
       const editedText = await grammarPipeline.invoke(text);
 
+      // Additional logging
+      console.log(`Edited text: ${editedText}`);
+
       // Store the result in DynamoDB
-      await dynamoDB
-        .put({
-          TableName: process.env.RESULTS_TABLE!,
-          Item: {
-            requestId,
-            editedText,
-            status: "COMPLETED",
-            timestamp: Date.now(),
-          },
-        })
-        .promise();
+      const params = {
+        TableName: process.env.RESULTS_TABLE!,
+        Item: {
+          requestId,
+          editedText,
+          status: "COMPLETED",
+          timestamp: Date.now(),
+        },
+      };
+      console.log(`Writing to DynamoDB: ${JSON.stringify(params)}`);
+
+      await dynamoDB.put(params).promise();
+
+      console.log(`Successfully processed requestId: ${requestId}`);
     } catch (error) {
-      console.error("Processing error:", error);
+      console.error(`Processing error for requestId ${requestId}:`, error);
 
       // Store the error in DynamoDB
       await dynamoDB
