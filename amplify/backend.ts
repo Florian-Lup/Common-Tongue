@@ -99,26 +99,23 @@ const statusRoute = api.root.addResource("status").addResource("{requestId}");
 
 statusRoute.addMethod(
   "GET",
-  new LambdaIntegration(backend.statusFunction.resources.lambda)
+  new LambdaIntegration(backend.statusFunction.resources.lambda, {
+    proxy: true,
+  }),
+  {
+    methodResponses: [
+      {
+        statusCode: "200",
+        responseParameters: {
+          "method.response.header.Access-Control-Allow-Origin": true,
+          "method.response.header.Access-Control-Allow-Methods": true,
+          "method.response.header.Access-Control-Allow-Headers": true,
+          "method.response.header.Access-Control-Allow-Credentials": true,
+        },
+      },
+    ],
+  }
 );
-
-// Add GET method with proper CORS configuration
-statusRoute
-  .addMethod(
-    "GET",
-    new LambdaIntegration(backend.statusFunction.resources.lambda, {
-      proxy: true,
-    })
-  )
-  .addMethodResponse({
-    statusCode: "200",
-    responseParameters: {
-      "method.response.header.Access-Control-Allow-Origin": true,
-      "method.response.header.Access-Control-Allow-Methods": true,
-      "method.response.header.Access-Control-Allow-Headers": true,
-      "method.response.header.Access-Control-Allow-Credentials": true,
-    },
-  });
 
 // Export API details with consistent naming
 backend.addOutput({

@@ -6,6 +6,6 @@ export const statusFunction = defineFunction({
     CORS_ORIGIN: process.env.CORS_ORIGIN || "",
     RESULTS_TABLE: process.env.RESULTS_TABLE || "",
   },
-  timeoutSeconds: 30,
+  timeoutSeconds: 300,
   memoryMB: 512,
 });
