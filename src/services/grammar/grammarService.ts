@@ -40,10 +40,10 @@ export async function proofreadText(text: string): Promise<string> {
 
     return result.editedText;
   } catch (error) {
-    /* Handle errors and throw a new error with a descriptive message */
+    console.error("Detailed error:", error);
     throw error instanceof Error
       ? error
-      : new Error("An unexpected error occurred while processing the text.");
+      : new Error("An unexpected error occurred while processing the text");
   }
 }
 
@@ -51,20 +51,31 @@ async function pollForResults(requestId: string): Promise<GrammarAPIResponse> {
   let attempts = 0;
 
   while (attempts < MAX_POLLING_ATTEMPTS) {
-    const response = await get({
-      apiName: "grammarapi",
-      path: `/status/${requestId}`,
-    }).response;
+    try {
+      const response = await get({
+        apiName: "grammarapi",
+        path: `/status/${requestId}`,
+      }).response;
 
-    const result =
-      (await response.body.json()) as unknown as GrammarAPIResponse;
+      const result =
+        (await response.body.json()) as unknown as GrammarAPIResponse;
 
-    if (result.status === "COMPLETED" || result.status === "ERROR") {
-      return result;
+      if (result.status === "COMPLETED" || result.status === "ERROR") {
+        return result;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL));
+      attempts++;
+    } catch (error) {
+      console.error(`Polling error (attempt ${attempts + 1}):`, error);
+
+      if (attempts >= MAX_POLLING_ATTEMPTS - 1) {
+        throw new Error("Maximum polling attempts reached");
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL));
+      attempts++;
     }
-
-    await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL));
-    attempts++;
   }
 
   throw new Error("Processing timeout exceeded");
