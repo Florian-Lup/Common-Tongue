@@ -1,8 +1,7 @@
 /* Grammar service for handling text proofreading functionality */
 import { post, get } from "aws-amplify/api";
 import { GrammarAPIResponse } from "../../types/api";
-
-const MAX_POLLING_ATTEMPTS = 120;
+import { ExponentialBackoff } from "../../utils/backoff";
 
 /* Function to proofread the provided text using the grammar API */
 export async function proofreadText(text: string): Promise<string> {
@@ -19,8 +18,8 @@ export async function proofreadText(text: string): Promise<string> {
       },
     }).response;
 
-    const initialData =
-      (await response.body.json()) as unknown as GrammarAPIResponse;
+    const rawResponse = await response.body.json();
+    const initialData = rawResponse as unknown as GrammarAPIResponse;
 
     if (!initialData.requestId) {
       throw new Error("No request ID received from the API");
@@ -46,45 +45,53 @@ export async function proofreadText(text: string): Promise<string> {
   }
 }
 
-async function pollForResults(requestId: string): Promise<GrammarAPIResponse> {
-  let attempts = 0;
-  const initialDelay = 1000; // Wait 1 second before first poll
+export async function pollForResults(
+  requestId: string,
+  options = {
+    maxAttempts: 10,
+    initialDelay: 1000,
+    maxDelay: 5000,
+    backoffFactor: 1.5,
+  }
+): Promise<GrammarAPIResponse> {
+  const backoff = new ExponentialBackoff(options);
 
-  // Wait for initial processing to begin
-  await new Promise((resolve) => setTimeout(resolve, initialDelay));
-
-  while (attempts < MAX_POLLING_ATTEMPTS) {
+  while (await backoff.shouldContinue()) {
     try {
       const response = await get({
         apiName: "grammarapi",
         path: `/status/${requestId}`,
       }).response;
 
-      const result =
-        (await response.body.json()) as unknown as GrammarAPIResponse;
+      // Ensure proper type casting
+      const rawResult = await response.body.json();
+      const result = rawResult as unknown as GrammarAPIResponse;
+
+      // Validate the response has required properties
+      if (!result || typeof result !== "object") {
+        throw new Error("Invalid response format");
+      }
 
       if (result.status === "COMPLETED" || result.status === "ERROR") {
         return result;
       }
 
-      // Exponential backoff with a maximum of 5 seconds
-      const delay = Math.min(1000 * Math.pow(1.5, attempts), 5000);
-      await new Promise((resolve) => setTimeout(resolve, delay));
-      attempts++;
+      await backoff.wait();
     } catch (error) {
-      // Only log real errors, not 404s during initial processing
-      if (!(error instanceof Response) || error.status !== 404) {
-        console.error("Polling error:", error);
+      if (error instanceof Response && error.status === 404) {
+        await backoff.wait();
+        continue;
       }
 
-      if (attempts >= MAX_POLLING_ATTEMPTS - 1) {
+      if (backoff.currentAttempt >= options.maxAttempts - 1) {
         throw new Error("Maximum polling attempts reached");
       }
 
-      // Exponential backoff for errors too
-      const delay = Math.min(1000 * Math.pow(1.5, attempts), 5000);
-      await new Promise((resolve) => setTimeout(resolve, delay));
-      attempts++;
+      console.error(
+        `Polling error (attempt ${backoff.currentAttempt + 1}):`,
+        error
+      );
+      await backoff.wait();
     }
   }
 

@@ -1,8 +1,15 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
 import { SQS } from "aws-sdk";
 import { v4 as uuidv4 } from "uuid";
+import { RateLimiter } from "../../../src/utils/rateLimiter";
 
 const sqs = new SQS();
+
+const rateLimiter = new RateLimiter({
+  tokensPerInterval: 100,
+  interval: 60000, // 1 minute in milliseconds
+  fireImmediately: true,
+});
 
 /**
  * CORS headers configuration for API responses
@@ -17,6 +24,20 @@ const corsHeaders = {
   "Access-Control-Allow-Credentials": "true",
 };
 
+const validateRequest = (text: string): void => {
+  if (!text || typeof text !== "string") {
+    throw new Error("Invalid input: text is required");
+  }
+
+  if (text.length > 10000) {
+    throw new Error("Text exceeds maximum length of 10000 characters");
+  }
+
+  if (!rateLimiter.tryRemoveTokens(1)) {
+    throw new Error("Rate limit exceeded");
+  }
+};
+
 /**
  * Lambda function handler for the grammar API endpoint
  * @param event - API Gateway event containing the request details
@@ -26,6 +47,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   try {
     const body = JSON.parse(event.body || "{}");
     const { text } = body;
+
+    validateRequest(text);
+
     const requestId = uuidv4();
 
     // Send message to SQS

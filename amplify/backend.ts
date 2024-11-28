@@ -75,6 +75,7 @@ backend.processorFunction.resources.lambda.addEventSource(
   new SqsEventSource(grammarQueue, {
     batchSize: 10,
     maxBatchingWindow: Duration.seconds(30),
+    reportBatchItemFailures: true,
   })
 );
 

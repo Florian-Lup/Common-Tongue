@@ -5,6 +5,10 @@ export interface GrammarAPIResponse {
   status: "PROCESSING" | "COMPLETED" | "ERROR";
   editedText?: string;
   error?: string;
+  progress?: {
+    stage: "COPY_EDITING" | "LINE_EDITING" | "PROOFREADING";
+    percentage: number;
+  };
 }
 
 // Interface for the properties of the ResponsePreview component
