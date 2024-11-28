@@ -50,7 +50,7 @@ export async function pollForResults(
   options = {
     maxAttempts: 10,
     initialDelay: 1000,
-    maxDelay: 5000,
+    maxDelay: 300000,
     backoffFactor: 1.5,
   }
 ): Promise<GrammarAPIResponse> {

@@ -2,7 +2,7 @@ export class CircuitBreaker {
   private failures = 0;
   private lastFailureTime?: number;
   private readonly threshold = 5;
-  private readonly resetTimeout = 60000; // 1 minute
+  private readonly resetTimeout = 300000; // 5 minutes
 
   async execute<T>(fn: () => Promise<T>): Promise<T> {
     if (this.isOpen()) {
