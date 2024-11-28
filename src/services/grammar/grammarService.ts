@@ -48,9 +48,9 @@ export async function proofreadText(text: string): Promise<string> {
 export async function pollForResults(
   requestId: string,
   options = {
-    maxAttempts: 10,
-    initialDelay: 1000,
-    maxDelay: 300000,
+    maxAttempts: 30,
+    initialDelay: 2000,
+    maxDelay: 15000,
     backoffFactor: 1.5,
   }
 ): Promise<GrammarAPIResponse> {
