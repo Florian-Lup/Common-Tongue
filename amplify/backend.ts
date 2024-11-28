@@ -50,7 +50,6 @@ const grammarQueue = new Queue(infraStack, "GrammarQueue", {
     maxReceiveCount: 3,
   },
   encryption: QueueEncryption.KMS_MANAGED,
-  contentBasedDeduplication: true,
   fifo: false,
   receiveMessageWaitTime: Duration.seconds(20),
 });
