@@ -25,7 +25,7 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
   const handleProofread = async () => {
     setIsProcessing(true);
     setShowModal(true);
-    setProcessingStatus("Starting text processing...");
+    setProcessingStatus("Initializing text processing...");
 
     try {
       const editedText = await proofreadText(editor.getText());
@@ -33,11 +33,16 @@ export default function EditorHeader({ editor }: EditorHeaderProps) {
       setProcessingStatus("");
     } catch (error) {
       console.error("Error processing text:", error);
-      setPreviewText(
+
+      // More user-friendly error messages
+      const errorMessage =
         error instanceof Error
-          ? `Error: ${error.message}`
-          : "An unexpected error occurred while processing the text."
-      );
+          ? error.message === "Maximum polling attempts reached"
+            ? "Processing is taking longer than expected. Please try again."
+            : `Error: ${error.message}`
+          : "An unexpected error occurred while processing the text.";
+
+      setPreviewText(errorMessage);
       setProcessingStatus("Processing failed");
     } finally {
       setIsProcessing(false);

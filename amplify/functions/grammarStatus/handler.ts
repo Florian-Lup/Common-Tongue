@@ -36,11 +36,11 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
     if (!result.Item) {
       return {
-        statusCode: 404,
+        statusCode: 202,
         headers: corsHeaders,
         body: JSON.stringify({
-          error: "Result not found",
-          status: "ERROR",
+          status: "PROCESSING",
+          message: "Processing not yet started",
           requestId,
         }),
       };

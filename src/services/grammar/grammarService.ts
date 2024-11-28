@@ -2,8 +2,7 @@
 import { post, get } from "aws-amplify/api";
 import { GrammarAPIResponse } from "../../types/api";
 
-const POLLING_INTERVAL = 2000; // 2 seconds
-const MAX_POLLING_ATTEMPTS = 30; // 1 minute maximum
+const MAX_POLLING_ATTEMPTS = 60; // 1 minute maximum
 
 /* Function to proofread the provided text using the grammar API */
 export async function proofreadText(text: string): Promise<string> {
@@ -49,6 +48,10 @@ export async function proofreadText(text: string): Promise<string> {
 
 async function pollForResults(requestId: string): Promise<GrammarAPIResponse> {
   let attempts = 0;
+  const initialDelay = 1000; // Wait 1 second before first poll
+
+  // Wait for initial processing to begin
+  await new Promise((resolve) => setTimeout(resolve, initialDelay));
 
   while (attempts < MAX_POLLING_ATTEMPTS) {
     try {
@@ -64,15 +67,23 @@ async function pollForResults(requestId: string): Promise<GrammarAPIResponse> {
         return result;
       }
 
-      await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL));
+      // Exponential backoff with a maximum of 5 seconds
+      const delay = Math.min(1000 * Math.pow(1.5, attempts), 5000);
+      await new Promise((resolve) => setTimeout(resolve, delay));
       attempts++;
-    } catch {
-      // Silent fail and retry
+    } catch (error) {
+      // Only log real errors, not 404s during initial processing
+      if (!(error instanceof Response) || error.status !== 404) {
+        console.error("Polling error:", error);
+      }
+
       if (attempts >= MAX_POLLING_ATTEMPTS - 1) {
         throw new Error("Maximum polling attempts reached");
       }
 
-      await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL));
+      // Exponential backoff for errors too
+      const delay = Math.min(1000 * Math.pow(1.5, attempts), 5000);
+      await new Promise((resolve) => setTimeout(resolve, delay));
       attempts++;
     }
   }
