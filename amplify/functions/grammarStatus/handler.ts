@@ -13,8 +13,6 @@ const corsHeaders = {
 };
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  console.log("Received event:", JSON.stringify(event, null, 2));
-
   const requestId = event.pathParameters?.requestId;
 
   if (!requestId) {
@@ -29,16 +27,12 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   }
 
   try {
-    console.log(`Fetching result for requestId: ${requestId}`);
-
     const result = await dynamoDB
       .get({
         TableName: process.env.RESULTS_TABLE!,
         Key: { requestId },
       })
       .promise();
-
-    console.log(`DynamoDB get result:`, JSON.stringify(result, null, 2));
 
     if (!result.Item) {
       return {
@@ -58,11 +52,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       body: JSON.stringify(result.Item),
     };
   } catch (error) {
-    console.error("Error details:", {
-      error: error instanceof Error ? error.message : "Unknown error",
-      stack: error instanceof Error ? error.stack : undefined,
-    });
-
     return {
       statusCode: 500,
       headers: corsHeaders,

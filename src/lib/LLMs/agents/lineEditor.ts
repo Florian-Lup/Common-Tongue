@@ -5,5 +5,5 @@ import { ChatOpenAI } from "@langchain/openai";
 export const lineEditorModel = new ChatOpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY,
   modelName: "gpt-4o-mini", // Using a lighter model for style improvements
-  temperature: 0, // Set to 0 for consistent, deterministic outputs
+  temperature: 0.1, // Set to 0 for consistent, deterministic outputs
 });

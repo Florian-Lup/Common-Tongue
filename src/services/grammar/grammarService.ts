@@ -66,9 +66,8 @@ async function pollForResults(requestId: string): Promise<GrammarAPIResponse> {
 
       await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL));
       attempts++;
-    } catch (error) {
-      console.error(`Polling error (attempt ${attempts + 1}):`, error);
-
+    } catch {
+      // Silent fail and retry
       if (attempts >= MAX_POLLING_ATTEMPTS - 1) {
         throw new Error("Maximum polling attempts reached");
       }

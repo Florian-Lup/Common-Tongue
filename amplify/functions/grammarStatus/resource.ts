@@ -7,5 +7,5 @@ export const statusFunction = defineFunction({
     RESULTS_TABLE: process.env.RESULTS_TABLE || "",
   },
   timeoutSeconds: 300,
-  memoryMB: 512,
+  memoryMB: 1024,
 });
