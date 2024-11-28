@@ -33,6 +33,16 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       .sendMessage({
         QueueUrl: process.env.GRAMMAR_QUEUE_URL!,
         MessageBody: JSON.stringify({ text, requestId }),
+        MessageAttributes: {
+          TextLength: {
+            DataType: "Number",
+            StringValue: text.length.toString(),
+          },
+          ProcessType: {
+            DataType: "String",
+            StringValue: "grammar_check",
+          },
+        },
       })
       .promise();
 

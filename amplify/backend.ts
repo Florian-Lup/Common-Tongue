@@ -8,7 +8,7 @@ import { RestApi, LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
 import { grammarFunction } from "./functions/grammarAPI/resource";
 import { processorFunction } from "./functions/grammarProcessor/resource";
 import { statusFunction } from "./functions/grammarStatus/resource";
-import { Queue } from "aws-cdk-lib/aws-sqs";
+import { Queue, QueueEncryption } from "aws-cdk-lib/aws-sqs";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Duration } from "aws-cdk-lib";
 import { Table, AttributeType } from "aws-cdk-lib/aws-dynamodb";
@@ -36,10 +36,23 @@ const resultsTable = new Table(infraStack, "GrammarResults", {
   removalPolicy: RemovalPolicy.DESTROY,
 });
 
-// Create SQS queue
+// Create DLQ
+const deadLetterQueue = new Queue(infraStack, "GrammarDLQ", {
+  retentionPeriod: Duration.days(14),
+});
+
+// Configure main queue with DLQ
 const grammarQueue = new Queue(infraStack, "GrammarQueue", {
   visibilityTimeout: Duration.seconds(300),
   retentionPeriod: Duration.days(1),
+  deadLetterQueue: {
+    queue: deadLetterQueue,
+    maxReceiveCount: 3,
+  },
+  encryption: QueueEncryption.KMS_MANAGED,
+  contentBasedDeduplication: true,
+  fifo: false,
+  receiveMessageWaitTime: Duration.seconds(20),
 });
 
 // Grant permissions first
@@ -61,7 +74,8 @@ backend.statusFunction.addEnvironment("RESULTS_TABLE", resultsTable.tableName);
 // Configure SQS trigger for processor
 backend.processorFunction.resources.lambda.addEventSource(
   new SqsEventSource(grammarQueue, {
-    batchSize: 1,
+    batchSize: 10,
+    maxBatchingWindow: Duration.seconds(30),
   })
 );
 

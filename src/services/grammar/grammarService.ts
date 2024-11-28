@@ -2,7 +2,7 @@
 import { post, get } from "aws-amplify/api";
 import { GrammarAPIResponse } from "../../types/api";
 
-const MAX_POLLING_ATTEMPTS = 60; // 1 minute maximum
+const MAX_POLLING_ATTEMPTS = 120;
 
 /* Function to proofread the provided text using the grammar API */
 export async function proofreadText(text: string): Promise<string> {
