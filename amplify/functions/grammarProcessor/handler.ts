@@ -75,6 +75,7 @@ async function processRecord(record: SQSRecord): Promise<ProcessingResult> {
           status: "COMPLETED",
           timestamp: Date.now(),
           messageId: record.messageId,
+          ttl: Math.floor(Date.now() / 1000) + 3600,
         },
       })
       .promise();

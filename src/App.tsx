@@ -20,7 +20,7 @@ const App: React.FC = () => {
     extensions: [
       StarterKit, // Basic editor functionality
       Highlight.configure({ multicolor: true }), // Enable multicolor highlights
-      CharacterCount.configure({ limit: 10000 }), // Set character limit
+      CharacterCount.configure({ limit: 5000 }), // Set character limit
       Placeholder.configure({
         placeholder: ({ node }) => {
           // Define placeholder text based on node type

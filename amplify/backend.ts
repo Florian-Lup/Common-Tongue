@@ -36,15 +36,15 @@ const resultsTable = new Table(infraStack, "GrammarResults", {
   removalPolicy: RemovalPolicy.DESTROY,
 });
 
-// Create DLQ
+// Create DLQ with 1-hour retention
 const deadLetterQueue = new Queue(infraStack, "GrammarDLQ", {
-  retentionPeriod: Duration.days(14),
+  retentionPeriod: Duration.hours(1),
 });
 
-// Configure main queue with DLQ
+// Configure main queue with DLQ and 1-hour retention
 const grammarQueue = new Queue(infraStack, "GrammarQueue", {
   visibilityTimeout: Duration.seconds(300),
-  retentionPeriod: Duration.days(1),
+  retentionPeriod: Duration.hours(1),
   deadLetterQueue: {
     queue: deadLetterQueue,
     maxReceiveCount: 3,
