@@ -2,6 +2,7 @@ import { SQSHandler, SQSRecord } from "aws-lambda";
 import { DynamoDB } from "aws-sdk";
 import { grammarPipeline } from "../../../src/lib/LLMs/workflows/grammarPipeline";
 
+// Types and interfaces for tracking grammar processing status and results
 type ProcessingStage = "COPY_EDITING" | "LINE_EDITING" | "PROOFREADING";
 
 interface ProcessingStatus {
@@ -21,6 +22,7 @@ interface ProcessingResult {
 
 const dynamoDB = new DynamoDB.DocumentClient();
 
+// Updates the processing status in DynamoDB for a given request
 async function updateProgress(
   requestId: string,
   progress: ProcessingStatus
@@ -44,28 +46,29 @@ async function updateProgress(
     .promise();
 }
 
+// Processes a single SQS record containing text to be grammar checked
 async function processRecord(record: SQSRecord): Promise<ProcessingResult> {
   const { text, requestId } = JSON.parse(record.body);
 
   try {
-    // Initial status
+    // Set initial processing status in DynamoDB
     await updateProgress(requestId, {
       status: "PROCESSING",
       progress: { stage: "COPY_EDITING", percentage: 0 },
       timestamp: Date.now(),
     });
 
-    // Process text
+    // Process the text through the grammar pipeline
     const editedText = await grammarPipeline.invoke(text);
 
-    // Final status
+    // Update status to completed
     await updateProgress(requestId, {
       status: "COMPLETED",
       progress: { stage: "PROOFREADING", percentage: 100 },
       timestamp: Date.now(),
     });
 
-    // Store the edited text
+    // Store the final edited text with TTL of 1 hour
     await dynamoDB
       .put({
         TableName: process.env.RESULTS_TABLE!,
@@ -82,6 +85,7 @@ async function processRecord(record: SQSRecord): Promise<ProcessingResult> {
 
     return { success: true, requestId, messageId: record.messageId };
   } catch (error) {
+    // Update status to error if processing fails
     await updateProgress(requestId, {
       status: "ERROR",
       timestamp: Date.now(),
@@ -91,9 +95,12 @@ async function processRecord(record: SQSRecord): Promise<ProcessingResult> {
   }
 }
 
+// Main Lambda handler for processing SQS messages
 export const handler: SQSHandler = async (event) => {
+  // Process all records in parallel and handle failures
   const results = await Promise.allSettled(event.Records.map(processRecord));
 
+  // Return any failed messages for SQS retry
   const failed = results.filter(
     (r): r is PromiseRejectedResult => r.status === "rejected"
   );

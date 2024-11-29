@@ -24,6 +24,12 @@ const corsHeaders = {
   "Access-Control-Allow-Credentials": "true",
 };
 
+/**
+ * Validates incoming requests for text processing
+ * Checks text length, format, and rate limits
+ * @param text The input text to validate
+ * @throws Error if validation fails
+ */
 const validateRequest = (text: string): void => {
   if (!text || typeof text !== "string") {
     throw new Error("Invalid input: text is required");
@@ -39,9 +45,10 @@ const validateRequest = (text: string): void => {
 };
 
 /**
- * Lambda function handler for the grammar API endpoint
- * @param event - API Gateway event containing the request details
- * @returns Promise containing API response with edited text or error
+ * Handles incoming API requests for grammar processing
+ * Queues text for processing and returns a request ID
+ * @param event API Gateway event
+ * @returns Promise with API response
  */
 export const handler: APIGatewayProxyHandler = async (event) => {
   try {

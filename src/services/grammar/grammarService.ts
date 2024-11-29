@@ -3,7 +3,12 @@ import { post, get } from "aws-amplify/api";
 import { GrammarAPIResponse } from "../../types/api";
 import { ExponentialBackoff } from "../../utils/backoff";
 
-/* Function to proofread the provided text using the grammar API */
+/**
+ * Handles text proofreading with retries and result polling
+ * @param text The text to be proofread
+ * @returns Promise containing the edited text
+ * @throws Error if processing fails or times out
+ */
 export async function proofreadText(text: string): Promise<string> {
   try {
     /* Initial request to start processing */
@@ -45,6 +50,14 @@ export async function proofreadText(text: string): Promise<string> {
   }
 }
 
+/**
+ * Polls the status endpoint for processing results
+ * Implements exponential backoff for efficient polling
+ * @param requestId The ID of the processing request
+ * @param options Configuration for polling behavior
+ * @returns Promise containing the API response
+ * @throws Error if polling times out or fails
+ */
 export async function pollForResults(
   requestId: string,
   options = {

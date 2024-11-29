@@ -9,7 +9,7 @@ Common Tongue is an advanced proofreading and text enhancement tool that leverag
 Built with React and TypeScript, it features a modern rich text editor powered by Tiptap, offering a familiar writing experience with professional editing capabilities. The application supports:
 
 - Multi-language grammar correction
-- Real-time text processing
+- Asynchronous text processing with real-time status updates
 - Advanced formatting options
 - Character count tracking
 - Customizable editing preferences
@@ -37,9 +37,11 @@ Built with React and TypeScript, it features a modern rich text editor powered b
 ### AWS Infrastructure
 
 - **AWS Amplify** - Full-stack development framework
-- **AWS Lambda** - Serverless functions
+- **AWS Lambda** - Serverless functions for text processing
 - **API Gateway** - REST API management
 - **AWS CDK** - Infrastructure as Code
+- **Amazon SQS** - Message queuing for async processing
+- **DynamoDB** - Status and result storage
 
 ### AI/ML Integration
 
@@ -79,13 +81,40 @@ Built with React and TypeScript, it features a modern rich text editor powered b
 
 The key directories and their purposes:
 
-- **amplify/**: Contains AWS Amplify backend configuration, including authentication, data models, and Lambda functions
+- **amplify/**: AWS Amplify backend configuration
+
+  - **functions/**: Lambda functions for text processing
+    - **grammarAPI/**: API endpoint for initiating text processing
+    - **grammarProcessor/**: SQS message handler for async processing
+    - **grammarStatus/**: Status checking endpoint
+  - **data/**: DynamoDB table definitions and schemas
+  - **backend.ts**: Main backend configuration
+  - **amplifyconfiguration.ts**: Frontend AWS configuration
+
 - **src/**: Main source code directory
-  - **components/**: React components for the editor interface
-  - **lib/**: Core library code, including LLM integrations
+
+  - **components/**: React components
+    - **common/**: Reusable components
+    - **toolbars/**: Editor toolbar components
+  - **lib/**: Core library code
+    - **LLMs/**: Language model integrations
+      - **agents/**: AI model configurations
+      - **prompts/**: System prompts for AI models
+      - **workflows/**: Processing pipelines
   - **services/**: API service implementations
+    - **grammar/**: Grammar processing service
   - **styles/**: SCSS stylesheets
+    - **editor/**: Editor-specific styles
+    - **global/**: Global styles
   - **types/**: TypeScript type definitions
+  - **utils/**: Utility functions
+    - **backoff.ts**: Exponential backoff implementation
+    - **rateLimiter.ts**: Rate limiting utilities
+
+- **public/**: Static assets
+- **.env**: Environment variables (not in repo)
+- **vite.config.ts**: Vite configuration
+- **tsconfig.json**: TypeScript configuration
 
 ## Getting Started
 
@@ -112,6 +141,7 @@ The key directories and their purposes:
    VITE_API_ENDPOINT=<your-api-endpoint>
    VITE_AWS_REGION=<your-aws-region>
    OPENAI_API_KEY=<your-openai-api-key>
+   CORS_ORIGIN=<your-frontend-origin>
    ```
 
 3. **Install dependencies**:
@@ -165,6 +195,8 @@ npx ampx pipeline-deploy --branch main --app-id <your-app-id>
 - If you encounter CORS issues during development, check your AWS API Gateway CORS settings
 - For OpenAI API issues, verify your API key and rate limits
 - For build errors, ensure all dependencies are properly installed and environment variables are set
+- If text processing seems stuck, check the AWS SQS queue and DynamoDB tables for processing status
+- For timeout issues, verify the Lambda function timeout settings match your processing needs
 
 ## License
 
