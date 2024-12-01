@@ -5,5 +5,5 @@ import { ChatOpenAI } from "@langchain/openai";
 export const syntaxEditorModel = new ChatOpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY,
   modelName: "gpt-4o",
-  temperature: 0.1,
+  temperature: 0,
 });
