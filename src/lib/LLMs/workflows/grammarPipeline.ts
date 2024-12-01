@@ -1,30 +1,23 @@
 import { RunnableSequence } from "@langchain/core/runnables";
-import { copyEditorModel } from "../agents/copyEditor";
-import { lineEditorModel } from "../agents/lineEditor";
-import { proofreaderModel } from "../agents/proofreader";
-import { copyEditorPrompt } from "../prompts/copyEditorPrompt";
-import { lineEditorPrompt } from "../prompts/lineEditorPrompt";
-import { proofreaderPrompt } from "../prompts/proofreaderPrompt";
+import { grammarEditorModel } from "../agents/grammarEditor";
+import { syntaxEditorModel } from "../agents/syntaxEditor";
+import { grammarEditorPrompt } from "../prompts/grammarEditorPrompt";
+import { syntaxEditorPrompt } from "../prompts/syntaxEditorPrompt";
 
 // Create individual chains by combining prompts with their respective models
-const copyEditorChain = copyEditorPrompt.pipe(copyEditorModel);
-const lineEditorChain = lineEditorPrompt.pipe(lineEditorModel);
-const proofreaderChain = proofreaderPrompt.pipe(proofreaderModel);
+const grammarEditorChain = grammarEditorPrompt.pipe(grammarEditorModel);
+const syntaxEditorChain = syntaxEditorPrompt.pipe(syntaxEditorModel);
 
 // Create a sequential pipeline that:
 // 1. Formats the input text
-// 2. Runs copy editing for basic corrections
-// 3. Processes the output for line editing
-// 4. Runs line editing for improved readability
-// 5. Processes the output for proofreading
-// 6. Runs final proofreading
-// 7. Returns the final cleaned text
+// 2. Runs grammar editing for basic corrections
+// 3. Processes the output for syntax editing
+// 4. Runs syntax editing for improved readability
+// 5. Returns the final cleaned text
 export const grammarPipeline = RunnableSequence.from([
   async (inputText: string) => ({ inputText }),
-  copyEditorChain,
+  grammarEditorChain,
   async (output: { text: string }) => ({ inputText: output.text }),
-  lineEditorChain,
-  async (output: { text: string }) => ({ inputText: output.text }),
-  proofreaderChain,
+  syntaxEditorChain,
   async (output: { text: string }) => output.text,
 ]);

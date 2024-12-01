@@ -3,7 +3,7 @@ import { DynamoDB } from "aws-sdk";
 import { grammarPipeline } from "../../../src/lib/LLMs/workflows/grammarPipeline";
 
 // Types and interfaces for tracking grammar processing status and results
-type ProcessingStage = "COPY_EDITING" | "LINE_EDITING" | "PROOFREADING";
+type ProcessingStage = "GRAMMAR_EDITING" | "SYNTAX_EDITING";
 
 interface ProcessingStatus {
   status: "PROCESSING" | "COMPLETED" | "ERROR";
@@ -54,7 +54,7 @@ async function processRecord(record: SQSRecord): Promise<ProcessingResult> {
     // Set initial processing status in DynamoDB
     await updateProgress(requestId, {
       status: "PROCESSING",
-      progress: { stage: "COPY_EDITING", percentage: 0 },
+      progress: { stage: "GRAMMAR_EDITING", percentage: 0 },
       timestamp: Date.now(),
     });
 
@@ -64,7 +64,7 @@ async function processRecord(record: SQSRecord): Promise<ProcessingResult> {
     // Update status to completed
     await updateProgress(requestId, {
       status: "COMPLETED",
-      progress: { stage: "PROOFREADING", percentage: 100 },
+      progress: { stage: "SYNTAX_EDITING", percentage: 100 },
       timestamp: Date.now(),
     });
 

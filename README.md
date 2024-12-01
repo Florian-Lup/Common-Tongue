@@ -1,10 +1,9 @@
 # Common Tongue
 
-Common Tongue is an advanced proofreading and text enhancement tool that leverages a chain of specialized AI agents to provide comprehensive text improvements. The tool processes text through three distinct stages:
+Common Tongue is an advanced text enhancement tool that leverages a chain of specialized AI agents to provide comprehensive text improvements. The tool processes text through two distinct stages:
 
-1. **Line Editor**: Improves readability and coherence while maintaining the author's voice
-2. **Copy Editor**: Corrects grammatical errors, punctuation, spelling, and syntax issues
-3. **Proofreader**: Performs final polishing and ensures publication-ready quality
+1. **Grammar Editor**: Corrects grammatical errors, punctuation, and spelling issues
+2. **Syntax Editor**: Improves readability and coherence while maintaining the author's voice
 
 Built with React and TypeScript, it features a modern rich text editor powered by Tiptap, offering a familiar writing experience with professional editing capabilities. The application supports:
 

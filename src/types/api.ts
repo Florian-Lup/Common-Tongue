@@ -6,7 +6,7 @@ export interface GrammarAPIResponse {
   editedText?: string;
   error?: string;
   progress?: {
-    stage: "COPY_EDITING" | "LINE_EDITING" | "PROOFREADING";
+    stage: "GRAMMAR_EDITING" | "SYNTAX_EDITING";
     percentage: number;
   };
 }
